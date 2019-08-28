@@ -1,5 +1,7 @@
 
 
-void UART_driver_receive_data();
+void UART_driver_initialize();
 
-void UART_driver_transmit_data();
+unsigned char UART_driver_receive();
+
+void UART_driver_transmit();
