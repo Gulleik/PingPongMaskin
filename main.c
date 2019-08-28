@@ -7,6 +7,7 @@
 #define F_CPU 16000000 // clock frequency in Hz
 #include <avr/io.h>
 #include <util/delay.h>
+#include "UART_driver.h"
 
 int main(void)
 {
