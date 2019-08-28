@@ -24,12 +24,5 @@ void UART_driver_initialize() {
 	UCSRC = (1 << URSEL) | (1 << USBS) | (3 << UCSZ0);
 }
 
-void main(void)
-{
-	...
-		USART_Init(MYUBRR);
-	...
-}
-void USART_Init(unsigned int ubrr)
-{
+
 	
