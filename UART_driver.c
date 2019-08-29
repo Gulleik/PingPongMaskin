@@ -4,33 +4,36 @@
 
 #include <avr/io.h>
 
-void UART_driver_transmit(unsigned int data) {
-    UCSR0B = (1 << TXEN0);
-
-    /* Wait for empty transmit buffer */
-    while ( !( UCSR0A & (1<<UDRE0)) );
-
-    /* Put data into buffer, sends the data */
-    UDR0 = data;
-} 
-
-
-unsigned char UART_driver_receive() {
-		/* Wait for data to be received */
-		while (!(UCSRA & (1 << RXC)));
-		/* Get and return received data from buffer */
-		return UDR;
-}
-
-
 void UART_driver_initialize() {
 	UBRRH = (unsigned char)((FOSC / 16 / BAUD - 1) >> 8);
 	UBRRL = (unsigned char)(FOSC / 16 / BAUD - 1);
 	/* Enable receiver and transmitter */
 	UCSRB = (1 << RXEN) | (1 << TXEN);
 	/* Set frame format: 8data, 2stop bit */
-	UCSRC = (1 << URSEL) | (1 << USBS) | (3 << UCSZ0);
+	UCSRC = (1 << URSEL0) | (3 << UCSZ00);
 }
+
+void UART_driver_transmit(unsigned int data) {
+
+    /* Wait for empty transmit buffer */
+    loop_until_bit_is_set(UCSR0A, UDRE0);;
+
+    /* Put data into buffer, sends the data */
+    UDR0 = data;
+
+	return 0;
+} 
+
+
+unsigned char UART_driver_receive() {
+		/* Wait for data to be received */
+		loop_until_bit_is_set(UCSR0A, RXC0);
+		/* Get and return received data from buffer */
+		return UDR0;
+}
+
+
+
 
 
 	
