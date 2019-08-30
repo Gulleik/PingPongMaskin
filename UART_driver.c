@@ -5,12 +5,12 @@
 #include <avr/io.h>
 
 void UART_driver_initialize() {
-	UBRRH = (unsigned char)((FOSC / 16 / BAUD - 1) >> 8);
-	UBRRL = (unsigned char)(FOSC / 16 / BAUD - 1);
+	UBRR0H = (unsigned char)((FOSC / 16 / BAUD - 1) >> 8);
+	UBRR0L = (unsigned char)(FOSC / 16 / BAUD - 1);
 	/* Enable receiver and transmitter */
-	UCSRB = (1 << RXEN) | (1 << TXEN);
+	UCSR0B = (1 << RXEN0) | (1 << TXEN0);
 	/* Set frame format: 8data, 2stop bit */
-	UCSRC = (1 << URSEL0) | (3 << UCSZ00);
+	UCSR0C = (1 << URSEL0) | (3 << UCSZ00);
 }
 
 void UART_driver_transmit(unsigned int data) {
