@@ -13,5 +13,9 @@ int main(void)
 {
 	UART_driver_initialize();
 
-    UART_driver_transmit('A');
+    fdevopen(UART_driver_transmit, UART_driver_receive);
+
+    unsigned int test = 232;
+
+    printf("%i\r\n", test);
 }

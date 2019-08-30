@@ -20,8 +20,6 @@ void UART_driver_transmit(unsigned int data) {
 
     /* Put data into buffer, sends the data */
     UDR0 = data;
-
-	return 0;
 } 
 
 
