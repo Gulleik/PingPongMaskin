@@ -8,14 +8,15 @@
 #include <avr/io.h>
 #include <util/delay.h>
 #include "UART_driver.h"
+#include "SRAM_driver.h"
 
 int main(void)
 {
 	UART_driver_initialize();
-
-    fdevopen(UART_driver_transmit, UART_driver_receive);
-
-    unsigned int test = 232;
-
-    printf("%i\r\n", test);
+    SRAM_driver_initialize();
+    //SRAM_driver_write(0x0000, 0x00);
+    uint16_t *ext = (char*) 0xFFFF;
+    while(1){
+        ext[0] = 0xFF;
+    }
 }

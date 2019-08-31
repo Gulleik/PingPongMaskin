@@ -11,6 +11,7 @@ void UART_driver_initialize() {
 	UCSR0B = (1 << RXEN0) | (1 << TXEN0);
 	/* Set frame format: 8data, 2stop bit */
 	UCSR0C = (1 << URSEL0) | (3 << UCSZ00);
+	fdevopen(UART_driver_transmit, UART_driver_receive);
 }
 
 void UART_driver_transmit(unsigned int data) {
