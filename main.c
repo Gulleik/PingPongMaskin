@@ -15,10 +15,13 @@ int main(void)
 	UART_driver_initialize();
     SRAM_driver_initialize();
     //SRAM_driver_write(0x0000, 0x00);
-    //uint16_t *ext = (char*) 0x1800;//0x1000;
-    volatile char *ext = (char *) 0x1800;
+    volatile char *ext_OLED = (char *) 0x1000;
+    volatile char *ext_ADC = (char *) 0x1400;
+    volatile char *ext_SRAM = (char *) 0x1800;
     SRAM_test();
-    //ext[5] = 0x55;
+    //ext_SRAM[0] = 0x55;
+    //ext_ADC[0] = 0x00;
+    //ext_OLED[0] = 0x00;
     
     while(1);
        /* ext[0] = 0x00;
