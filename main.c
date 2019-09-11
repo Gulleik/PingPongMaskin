@@ -9,33 +9,18 @@
 #include <util/delay.h>
 #include "UART_driver.h"
 #include "XMEM_driver.h"
+#include "ADC_driver.h"
 
 int main(void)
 {
-	UART_driver_initialize();
-    SRAM_driver_initialize();
-    //SRAM_driver_write(0x0000, 0x00);
-    volatile char *ext_OLED = (char *) 0x1000;
-    volatile char *ext_ADC = (char *) 0x1400;
-    volatile char *ext_SRAM = (char *) 0x1800;
-    SRAM_test();
-    //ext_SRAM[0] = 0x55;
-    //ext_ADC[0] = 0x00;
-    //ext_OLED[0] = 0x00;
-    
-    while(1);
-       /* ext[0] = 0x00;
-        printf("0\n\r");
-        _delay_ms(1000);
-        ext[1] = 0x00;
-        printf("1\n\r");
-        _delay_ms(1000);
-        ext[2] = 0x00;
-        printf("2\n\r");
-        _delay_ms(1000);
-        ext[3] = 0x00;
-        printf("3\n\r");
-        _delay_ms(1000);
-       */
-    
+    char * Ch1 = 0b0101;
+    char * Ch2 = 0b0100;
+    char * Ch3 = 0b0110;
+	UART_initialize();
+    XMEM_initialize();
+    while(1) {
+        char Y = ADC_read(Ch2);
+        printf("Y=%d\n\r", Y);
+        _delay_ms(100);
+    }  
 }

@@ -1,6 +1,10 @@
+#ifndef UART_H
+#define UART_H
 
-void UART_driver_initialize();
+#endif
 
-unsigned char UART_driver_receive();
+void UART_initialize();
 
-void UART_driver_transmit();
+unsigned char UART_receive();
+
+void UART_transmit(char data);
