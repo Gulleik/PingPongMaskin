@@ -8,7 +8,7 @@
 #include <avr/io.h>
 #include <util/delay.h>
 #include "UART_driver.h"
-#include "SRAM_driver.h"
+#include "XMEM_driver.h"
 
 int main(void)
 {

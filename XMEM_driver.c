@@ -1,8 +1,8 @@
-#include "SRAM_driver.h"
+#include "XMEM_driver.h"
 #include <stdlib.h>
 #include <util/delay.h>
 
-void SRAM_driver_initialize(){
+void XMEM_initialize(){
     //Enabling External Memory Interface
     MCUCR |= (1<<SRE);
     //SFIOR |= (1<<XMBK);
