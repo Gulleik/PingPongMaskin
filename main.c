@@ -10,16 +10,18 @@
 #include "UART_driver.h"
 #include "XMEM_driver.h"
 #include "ADC_driver.h"
+#include "controller.h"
 
 int main(void)
 {
-    char * Ch1 = 0b0101;
-    char * Ch2 = 0b0100;
+    char * Ch1 = 0b0100;
+    char * Ch2 = 0b0101;
     char * Ch3 = 0b0110;
+    char * Ch4 = 0b0111;
 	UART_initialize();
     XMEM_initialize();
     while(1) {
-        char Y = ADC_read(Ch2);
+        char Y = controller_button_read();
         printf("Y=%d\n\r", Y);
         _delay_ms(100);
     }  
