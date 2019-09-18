@@ -10,17 +10,24 @@
 #include "UART_driver.h"
 #include "XMEM_driver.h"
 #include "ADC_driver.h"
+#include "controller.h"
+#include "OLED.h"
 
 int main(void)
 {
-    char * Ch1 = 0b0101;
-    char * Ch2 = 0b0100;
-    char * Ch3 = 0b0110;
 	UART_initialize();
     XMEM_initialize();
-    while(1) {
-        char Y = ADC_read(Ch2);
-        printf("Y=%d\n\r", Y);
+
+    OLED_initialize();
+    OLED_reset();
+    OLED_goto_line(3);
+    //OLED_write_c(0x0);
+    int i = 0;
+    while (1) {
         _delay_ms(100);
-    }  
+        OLED_write_char('A');
+    }
+    //OLED_goto_column(20);
+    //OLED_reset();
+    //OLED_print("vi klarer oss uten deg jj");
 }

@@ -7,7 +7,7 @@
 char ADC_read(char *channel){
     volatile char *ext_ADC = (char *) 0x1400;
     
-     *ext_ADC = channel; //Write configuration to MUX-pins, Y-axis to CH1
+     ext_ADC[0] = channel; //Write configuration to MUX-pins, Y-axis to CH1
     _delay_ms(1);
 
     return *ext_ADC;
