@@ -23,17 +23,12 @@ int main(void)
 
     OLED_initialize();
     OLED_clear();
-    //OLED_reset_position();
-    OLED_goto_column(0x00);
-	OLED_goto_line(0x00);
-	//OLED_print_char('K');
-	OLED_print_string("Helo");
+    OLED_reset_position();
 	
-	/*
-	char k = 0;
+	int x = 0;
+	int y = 0;
+	OLED_get_main_menu();
 	while (1) {
-		//OLED_write_c(0xa5);
-		OLED_write_d(k++%0xFF);
-		_delay_ms(10);
-    }*/
+		
+    }
 }

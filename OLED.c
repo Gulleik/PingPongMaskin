@@ -101,7 +101,8 @@ const unsigned char PROGMEM font[95][5] = {
 	{0b00000000,0b00001000,0b00111100,0b01000010,0b00000000}, // {
 	{0b00000000,0b00000000,0b01111110,0b00000000,0b00000000}, // |
 	{0b00000000,0b01000010,0b00111100,0b00001000,0b00000000}, // }
-	{0b00000100,0b00000010,0b00000100,0b00000010,0b00000000}, // ~
+	{0b11111111,0b11111111,0b11111111,0b11111111,0b11111111}, // BLOCK
+	//{0b00000100,0b00000010,0b00000100,0b00000010,0b00000000}, // ~
 };
 
 void OLED_initialize(){
@@ -153,41 +154,81 @@ void OLED_print_string(unsigned char* string){
 	}
 }
 
-void OLED_goto_line(unsigned char page){
-	
-	//HORIZONTAL ADDRESSING
+void OLED_goto_page(unsigned char new_page){
   	OLED_write_c(0x22);
-  	OLED_write_c(page);
+  	OLED_write_c(new_page);
   	OLED_write_c(0x07);
-	
-	/*
-	//PAGE ADDRESSING
-	char p = 0xB0 + page;
-	OLED_write_c(p);
-	*/
+
+	page = new_page;
 }
 
-void OLED_goto_column(unsigned char column){
-	
+void OLED_goto_column(unsigned char new_column){
   	OLED_write_c(0x21);
-	OLED_write_c(column);
+	OLED_write_c(new_column);
 	OLED_write_c(0x7F);
-	
+
+	column = new_column;
 }
 
 void OLED_reset_position() {
 	OLED_goto_column(0x00);
-	OLED_goto_line(0x00);
+	OLED_goto_page(0x00);
 }
-
-
 
 void OLED_clear(){
 	volatile char *ext_OLED = (char *) OLED_DATA_BASE_ADDR;
 	for (int i = 0; i<8; i++){
-		//OLED_goto_line(i);
-		for (int f = 0; f<128;f++){
+		for (int f = 0; f<128; f++){
 			ext_OLED[0] = 0x00;
 		}
 	}
+}
+
+void OLED_navigate_ypos_with_joystick(int y){
+	if(y > 95){
+		if(page == 0){
+			OLED_goto_page(7);
+		}else{
+			OLED_goto_page(page-1);
+		}
+	}else if(y < -95){
+		if(page == 7){
+			OLED_goto_page(0);
+		}else{
+			OLED_goto_page(page+1);
+		}
+	}
+}
+
+void OLED_navigate_xpos_with_joystick(int x){
+		if(x > 90){
+		if(column > 122){
+			OLED_goto_column(0);
+		}else{
+			OLED_goto_column(column+5);
+		}
+	}else if(x < -90){
+		if(column < 5){
+			OLED_goto_column(127);
+		}else{
+			OLED_goto_column(column-5);
+		}
+	}
+}
+
+void OLED_navigate_menu(int y){
+	OLED_navigate_ypos_with_joystick(y);
+	OLED_print_char(BLOCK);
+	OLED_goto_column(column);
+	_delay_ms(500);
+	OLED_print_char(' ');
+	OLED_goto_column(column);
+	_delay_ms(500);
+}
+
+void OLED_get_main_menu(){
+	OLED_goto_page(0);
+	OLED_goto_column(0);
+	OLED_print_string('git pull out');
+	
 }
