@@ -27,7 +27,7 @@ int main(void)
 	
 	int x = 0;
 	int y = 0;
-	OLED_get_main_menu();
+	OLED_home();
 	while (1) {
 		
     }

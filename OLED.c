@@ -5,6 +5,7 @@
 #include <util/delay.h>
 #include <avr/pgmspace.h>
 #include <string.h>
+#include "controller.h"
 
 const unsigned char PROGMEM font[95][5] = {
 	{0b00000000,0b00000000,0b00000000,0b00000000,0b00000000}, //
@@ -176,23 +177,20 @@ void OLED_reset_position() {
 }
 
 void OLED_clear(){
-	volatile char *ext_OLED = (char *) OLED_DATA_BASE_ADDR;
-	for (int i = 0; i<8; i++){
-		for (int f = 0; f<128; f++){
-			ext_OLED[0] = 0x00;
-		}
-	}
+	OLED_goto_page(0);
+	OLED_goto_column(0);
+	OLED_write_c(0xA4);
 }
 
-void OLED_navigate_ypos_with_joystick(int y){
+void OLED_navigate_ypos_with_joystick(int y, int lower_page_limit){
 	if(y > 95){
 		if(page == 0){
-			OLED_goto_page(7);
+			OLED_goto_page(lower_page_limit);
 		}else{
 			OLED_goto_page(page-1);
 		}
 	}else if(y < -95){
-		if(page == 7){
+		if(page == lower_page_limit){
 			OLED_goto_page(0);
 		}else{
 			OLED_goto_page(page+1);
@@ -216,19 +214,55 @@ void OLED_navigate_xpos_with_joystick(int x){
 	}
 }
 
-void OLED_navigate_menu(int y){
-	OLED_navigate_ypos_with_joystick(y);
-	OLED_print_char(BLOCK);
-	OLED_goto_column(column);
-	_delay_ms(500);
-	OLED_print_char(' ');
-	OLED_goto_column(column);
-	_delay_ms(500);
+
+
+void OLED_clear_page(int pageNr){
+	OLED_goto_page(pageNr);
+	OLED_goto_column(0);
+	OLED_print_string("                   ");
 }
 
-void OLED_get_main_menu(){
+void OLED_home(){
+	// initialize home menu
+	OLED_clear();
+	OLED_print_string("git pull out");
+	OLED_goto_page(1);
+	OLED_goto_column(0);
+	OLED_print_string("git come");
+	OLED_goto_page(2);
+	OLED_goto_column(0);
+	OLED_print_string("git no baby");
+
 	OLED_goto_page(0);
 	OLED_goto_column(0);
-	OLED_print_string('git pull out');
+	while(1){
+		OLED_navigate_ypos_with_joystick(controller_joystick_read_Y(),2);
+		if(page == 0){
+			OLED_clear_page(page);
+			_delay_ms(500);
+			OLED_goto_page(0);
+			OLED_goto_column(0);
+			OLED_print_string("git pull out");
+			_delay_ms(500);
+		}
+		else if(page == 1){
+			OLED_clear_page(page);
+			_delay_ms(500);
+			OLED_goto_page(1);
+			OLED_goto_column(0);
+			OLED_print_string("git come");
+			_delay_ms(500);
+		}
+
+		else if(page == 2){
+			OLED_clear_page(page);
+			_delay_ms(500);
+			OLED_goto_page(2);
+			OLED_goto_column(0);
+			OLED_print_string("git no baby");
+			_delay_ms(500);
+		}
+		
+	}
 	
 }
