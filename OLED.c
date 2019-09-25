@@ -177,9 +177,12 @@ void OLED_reset_position() {
 }
 
 void OLED_clear(){
-	OLED_goto_page(0);
-	OLED_goto_column(0);
-	OLED_write_c(0xA4);
+	volatile char *ext_OLED = (char *) OLED_DATA_BASE_ADDR;
+	for (int i = 0; i<8; i++) {
+		for (int f = 0; f<128; f++) {
+			ext_OLED[0] = 0x00;
+		}
+	}
 }
 
 void OLED_navigate_ypos_with_joystick(int y, int lower_page_limit){
@@ -217,52 +220,11 @@ void OLED_navigate_xpos_with_joystick(int x){
 
 
 void OLED_clear_page(int pageNr){
+	volatile char *ext_OLED = (char *) OLED_DATA_BASE_ADDR;
 	OLED_goto_page(pageNr);
 	OLED_goto_column(0);
-	OLED_print_string("                   ");
+	for (int f = 0; f<128; f++) {
+			ext_OLED[0] = 0x00;
+		}
 }
 
-void OLED_home(){
-	// initialize home menu
-	OLED_clear();
-	OLED_print_string("git pull out");
-	OLED_goto_page(1);
-	OLED_goto_column(0);
-	OLED_print_string("git come");
-	OLED_goto_page(2);
-	OLED_goto_column(0);
-	OLED_print_string("git no baby");
-
-	OLED_goto_page(0);
-	OLED_goto_column(0);
-	while(1){
-		OLED_navigate_ypos_with_joystick(controller_joystick_read_Y(),2);
-		if(page == 0){
-			OLED_clear_page(page);
-			_delay_ms(500);
-			OLED_goto_page(0);
-			OLED_goto_column(0);
-			OLED_print_string("git pull out");
-			_delay_ms(500);
-		}
-		else if(page == 1){
-			OLED_clear_page(page);
-			_delay_ms(500);
-			OLED_goto_page(1);
-			OLED_goto_column(0);
-			OLED_print_string("git come");
-			_delay_ms(500);
-		}
-
-		else if(page == 2){
-			OLED_clear_page(page);
-			_delay_ms(500);
-			OLED_goto_page(2);
-			OLED_goto_column(0);
-			OLED_print_string("git no baby");
-			_delay_ms(500);
-		}
-		
-	}
-	
-}
