@@ -6,5 +6,9 @@
 #define ADC_BASE_ADDR 0x1400
 #define SRAM_BASE_ADDR 0x1800
 
-
 #endif
+
+/**
+ * Tests that SRAM is connected properly and operational.
+*/
+void SRAM_test(void);

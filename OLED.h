@@ -14,16 +14,31 @@ static int page = 0;
 static int column = 0;
 
 
-
+/**
+  Structure with command initializations of OLED
+*/
 void OLED_initialize();
 
+/**
+  Write command to OLED_command
+  @param command; char-value to be written to OLED_command register
+*/
 void OLED_write_c(unsigned char command);
 
+/**
+  Write data to OLED_data
+  @param data; char-value to be written to OLED_data register
+*/
 void OLED_write_d(unsigned char data);
+
+/**
+  Print character to current line and column of OLED screen
+  @param string; String to be printed, has to be in double exclamation marks. => ""
+*/
 void OLED_print_char(unsigned char character);
 
 /**
-  Set Y-position on OLED with joystick. One movement equaks one char size (8X5 pixels)
+  Print string to current line and column of OLED screen
   @param string; String to be printed, has to be in double exclamation marks. => ""
 */
 void OLED_print_string(unsigned char* string);
