@@ -74,3 +74,6 @@ void OLED_navigate_Ypos_with_joystick(int y, int lower_page_limit);
   @param pageNR; Page to be cleared
 */
 void OLED_clear_page(int pageNr);
+
+
+void OLED_home();

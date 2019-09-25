@@ -14,6 +14,7 @@
 #include "ADC_driver.h"
 #include "controller.h"
 #include "OLED.h"
+#include "OLED_interface.h"
 
 
 int main(void)
@@ -25,10 +26,8 @@ int main(void)
     OLED_clear();
     OLED_reset_position();
 
-	//OLED_home();
-	while (1) {
-        _delay_ms(50);
-        char button = controller_button_read();
-        printf("button = %d\n\r", button);
-    }
+	OLED_menu_navigate();
+    
+
+	
 }

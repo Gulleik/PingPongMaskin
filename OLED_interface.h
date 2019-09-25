@@ -15,4 +15,5 @@ struct Node {
   
 void OLED_menu_initialize();
 
-void OLED_home();
+void OLED_menu_navigate();
+

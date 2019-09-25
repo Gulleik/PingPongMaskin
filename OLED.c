@@ -228,3 +228,52 @@ void OLED_clear_page(int pageNr){
 	}
 }
 
+
+
+void OLED_home(){
+    
+
+	
+	// initialize home menu
+	OLED_clear();
+	OLED_print_string("git pull out");
+	OLED_goto_page(1);
+	OLED_goto_column(0);
+	OLED_print_string("git come");
+	OLED_goto_page(2);
+	OLED_goto_column(0);
+	OLED_print_string("git no baby");
+
+	OLED_goto_page(0);
+	OLED_goto_column(0);
+	while(1){
+		OLED_navigate_ypos_with_joystick(controller_joystick_read_Y(),2);
+		if(page == 0){
+			OLED_clear_page(page);
+			_delay_ms(500);
+			OLED_goto_page(0);
+			OLED_goto_column(0);
+			OLED_print_string("git pull out");
+			_delay_ms(500);
+		}
+		else if(page == 1){
+			OLED_clear_page(page);
+			_delay_ms(500);
+			OLED_goto_page(1);
+			OLED_goto_column(0);
+			OLED_print_string("git come");
+			_delay_ms(500);
+		}
+
+		else if(page == 2){
+			OLED_clear_page(page);
+			_delay_ms(500);
+			OLED_goto_page(2);
+			OLED_goto_column(0);
+			OLED_print_string("git no baby");
+			_delay_ms(500);
+		}
+		
+	}
+	
+}
