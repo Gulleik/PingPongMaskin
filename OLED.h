@@ -47,7 +47,7 @@ void OLED_pos(int row, int column);
 void OLED_navigate_Xpos_with_joystick(int x);
 
 /**
-  Set Y-position on OLED with joystick. One movement equaks one char size (8X5 pixels)
+  Set Y-position on OLED with joystick. One movement equals one char size (8X5 pixels)
   @param x; Y position on joystick
   @param lower_page_limit; Lower limit of Ypos (for menus)
 */

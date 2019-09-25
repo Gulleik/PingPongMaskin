@@ -11,5 +11,4 @@ char controller_slider_read_L(); //returns value between 0 and 100
 
 char controller_slider_read_R(); //returns value between 0 and 100
 
-char controller_button_read(); //returns the ascii values of l, r, or b for left right or both
-
+char controller_button_read(); //returns the ascii values of l, r, or b for left right or both. j for joystick pressed down. 0 else

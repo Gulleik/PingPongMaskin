@@ -44,14 +44,15 @@ char controller_slider_read_R(){
 char controller_button_read(){
     DDRB = 0;
     char B = PINB;
-    if(B==8){
+    if(B==0){
+        return 'j';
+    }else if(B > 6 && B <= 10){
         return 'r';
-    }else if(B==4){
+    }else if(B > 1 && B <= 6){
         return 'l';
-    }else if(B==12){
+    }else if(B > 10 && B <= 14){
         return 'b';
     }else{
         return 0;
     }
 }
-

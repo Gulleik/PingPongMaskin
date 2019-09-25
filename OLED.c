@@ -177,9 +177,12 @@ void OLED_reset_position() {
 }
 
 void OLED_clear(){
-	OLED_goto_page(0);
-	OLED_goto_column(0);
-	OLED_write_c(0xA4);
+	volatile char *ext_OLED = (char *) OLED_DATA_BASE_ADDR;
+	for (int i = 0; i<8; i++){
+		for (int f = 0; f<128;f++){
+			ext_OLED[0] = 0x00;
+		}
+	}
 }
 
 void OLED_navigate_ypos_with_joystick(int y, int lower_page_limit){
@@ -217,21 +220,24 @@ void OLED_navigate_xpos_with_joystick(int x){
 
 
 void OLED_clear_page(int pageNr){
-	OLED_goto_page(pageNr);
+	volatile char *ext_OLED = (char *) OLED_DATA_BASE_ADDR;
 	OLED_goto_column(0);
-	OLED_print_string("                   ");
+	OLED_goto_page(pageNr);
+	for (int f = 0; f<128;f++){
+			ext_OLED[0] = 0x00;
+		}
 }
 
 void OLED_home(){
 	// initialize home menu
 	OLED_clear();
-	OLED_print_string("git pull out");
+	OLED_print_string("cum and go");
 	OLED_goto_page(1);
 	OLED_goto_column(0);
-	OLED_print_string("git come");
+	OLED_print_string("ejaculate and evacuate");
 	OLED_goto_page(2);
 	OLED_goto_column(0);
-	OLED_print_string("git no baby");
+	OLED_print_string("smash and dash");
 
 	OLED_goto_page(0);
 	OLED_goto_column(0);
@@ -242,7 +248,7 @@ void OLED_home(){
 			_delay_ms(500);
 			OLED_goto_page(0);
 			OLED_goto_column(0);
-			OLED_print_string("git pull out");
+			OLED_print_string("cum and go");
 			_delay_ms(500);
 		}
 		else if(page == 1){
@@ -250,7 +256,7 @@ void OLED_home(){
 			_delay_ms(500);
 			OLED_goto_page(1);
 			OLED_goto_column(0);
-			OLED_print_string("git come");
+			OLED_print_string("ejaculate and evacuate");
 			_delay_ms(500);
 		}
 
@@ -259,7 +265,7 @@ void OLED_home(){
 			_delay_ms(500);
 			OLED_goto_page(2);
 			OLED_goto_column(0);
-			OLED_print_string("git no baby");
+			OLED_print_string("smash and dash");
 			_delay_ms(500);
 		}
 		

@@ -24,11 +24,11 @@ int main(void)
     OLED_initialize();
     OLED_clear();
     OLED_reset_position();
-	
-	int x = 0;
-	int y = 0;
-	OLED_home();
+
+	//OLED_home();
 	while (1) {
-		
+        _delay_ms(50);
+        char button = controller_button_read();
+        printf("button = %d\n\r", button);
     }
 }

@@ -1,5 +1,6 @@
 {
     "files.associations": {
-        "xmem_driver.h": "c"
+        "xmem_driver.h": "c",
+        "controller.h": "c"
     }
 }
