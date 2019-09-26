@@ -228,7 +228,14 @@ void OLED_clear_page(int pageNr){
 	}
 }
 
-
+void OLED_invert_page(int page) {
+	volatile char *ext_OLED = (char *) OLED_DATA_BASE_ADDR;
+	OLED_goto_page(page);
+	OLED_goto_column(0);
+	for (int f = 0; f<128; f++) {
+		ext_OLED[0] = ~ext_OLED[0];
+	}
+}
 
 void OLED_home(){
     

@@ -75,5 +75,12 @@ void OLED_navigate_Ypos_with_joystick(int y, int lower_page_limit);
 */
 void OLED_clear_page(int pageNr);
 
+/**
+ * *************UNTESTED**************
+ * /brief Inverts an entire page
+ * 
+ * @param page; Page to be inverted
+*/
+void OLED_invert_page(int page);
 
 void OLED_home();

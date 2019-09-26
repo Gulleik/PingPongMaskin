@@ -1,5 +1,6 @@
 #include "OLED_interface.h"
 #include "OLED.h"
+#include "controller.h"
 #include <avr/pgmspace.h>
 #include <util/delay.h>
 #include <string.h>
@@ -92,11 +93,30 @@ void OLED_menu_initialize()
     list by following next pointers.    */
 }
 
-const char ALTMenuItem1[] = "Menu1";
-const char ALTMenuItem2[] = "Menu2";
-const char ALTMenuItem3[] = "Menu3";
+//Home screen
+const char AMenu10[] = "Menu0"; //First option
+const char AMenu11[] = "Menu1"; //Second option
+const char AMenu12[] = "Menu2"; //Third option
+const char AMenu13[] = NULL;
+const char AMenu14[] = NULL;
+const char AMenu15[] = NULL;
+const char AMenu16[] = NULL;
+const char AMenu17[] = NULL;
 
-char* ALTMenuItemPointers[] = {ALTMenuItem1, ALTMenuItem2, ALTMenuItem3};
+//Second screen
+const char AMenu20[] = "Menu0"; //First option
+const char AMenu21[] = "Menu1"; //Second option
+const char AMenu22[] = "Menu2"; //Third option
+const char AMenu23[] = NULL;
+const char AMenu24[] = NULL;
+const char AMenu25[] = NULL;
+const char AMenu26[] = NULL;
+const char AMenu27[] = "Return"; //Return
+
+char* ALTMenuItemPointers[][] = {
+	{AMenu10, AMenu11, AMenu12, AMenu13, AMenu14, AMenu15, AMenu16, AMenu17},
+	{AMenu20, AMenu21, AMenu22, AMenu23, AMenu24, AMenu25, AMenu26, AMenu27}
+};
 /*
 const char PROGMEM MenuItem1[] = "Menu1";
 const char PROGMEM MenuItem2[] = "Menu2";
@@ -104,11 +124,13 @@ const char PROGMEM MenuItem3[] = "Menu3";
 
 char* MenuItemPointers[]  = {MenuItem1, MenuItem2, MenuItem3};
 */
-static unsigned char current_menu_ID = 0x00; //Initialized to head
+static unsigned char current_menu_ID = 0x00; //Initialized to head //TODO make integration with initialized linkedlist!
 
 void OLED_menu_navigate() {
 	//Testing PROGMEM strings
+	/*
 	int i = 0;
+	int current_menu_screen;
 	while(1) {
 		_delay_ms(2000);
 		OLED_reset_position();
@@ -116,8 +138,25 @@ void OLED_menu_navigate() {
 		OLED_print_string(ALTMenuItemPointers[i]);
 		if (i == 2) i = 0;
 		else i++;
-	}
+	}*/
 
+	while(1) {
+		current_menu_screen = current_menu_ID / 8;
+		//Print entire menu screen **********UNTESTED**********
+		for (int option = 0; option < 8; option++) {
+			if (ALTMenuItemPointers[current_menu_screen + option]) {
+				OLED_goto_column(0);
+				OLED_goto_page((current_menu_screen + option) % 8);
+				OLED_print_string(ALTMenuItemPointers[current_menu_screen + option]);
+			}
+		}
+
+		//TODO Highlight chosen option **********UNTESTED**********
+		OLED_invert_page(current_menu_ID % 8);
+
+		//TODO Implement menu traversion
+		if (controller_joystick_read_Y < -95) 
+	}
 	/*
 	while(1) {
 		switch (current_menu_ID) {
