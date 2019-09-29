@@ -129,5 +129,5 @@ struct Node {
     struct Node* next;
 }; 
 
-void OLED_menu_navigate();
+void OLED_menu_interface();
 

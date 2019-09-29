@@ -14,7 +14,7 @@ const char PROGMEM MenuItem3[] = "Menu3";
 char* MenuItemPointers[]  = {MenuItem1, MenuItem2, MenuItem3};
 */
 
-void OLED_menu_navigate() {
+void OLED_menu_interface() {
 	//Testing PROGMEM strings
 	/*
 	int i = 0;
@@ -32,42 +32,44 @@ void OLED_menu_navigate() {
 		unsigned char current_menu_screen = menu_pointer->menu_ID / 8;
 		//Print entire menu screen **********UNTESTED**********
 		for (int option = 0; option < 8; option++) {
-			if (ALTMenuItemPointers[menu_pointer->menu_ID + option]) {
+			if (ALTMenuItemPointers[current_menu_screen][option]) {
 				OLED_goto_column(0);
-				OLED_goto_page((current_menu_screen + option) % 8);
-				OLED_print_string(ALTMenuItemPointers[current_menu_screen + option]);
+				OLED_goto_page(option);
+				OLED_print_string(ALTMenuItemPointers[current_menu_screen][option]);
 			}
 		}
 
-		//Highlight chosen option **********UNTESTED**********
-		OLED_invert_page(menu_pointer->menu_ID % 8);
+    //Highlight chosen option **********UNTESTED**********
+    OLED_invert_page(menu_pointer->menu_ID % 8);
+    
+    //Menu traversion loop **********UNTESTED**********
+    while (1) {
+      if (controller_joystick_read_Y < -95) {
+        menu_pointer = menu_pointer->down;
+        break;
+      }
+      else if (controller_joystick_read_Y > 95) {
+        menu_pointer = menu_pointer->up;
+        break;
+      }
+      else if (controller_button_read() == 'j') {
+        menu_pointer = menu_pointer->next;
+        break;
+      }
+    }
 
-		//Implement menu traversion **********UNTESTED**********
-		if (controller_joystick_read_Y < -95) {
-      menu_pointer = menu_pointer->down;
-    }
-    else if (controller_joystick_read_Y > 95) {
-      menu_pointer = menu_pointer->up;
-    }
-    else if (controller_button_read() == 'j') {
-      menu_pointer = menu_pointer->next;
-    }
+    //Break menu loop if option is set to quit menu with next = NULL
+    if (!menu_pointer->next) break;
 	}
-	/*
-	while(1) {
-		switch (current_menu_ID) {
-			case 0x00: //First option on first screen (Linkedlist head)
-				OLED_goto_column(0);
-				OLED_goto_page(0);
-				//OLED_print_string(pgm_read_byte(MenuItemPointers[current_menu_ID]));
-				break;
-			case 0x01:
-				OLED_goto_column(0);
-				OLED_goto_page(1);
-				//OLED_print_string(pgm_read_byte(MenuItemPointers[current_menu_ID]));
-			//...............
-		}
-	}*/
+  //Open exit function if available
+  switch (menu_pointer->menu_ID) {
+    case 0x00: //Menu ID with exit function
+      //Do something
+      break;
+    default:
+      //Fancy menu animation
+      break;
+  }
 }
 
 
