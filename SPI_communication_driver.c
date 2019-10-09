@@ -8,7 +8,6 @@ void SPI_master_initialize(){
 
     //Enable SPI interrupts on end of transmission
     //SPCR |= 1 << SPIE
-
 }
 
 void SPI_write_byte(uint8_t data) {

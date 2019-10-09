@@ -3,18 +3,18 @@
 #include <avr/io.h>
 
 
+void MCP_driver_reset(){
+    MCP_enable();
+    SPI_write_byte(MCP_RESET);
+    MCP_disable();
+}
+
 void MCP_enable(){
     PORTB = 0<<PB4;
 }
 
 void MCP_disable() {
     PORTB = 1<<PB4;
-}
-
-void MCP_driver_reset(){
-    MCP_enable();
-    SPI_write_byte(MCP_RESET);
-    MCP_disable();
 }
 
 uint8_t MCP_read(uint8_t address) {

@@ -1,8 +1,8 @@
 #ifndef CONTROLLER_H
 #define CONTROLLER_H
 
-
 #endif
+
 /**
  * Read USB multifunction joystick value in X-direction, and convert to [-100,100]
  * @return converted joystick value
