@@ -24,16 +24,9 @@ void UART_transmit(char data) {
     UDR0 = data;
 } 
 
-
 unsigned char UART_receive() {
 	/* Wait for data to be received */
 	loop_until_bit_is_set(UCSR0A, RXC0);
 	/* Get and return received data from buffer */
 	return UDR0;
 }
-
-
-
-
-
-	
