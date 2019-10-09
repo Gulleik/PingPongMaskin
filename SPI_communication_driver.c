@@ -20,10 +20,14 @@ void SPI_write_byte(uint8_t data) {
 }
 
 uint8_t SPI_read_byte() {
+    volatile uint8_t data;
+
     //Write arbitrary value to SPI
-    SPI_write_byte(0xFF);
+    SPDR = 0xFF;
+
+    while(!(SPSR & (1 << SPIF)));
 
     //Catch returned data
-    volatile uint8_t data = SPDR;
+    data = SPDR;
     return data;
 }

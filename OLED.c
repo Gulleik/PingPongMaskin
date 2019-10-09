@@ -107,7 +107,7 @@ const unsigned char PROGMEM font[95][5] = {
 };
 
 void OLED_initialize(){
-	OLED_write_c(0xae);        //  display  off        
+	OLED_write_c(0xae);        //display  off        
 	OLED_write_c(0xa1);        //segment  remap        
 	OLED_write_c(0xda);        //common  pads  hardware:  alternative        
 	OLED_write_c(0x12);        
@@ -262,6 +262,7 @@ void OLED_home(){
 			OLED_goto_column(0);
 			OLED_print_string("git pull out");
 			_delay_ms(500);
+			printf("page=0\n\r");
 		}
 		else if(page == 1){
 			OLED_clear_page(page);
@@ -270,6 +271,7 @@ void OLED_home(){
 			OLED_goto_column(0);
 			OLED_print_string("git come");
 			_delay_ms(500);
+			printf("page=1\n\r");
 		}
 
 		else if(page == 2){
@@ -279,6 +281,7 @@ void OLED_home(){
 			OLED_goto_column(0);
 			OLED_print_string("git no baby");
 			_delay_ms(500);
+			printf("page=2\n\r");
 		}
 		
 	}
