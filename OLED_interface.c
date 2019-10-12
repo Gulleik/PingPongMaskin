@@ -7,11 +7,11 @@
 
 
 
-const char MenuItem1[] PROGMEM = "Menu1";
-const char MenuItem2[] PROGMEM = "Menu2";
-const char MenuItem3[] PROGMEM = "Menu3";
+//const char MenuItem1[] PROGMEM = "Menu1";
+//const char MenuItem2[] PROGMEM = "Menu2";
+//const char MenuItem3[] PROGMEM = "Menu3";
 
-char* MenuItemPointers[]  = {MenuItem1, MenuItem2, MenuItem3};
+//char* MenuItemPointers[]  = {MenuItem1, MenuItem2, MenuItem3};
 
 //Home screen
 const char AMenu10[] = "Home Screen, Option 1"; //First option
@@ -39,7 +39,7 @@ void OLED_menu_interface() {
 	//Testing PROGMEM strings
 	
 	int i = 0;
-	int current_menu_screen;
+	int current_menu_screen;/*
 	while(1) {
 		_delay_ms(2000);
 		OLED_reset_position();
@@ -47,8 +47,8 @@ void OLED_menu_interface() {
 		OLED_print_string(ALTMenuItemPointers[i]);
 		if (i == 2) i = 0;
 		else i++;
-	}
-/*
+	}*/
+  /*
 	while(1) {
 		unsigned char current_menu_screen = menu_pointer->menu_ID / 8;
 		//Print entire menu screen **********UNTESTED**********

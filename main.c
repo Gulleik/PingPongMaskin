@@ -17,6 +17,7 @@
 #include "OLED_interface.h"
 #include "CAN_driver.h"
 #include "MCP_driver.h"
+#include "lib.h"
 #include <avr/interrupt.h>
 
 
@@ -24,15 +25,26 @@ int main(void)
 {
 	UART_initialize();
     XMEM_initialize();
-
     OLED_initialize();
-    //OLED_home();
+
+    SRAM_test();
+    //volatile char *ext_ram = (char *) 0x1000; // Start address for the OLED
+    //volatile char *ext_ram = (char *) 0x1400; // Start address for the ADC
     
-    //OLED_clear();
-    //OLED_reset_position();
+
+    OLED_print_string("helo");
+    OLED_goto_page(1);
+    OLED_goto_column(0);
+    OLED_print_string("i am");
+    OLED_goto_page(2);
+    OLED_goto_column(0);
+    OLED_print_string("cool");
+    OLED_invert_page(0);
+
+    //OLED_home();
     //OLED_menu_interface();
 	 
-    CAN_initilize();
+    //CAN_initilize();
 
     message_t msg;
     msg.ID = 1;
@@ -43,6 +55,7 @@ int main(void)
 
     
     while(1) {
+        /*
         CAN_write_message(msg);
         if(MCP_read(MCP_CANINTF) & 0x01){
             message_t mg = CAN_receive_message();
@@ -50,13 +63,13 @@ int main(void)
                 printf("msg2 = %d\n\r", mg.data[f]);
             }
             _delay_ms(10);
-        }
+        }*/
     }
 }
 
-
+/*
 ISR(INT0_vect){
     cli();
     printf("Interrupted");
     sei();
-}
+}*/

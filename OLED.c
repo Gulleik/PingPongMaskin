@@ -7,6 +7,8 @@
 #include <string.h>
 #include "controller.h"
 
+volatile uint8_t *ext_OLED_mem = (uint8_t) 
+
 const unsigned char PROGMEM font[95][5] = {
 	{0b00000000,0b00000000,0b00000000,0b00000000,0b00000000}, //
 	{0b00000000,0b00000000,0b01011110,0b00000000,0b00000000}, // !
@@ -129,6 +131,9 @@ void OLED_initialize(){
 	OLED_write_c(0xa4);        //out  follows  RAM  content        
 	OLED_write_c(0xa6);        //set  normal  display        
 	OLED_write_c(0xaf);        //  display  on 
+
+    OLED_reset_position();
+    OLED_clear();
 } 
 
 void OLED_write_c(unsigned char command) {
@@ -238,9 +243,6 @@ void OLED_invert_page(int page) {
 }
 
 void OLED_home(){
-    
-
-	
 	// initialize home menu
 	OLED_clear();
 	OLED_print_string("git pull out");
