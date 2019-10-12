@@ -20,25 +20,19 @@
 #include "lib.h"
 #include <avr/interrupt.h>
 
-
 int main(void)
 {
 	UART_initialize();
     XMEM_initialize();
-    OLED_initialize();
-
-    SRAM_test();
-    //volatile char *ext_ram = (char *) 0x1000; // Start address for the OLED
-    //volatile char *ext_ram = (char *) 0x1400; // Start address for the ADC
+    OLED_initialize();    
     
-
-    OLED_print_string("helo");
+    OLED_print_string("helohelo");
     OLED_goto_page(1);
     OLED_goto_column(0);
-    OLED_print_string("i am");
+    OLED_print_string("heyhey");
     OLED_goto_page(2);
     OLED_goto_column(0);
-    OLED_print_string("cool");
+    OLED_print_string("coolcool");
     OLED_invert_page(0);
 
     //OLED_home();

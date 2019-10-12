@@ -3,6 +3,8 @@
 #endif
 
 #include "string.h"
+#include "lib.h"
+#include <stdint.h>
 
 // Char that light all pixels in a char space
 #define BLOCK 126
@@ -12,6 +14,9 @@ static int page = 0;
 
 // current column
 static int column = 0;
+
+static uint8_t current_column;
+static uint8_t current_page;
 
 
 /**

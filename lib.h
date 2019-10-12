@@ -5,7 +5,7 @@
 #define OLED_DATA_BASE_ADDR 0x1200
 #define ADC_BASE_ADDR 0x1400
 #define SRAM_BASE_ADDR 0x1800
-#define SRAM_OLED_BASE_ADDR 0x
+#define SRAM_OLED_BASE_ADDR 0x1c00
 
 #endif
 
