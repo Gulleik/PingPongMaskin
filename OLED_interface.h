@@ -5,108 +5,18 @@
 
 #include <stdlib.h> 
 #include <string.h>
-
-//////////////////////////////////////////////////////////////////////////////
-///////////////////////////////INITIALIZE MENU////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-/*
-struct Node* head = NULL;  
-struct Node* second = NULL; 
-struct Node* third = NULL; 
-
-struct Node* menu_pointer = head;
-*/
-// allocate 3 nodes in the heap 
-/*
-head = (struct Node*)malloc(sizeof(struct Node)); 
-second = (struct Node*)malloc(sizeof(struct Node)); 
-third = (struct Node*)malloc(sizeof(struct Node)); 
-*/
-/* Three blocks have been allocated dynamically.  
-  We have pointers to these three blocks as head, 
-  second and third      
-    head           second           third 
-    |                |               | 
-    |                |               | 
-+---+-----+     +----+----+     +----+----+ 
-| #  | #  |     | #  | #  |     |  # |  # | 
-+---+-----+     +----+----+     +----+----+ 
-  
-# represents any random value. 
-Data is random because we haven’t assigned  
-anything yet  */
-/*
-head->menu_ID = 0x00; // assign unique ID to first menu node 
-head->down = second; // Link first node with the second node 
-head->up = third; // Link to final node (wrap-around)
-head->next = NULL; // Link to next menu screen (Currently none)
-*/
-/* data has been assigned to the data part of the first 
-  block (block pointed by the head). And next 
-  pointer of first block points to second.   
-  So they both are linked. 
-
-    head          second         third 
-    |              |              | 
-    |              |              | 
-+---+---+     +----+----+     +-----+----+ 
-| 1  | o----->| #  | #  |     |  #  | #  | 
-+---+---+     +----+----+     +-----+----+     
-*/
-/*
-// assign unique ID to second menu node
-second->menu_ID = 0x01; 
-second->down = third; // Link second node with the third node 
-head->up = head; // Link to first node
-head->next = NULL; // Link to next menu screen (Currently none)
-*/
-/* data has been assigned to the data part of the second 
-  block (block pointed by second). And next 
-  pointer of the second block points to the third  
-  block. So all three blocks are linked. 
-
-    head         second         third 
-    |             |             | 
-    |             |             | 
-+---+---+     +---+---+     +----+----+ 
-|0x0| o----->| 0x1| o-----> |  # |  # | 
-+---+---+     +---+---+     +----+----+      */
-/*
-third->menu_ID = 0x02; // assign unique menu id to third node
-third->down = head; // Link third node to first node (wrap around)
-third->up = second; // Link third node to second node
-third->next = NULL; // Link to next menu screen (Currently none)
-*/
-/* data has been assigned to data part of third 
-block (block pointed by third). And next pointer 
-of the third block is made NULL to indicate 
-that the linked list is terminated here. 
-
-  We have the linked list ready.   
-
-        head     
-          | 
-          |  
-    +---+---+     +---+---+       +----+------+ 
-    |0x0| o----->| 0x1| o----->   |0x2 | NULL | 
-    +---+---+     +---+---+       +----+------+        
-  
-  
-Note that only head is sufficient to represent  
-the whole list.  We can traverse the complete  cde54es
-list by following next pointers.    */
-
-
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
   
 struct Node { 
     unsigned char menu_ID;
     struct Node* up;
     struct Node* down;
     struct Node* next;
-}; 
+};
+
+enum menu_options {
+	HOME0, HOME1, HOME2, HOME3, HOME4, HOME5, HOME6, HOME7,
+	SECOND0, SECOND1, SECOND2, SECOND3, SECOND4, SECOND5, SECOND6, SECOND_RETURN
+};
 
 void OLED_menu_interface();
 
