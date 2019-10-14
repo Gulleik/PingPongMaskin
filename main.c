@@ -25,18 +25,9 @@ int main(void)
 	UART_initialize();
     XMEM_initialize();
     OLED_initialize();    
-    
-    OLED_print_string("helohelo");
-    OLED_goto_page(1);
-    OLED_goto_column(0);
-    OLED_print_string("heyhey");
-    OLED_goto_page(2);
-    OLED_goto_column(0);
-    OLED_print_string("coolcool");
-    OLED_invert_page(0);
 
     //OLED_home();
-    //OLED_menu_interface();
+    OLED_menu_interface();
 	 
     //CAN_initilize();
 

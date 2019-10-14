@@ -232,12 +232,11 @@ void OLED_navigate_xpos_with_joystick(int x){
 
 
 
-void OLED_clear_page(int pageNr){
-	volatile char *ext_OLED = (char *) OLED_DATA_BASE_ADDR;
-	OLED_goto_page(pageNr);
+void OLED_clear_page(int page){
+	OLED_goto_page(page);
 	OLED_goto_column(0);
 	for (int f = 0; f<128; f++) {
-		ext_OLED[0] = 0x00;
+		OLED_write_d(0);
 	}
 }
 

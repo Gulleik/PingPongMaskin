@@ -14,65 +14,68 @@
 //char* MenuItemPointers[]  = {MenuItem1, MenuItem2, MenuItem3};
 
 //Home screen
-const char HOME0[] = "Home Screen, Option 0"; //First option
-const char HOME1[] = "Home Screen, Option 1"; //Second option
-const char HOME2[] = "Home Screen, Option 2"; //Third option
-const char HOME3[] = "NULL";
-const char HOME4[] = "NULL";
-const char HOME5[] = "NULL";
-const char HOME6[] = "NULL";
-const char HOME7[] = "NULL";
+const char h0[] = "Goto second screen"; //First option
+const char h1[] = "helo"; //Second option
+const char h2[] = ""; //Third option
+const char h3[] = "Goto first option";
+const char h4[] = "";
+const char h5[] = "git";
+const char h6[] = "no";
+const char h7[] = "baby";
 
 //Second screen
-const char SECOND0[] = "Second Screen, Option 0"; //First option
-const char SECOND1[] = "Second Screen, Option 1"; //Second option
-const char SECOND2[] = "Second Screen, Option 2"; //Third option
-const char SECOND3[] = "NULL";
-const char SECOND4[] = "NULL";
-const char SECOND5[] = "NULL";
-const char SECOND6[] = "NULL";
-const char SECOND_RETURN[] = "Return"; //Return
+const char sec0[] = "helo0"; //First option
+const char sec1[] = "helo1"; //Second option
+const char sec2[] = "helo2"; //Third option
+const char sec3[] = "";
+const char sec4[] = "";
+const char sec5[] = "";
+const char sec6[] = "";
+const char sec_return[] = "Return"; //Return
 
 char* ALTMenuItemPointers[] = {
-	HOME0, HOME1, HOME2, HOME3, HOME4, HOME5, HOME6, HOME7,
-	SECOND0, SECOND1, SECOND2, SECOND3, SECOND4, SECOND5, SECOND6, SECOND_RETURN};
+	h0, h1, h2, h3, h4, h5, h6, h7,
+	sec0, sec1, sec2, sec3, sec4, sec5, sec6, sec_return};
 
 uint8_t enter() {
 	return controller_button_read() == 'j';
 }
 
-void traverse_menu(*option) {
+uint8_t traverse_menu(enum menu_options *option) {
+	uint8_t screen = *option / 8;
 	//Traverse up and down on screen
-	if (controller_joystick_read_Y() < -95) {
+	//printf("Up: %d\tDown: %d\tKey press: %d\n\r", controller_joystick_read_Y() < -95, controller_joystick_read_Y() > 95, enter());
+	char c = UART_receive();
+	if (c == 'l'/*controller_joystick_read_Y() < -95*/) { //DOWN
 		do {
-			*option = (*option + 1) % 8;
-		} while (!ALTMenuItemPointers[*options]);
+			*option = screen * 8 + (*option + 1) % 8; // Increment option and loop if out of bounds
+		} while (ALTMenuItemPointers[*option][0] == '\0');
 		return 1; //Traversion -> Redraw screen
 	}
-	else if (controller_joystick_read_Y() > 95) {
+	else if (c == 'o'/*controller_joystick_read_Y() > 95*/) { //UP
 		do {
-			*option = (*option - 1) % 8;
-		} while (!ALTMenuItemPointers[*options]);
+			*option = screen * 8 + (*option - 1) % 8;
+		} while (ALTMenuItemPointers[*option][0] == '\0'); // Increment option and loop if out of bounds
 		return 1;
 	}
 	//Traverse in and out of screens
-	switch (option) {
+	switch (*option) {
 		case (HOME0):
-			if enter() {
-				option = SECOND0;
+			if (c == 13/*enter()*/) {
+				*option = SECOND0;
 				return 1; //Traversion -> Redraw screen
 			}
 			break;
-		case (HOME1):
-			if enter() {
+		case (HOME3):
+			if (c == 13/*enter()*/) {
 				//DO SOMETHING
-				option = HOME0; //Return to home after function call
+				*option = HOME0; //Return to home after function call
 				return 1;
 			}
 			break;
 		case (SECOND_RETURN):
-			if enter() {
-				option = HOME0;
+			if (c == 13/*enter()*/) {
+				*option = HOME0;
 				return 1;
 			}
 			break;
@@ -100,11 +103,13 @@ void OLED_menu_interface() {
 	//Initialize default option to first option at home screen (HOME0)
 	enum menu_options option = HOME0;
 	while(1) {
+		printf("option = %d\n\r", option);
 		//Print entire screen
 		for (int page = 0; page < 8; page++) {
 			OLED_goto_column(0);
-			OLED_goto_page(option % 8);
-			OLED_print_string(ALTMenuItemPointers[option]);
+			OLED_clear_page(page);
+			OLED_goto_page(page);
+			OLED_print_string(ALTMenuItemPointers[(option / 8) * 8 + page]);
 		}
 		//Highlight chosen option
 		OLED_invert_page(option % 8);
