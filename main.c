@@ -15,31 +15,46 @@
 #include "controller.h"
 #include "OLED.h"
 #include "OLED_interface.h"
-#include "SPI_communication_driver.h"
+#include "CAN_driver.h"
 #include "MCP_driver.h"
-
+#include "lib.h"
+#include <avr/interrupt.h>
 
 int main(void)
 {
 	UART_initialize();
     XMEM_initialize();
+    OLED_initialize();    
 
-    OLED_initialize();
     //OLED_home();
-    
-    //OLED_clear();
-    //OLED_reset_position();
-    //OLED_menu_interface();
+    OLED_menu_interface();
 	 
-    SPI_master_initialize();
-    MCP_driver_reset();
-    MCP_write(MCP_CANCTRL, MODE_LOOPBACK);
+    //CAN_initilize();
 
-    printf("MCP_CANCTRL: %d\n\r", MCP_read(MCP_CANCTRL));
-    _delay_ms(100);
-    MCP_bit_modify(MCP_CANCTRL, 0b10000000, 0b10000000);
-    printf("Modified MCP_CANCTRL: %d\n\r", MCP_read(MCP_CANCTRL));
+    message_t msg;
+    msg.ID = 1;
+    msg.length = 3;
+    msg.data[0] = 'K';
+    msg.data[1] = 'U';
+    msg.data[2] = 'K';
 
+    
     while(1) {
+        /*
+        CAN_write_message(msg);
+        if(MCP_read(MCP_CANINTF) & 0x01){
+            message_t mg = CAN_receive_message();
+            for(uint8_t f = 0;f<msg.length;f++){
+                printf("msg2 = %d\n\r", mg.data[f]);
+            }
+            _delay_ms(10);
+        }*/
     }
 }
+
+/*
+ISR(INT0_vect){
+    cli();
+    printf("Interrupted");
+    sei();
+}*/

@@ -1,9 +1,11 @@
 #include "SPI_communication_driver.h"
 #include "MCP_driver.h"
 #include <avr/io.h>
+#include <stdint.h>
 
 
 void MCP_driver_reset(){
+    SPI_master_initialize();
     MCP_enable();
     SPI_write_byte(MCP_RESET);
     MCP_disable();
@@ -14,8 +16,9 @@ void MCP_enable(){
 }
 
 void MCP_disable() {
-    PORTB = 1<<PB4;
+    PORTB = 0b00000001<<PB4;
 }
+
 
 uint8_t MCP_read(uint8_t address) {
     MCP_enable();
@@ -35,13 +38,25 @@ void MCP_write(uint8_t address, uint8_t data){
     MCP_disable();
 }
 
-void MCP_RTS(){
+
+void MCP_RTS(uint8_t buffer){
     MCP_enable();
+    switch (buffer) {
+        case 0x00:
+            SPI_write_byte(MCP_RTS_TX0);
+            break;
+        case 0x01:
+            SPI_write_byte(MCP_RTS_TX1);
+            break;
+        case 0x02:
+            SPI_write_byte(MCP_RTS_TX2);
+            break;
+    }
     SPI_write_byte(MCP_RTS_TX0);
     MCP_disable();
 }
 
-void MCP_read_status(){
+uint8_t MCP_read_status(){
     MCP_enable();
     SPI_write_byte(MCP_READ_STATUS);
     uint8_t data = SPI_read_byte();

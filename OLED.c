@@ -1,11 +1,12 @@
 
 #include "OLED.h"
-#include "lib.h"
 #include "fonts.h"
 #include <util/delay.h>
 #include <avr/pgmspace.h>
 #include <string.h>
 #include "controller.h"
+
+//volatile uint8_t *ext_OLED_mem = (uint8_t) SRAM_OLED_BASE_ADDR;
 
 const unsigned char PROGMEM font[95][5] = {
 	{0b00000000,0b00000000,0b00000000,0b00000000,0b00000000}, //
@@ -129,6 +130,9 @@ void OLED_initialize(){
 	OLED_write_c(0xa4);        //out  follows  RAM  content        
 	OLED_write_c(0xa6);        //set  normal  display        
 	OLED_write_c(0xaf);        //  display  on 
+
+    OLED_reset_position();
+    OLED_clear();
 } 
 
 void OLED_write_c(unsigned char command) {
@@ -138,14 +142,24 @@ void OLED_write_c(unsigned char command) {
 
 void OLED_write_d(unsigned char data) {
 	volatile char *ext_OLED = (char *) OLED_DATA_BASE_ADDR;
+	volatile char *ext_OLED_mem = (char *) SRAM_OLED_BASE_ADDR;
 	ext_OLED[0] = data;
+	ext_OLED_mem[current_page * 128 + current_column] = data;
+
+	if (current_column < 127) {
+		current_column++;
+	} else {
+		current_column = 0;
+		current_page++;
+	}
+	if (current_page > 7) {
+		current_page = 0;
+	}
 }
 
 void OLED_print_char(unsigned char character) {
-	volatile char *ext_OLED = (char *) OLED_DATA_BASE_ADDR;
-
 	for (int i = 0; i < 5; i++) {
-		ext_OLED[0] = pgm_read_byte(&font[character - 32][i]);
+		OLED_write_d(pgm_read_byte(&font[character - 32][i]));
 	}
 }
 
@@ -169,7 +183,7 @@ void OLED_goto_page(unsigned char new_page){
   	OLED_write_c(new_page);
   	OLED_write_c(0x07);
 
-	page = new_page;
+	current_page = new_page;
 }
 
 void OLED_goto_column(unsigned char new_column){
@@ -177,7 +191,7 @@ void OLED_goto_column(unsigned char new_column){
 	OLED_write_c(new_column);
 	OLED_write_c(0x7F);
 
-	column = new_column;
+	current_column = new_column;
 }
 
 void OLED_goto_pos(int row, int column){
@@ -222,21 +236,23 @@ void OLED_navigate_xpos_with_joystick(int x){
 	}
 }
 
-void OLED_clear_page(int pageNr){
-	volatile char *ext_OLED = (char *) OLED_DATA_BASE_ADDR;
-	OLED_goto_page(pageNr);
+
+
+
+void OLED_clear_page(int page){
+	OLED_goto_page(page);
 	OLED_goto_column(0);
 	for (int f = 0; f<128; f++) {
-		ext_OLED[0] = 0x00;
+		OLED_write_d(0);
 	}
 }
 
 void OLED_invert_page(int page) {
-	volatile char *ext_OLED = (char *) OLED_DATA_BASE_ADDR;
+	volatile char *ext_OLED_mem = (char *) SRAM_OLED_BASE_ADDR;
 	OLED_goto_page(page);
 	OLED_goto_column(0);
 	for (int f = 0; f<128; f++) {
-		ext_OLED[0] = ~ext_OLED[0];
+		OLED_write_d(~ext_OLED_mem[page * 128 + f]);
 	}
 }
 

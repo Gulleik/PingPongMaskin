@@ -3,6 +3,8 @@
 #endif
 
 #include "string.h"
+#include "lib.h"
+#include <stdint.h>
 
 // Char that light all pixels in a char space
 #define BLOCK 126
@@ -12,6 +14,10 @@ static int page = 0;
 
 // current column
 static int column = 0;
+
+
+static uint8_t current_column;
+static uint8_t current_page;
 
 /**
  * Structure with command initializations of OLED
@@ -88,7 +94,7 @@ void OLED_navigate_xpos_with_joystick(int x);
  * Clears an entire page
  * @param pageNr; Page to be cleared
 */
-void OLED_clear_page(int pageNr);
+void OLED_clear_page(int page);
 
 /**
  * *************UNTESTED**************
