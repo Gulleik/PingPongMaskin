@@ -169,15 +169,6 @@ void OLED_print_string(unsigned char* string){
 	}
 }
 
-void OLED_clear(){
-	volatile char *ext_OLED = (char *) OLED_DATA_BASE_ADDR;
-	for (int i = 0; i<8; i++){
-		for (int f = 0; f<128;f++){
-			ext_OLED[0] = 0x00;
-		}
-	}
-}
-
 void OLED_goto_page(unsigned char new_page){
   	OLED_write_c(0x22);
   	OLED_write_c(new_page);
@@ -194,14 +185,17 @@ void OLED_goto_column(unsigned char new_column){
 	current_column = new_column;
 }
 
-void OLED_goto_pos(int row, int column){
-	OLED_goto_page((char)row);
-	OLED_goto_column((char)column);
-}
-
 void OLED_reset_position() {
 	OLED_goto_column(0x00);
 	OLED_goto_page(0x00);
+}
+
+void OLED_clear(){
+	for (int i = 0; i<8; i++){
+		for (int f = 0; f<128;f++){
+			OLED_write_d(0x00);
+		}
+	}
 }
 
 void OLED_navigate_ypos_with_joystick(int y, int lower_page_limit){
@@ -235,7 +229,6 @@ void OLED_navigate_xpos_with_joystick(int x){
 		}
 	}
 }
-
 
 
 

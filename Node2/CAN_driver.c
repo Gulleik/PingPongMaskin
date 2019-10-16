@@ -6,14 +6,14 @@
 
 
 
-void CAN_initilize(){
+void CAN_initialize(){
     MCP_driver_reset();
-    MCP_write(MCP_CANCTRL, MODE_LOOPBACK);
     MCP_bit_modify(MCP_CANINTE, 0x1, 0xFF);
 
     //Setup for interrupt operation
     MCUCR |= (0x01);
-    GICR |= (1 << INT0);
+    //GICR |= (1 << INT0);
+    MCP_write(MCP_CANCTRL, MODE_NORMAL);
 }
 
 void CAN_write_message(message_t msg) {

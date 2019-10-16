@@ -1,13 +1,14 @@
 #include "SPI_communication_driver.h"
 
 void SPI_master_initialize(){
-    /* Set MOSI and SCK output, all others input */
-    DDRB = (1<<DDB5)|(1<<DDB7)|(1<<DDB4);
+    /* Set MOSI, SS and SCK output, all others input */
+    DDRB = (1<<DD_CS)|(1<<DD_MOSI)|(1<<DD_SCK)|(1<<PB7);
     /* Enable SPI, Master, set clock rate fck/16 */
     SPCR = (1<<SPE)|(1<<MSTR)|(1<<SPR0);
 
     //Enable SPI interrupts on end of transmission
     //SPCR |= 1 << SPIE
+
 }
 
 void SPI_write_byte(uint8_t data) {

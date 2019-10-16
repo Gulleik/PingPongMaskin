@@ -12,7 +12,7 @@ struct message_t {
 } typedef message_t;
 
 
-void CAN_initilize();
+void CAN_initialize();
 
 void CAN_write_message(message_t msg);
 

@@ -4,21 +4,22 @@
 #include <stdint.h>
 
 
+void MCP_enable(){
+    //PORTB &= ~(1<<DD_CS);
+    PORTB &= ~(1<<PB7);
+}
+
+void MCP_disable() {
+    //PORTB |= 1<<DD_CS;
+    PORTB |= 1<<PB7;
+}
+
 void MCP_driver_reset(){
     SPI_master_initialize();
     MCP_enable();
     SPI_write_byte(MCP_RESET);
     MCP_disable();
 }
-
-void MCP_enable(){
-    PORTB = 0<<PB4;
-}
-
-void MCP_disable() {
-    PORTB = 0b00000001<<PB4;
-}
-
 
 uint8_t MCP_read(uint8_t address) {
     MCP_enable();

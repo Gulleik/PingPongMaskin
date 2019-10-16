@@ -167,54 +167,20 @@ Copyright 2003 Kimberly Otten Software Consulting
 
 #endif
 
-/**
- * Resets the MCP driver.
-*/
 void MCP_driver_reset();
 
-/**
- * Enables the MCP driver.
-*/
 void MCP_enable();
 
-/**
- * Disables the MCP driver.
-*/
 void MCP_disable();
 
-/**
- * Reads and returns the data at the given address.
- * @param address; address to be read from.
- * @return data; data located at address.
-*/
 uint8_t MCP_read(uint8_t address);
 
-/**
- * Writes data to the given address.
- * @param address; address to be written to.
- * @param data; data to be written.
-*/
 void MCP_write(uint8_t address, uint8_t data);
 
-/**
- * Request to send data.
-*/
 void MCP_RTS(uint8_t buffer);
 
-
-/**
- * Modifies data at given address by masking it with mask.
- * @param address; address to be modified.
- * @param mask; mask to be used.
- * @param data; data to be masked at address.
-*/
 void MCP_bit_modify(uint8_t address, uint8_t mask, uint8_t data);
 
-
-/**
- * Initializes MCP.
- * @return ###########################################################################?
-*/
 uint8_t MCP_read_status();
 
 uint8_t mcp_init();
