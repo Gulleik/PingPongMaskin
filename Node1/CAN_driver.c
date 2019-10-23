@@ -8,7 +8,7 @@
 
 void CAN_initialize(){
     MCP_driver_reset();
-    MCP_write(MCP_CANCTRL, MODE_LOOPBACK);
+    MCP_write(MCP_CANCTRL, MODE_NORMAL);
     MCP_bit_modify(MCP_CANINTE, 0x1, 0xFF);
 
     //Setup for interrupt operation
@@ -36,6 +36,7 @@ void CAN_write_message(message_t msg) {
 
 message_t CAN_receive_message(){
     message_t msg;
+    msg.ID = -1;
 
     if(MCP_read(MCP_CANINTF) & 0x01){
         MCP_bit_modify(MCP_CANINTF, 0x01, 0);

@@ -36,8 +36,9 @@ void CAN_write_message(message_t msg) {
 
 message_t CAN_receive_message(){
     message_t msg;
+    msg.ID = -1;
 
-    if(MCP_read(MCP_CANINTF) & 0x01){
+    if(MCP_read(MCP_CANINTF) & 0x01 ){
         MCP_bit_modify(MCP_CANINTF, 0x01, 0);
         msg.ID = (MCP_read(MCP_RXB0SIDH) << 3);
         msg.ID |= (MCP_read(MCP_RXB0SIDL) >> 5);

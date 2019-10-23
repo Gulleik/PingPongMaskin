@@ -1,4 +1,5 @@
 #include "controller.h"
+#include "CAN_driver.h"
 #include <avr/io.h>
 
 char controller_joystick_read_X(){
@@ -42,7 +43,8 @@ char controller_slider_read_R(){
 }
 
 char controller_button_read(){
-    DDRB = 0;
+    DDRB &= ~(1 << DDB0);
+    
     char B = PINB;
     if(B==0){
         return 'j';
@@ -55,4 +57,23 @@ char controller_button_read(){
     }else{
         return 0;
     }
+}
+
+
+void controller_CAN_send() {
+    message_t msg;
+    msg.length = 5;
+    msg.ID = 0;
+    msg.data[0] = controller_joystick_read_X();
+    msg.data[1] = controller_joystick_read_Y();
+    msg.data[2] = controller_slider_read_L();
+    msg.data[3] = controller_slider_read_R();
+    msg.data[4] = controller_button_read();
+    CAN_write_message(msg);
+
+    printf("Controller send: \n\r\t\t\t");
+    for (int i = 0; i < msg.length; i++) {
+        printf("%d ", msg.data[i]);
+    }
+    printf("\n\r");
 }
