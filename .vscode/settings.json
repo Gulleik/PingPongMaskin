@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "xmem_driver.h": "c",
-        "controller.h": "c"
+        "controller.h": "c",
+        "uart_driver.h": "c"
     }
 }

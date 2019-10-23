@@ -32,8 +32,7 @@ int main(void)
 	 
     CAN_initialize();
 
-    //printf("CANSTAT: %d\n\r", MCP_read(MCP_CANSTAT));
-    
+    printf("CANSTAT: %d\n\r", MCP_read(MCP_CANSTAT));
     message_t msg;
     msg.ID = 0;
     msg.length = 2;
@@ -41,8 +40,11 @@ int main(void)
     msg.data[1] = 'B';
     while(1) {
         _delay_ms(100);
-        //CAN_write_message(msg);
-        controller_CAN_send();
+        //printf("X=%d\tY=%d\n\r", controller_joystick_read_X(), controller_joystick_read_Y());
+        CAN_write_message(msg);
+        printf("Node 1 write: %c\n\r", msg.data[0]);
+        printf("Node 1 receive: %c\n\r", CAN_receive_message());
+        //controller_CAN_send();
     }
 }
 

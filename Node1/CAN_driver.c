@@ -8,7 +8,7 @@
 
 void CAN_initialize(){
     MCP_driver_reset();
-    MCP_write(MCP_CANCTRL, MODE_NORMAL);
+    MCP_write(MCP_CANCTRL, MODE_LOOPBACK);
     MCP_bit_modify(MCP_CANINTE, 0x1, 0xFF);
 
     //Setup for interrupt operation
@@ -32,11 +32,17 @@ void CAN_write_message(message_t msg) {
     MCP_write(MCP_TXB0CTRL, 1<<3); //1<<3 = TXREQ
 
     MCP_RTS(0x00); //RTS buffer 0
+
+    //printf("Node 1 CAN write: \n\r\t\t\t"); //sloyf det her seinre ellerno piss
+    //for (int i = 0; i < msg.length; i++) {
+    //    printf("%d ", msg.data[i]);
+    //}
+    //printf("\n\r");
 }
 
 message_t CAN_receive_message(){
     message_t msg;
-    msg.ID = -1;
+    //msg.ID = -1;
 
     if(MCP_read(MCP_CANINTF) & 0x01){
         MCP_bit_modify(MCP_CANINTF, 0x01, 0);

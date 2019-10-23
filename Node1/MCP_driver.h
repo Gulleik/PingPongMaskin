@@ -106,7 +106,7 @@ Copyright 2003 Kimberly Otten Software Consulting
 
 #define MCP_READ_STATUS	0xA0
 
-#define MCP_RX_STATUS	0xB0void MCP_RTS(uint8_t buffer);
+#define MCP_RX_STATUS	0xB0
 
 #define MCP_RESET		0xC0
 

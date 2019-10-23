@@ -14,6 +14,7 @@
 #include "CAN_driver.h"
 #include "MCP_driver.h"
 #include "lib.h"
+#include "servo_driver.h"
 #include <avr/interrupt.h>
 
 int main(void)
@@ -24,19 +25,16 @@ int main(void)
 	 
     CAN_initialize();
 
-    //printf("CANSTAT: %d\n\r", MCP_read(MCP_CANSTAT));
+    printf("CANSTAT: %d\n\r", MCP_read(MCP_CANSTAT));
 
-    
+    servo_driver_pwm_init();
+    uint8_t X_pos;
     message_t msg;
     while(1) {
-        _delay_ms(1000);
+        _delay_ms(300);
         msg = CAN_receive_message();
-        printf("ID: %d, length: %d: \r\n", msg.ID, msg.length);
-        printf("Node 2 receive: \n\r\t\t\t");
-        for (int i = 0; i < msg.length; i++) {
-            printf("%d ", msg.data[i]);
-        }
-        printf("\n\r");
+        printf("Node 2 receive: \n\r", msg.data[0]);
+        //servo_driver_pwm_controller(X_pos);
     }
 }
 

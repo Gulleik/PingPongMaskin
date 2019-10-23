@@ -36,7 +36,7 @@ void CAN_write_message(message_t msg) {
 
 message_t CAN_receive_message(){
     message_t msg;
-    msg.ID = -1;
+    //msg.ID = -1;
 
     if(MCP_read(MCP_CANINTF) & 0x01 ){
         MCP_bit_modify(MCP_CANINTF, 0x01, 0);
@@ -49,5 +49,12 @@ message_t CAN_receive_message(){
             msg.data[i] = MCP_read(MCP_RXB0D0+i);
         }
     }
+
+    //printf("Node 2 CAN receive: \n\r\t\t\t"); //sloyf det her seinre ellerno piss
+    //for (int i = 0; i < msg.length; i++) {
+    //    printf("%d ", msg.data[i]);
+    //}
+    //printf("\n\r");
+    
     return msg;
 }
