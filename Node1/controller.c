@@ -23,7 +23,7 @@ uint8_t controller_slider_read_R(){
 }
 
 char controller_button_read(){
-    DDRB &= ~(1 << DDB0);
+    DDRB &= ~(1 << DDB1) & ~(1 << DDB2) & ~(1 << DDB3);
 
     char B = PINB;
     if(B==0){
@@ -42,12 +42,12 @@ char controller_button_read(){
 
 void controller_CAN_send() {
     message_t msg;
-    msg.length = 1;
+    msg.length = 5;
     msg.ID = 0;
     msg.data[0] = controller_joystick_read_X();
-    //msg.data[1] = controller_joystick_read_Y();
-    //msg.data[2] = controller_slider_read_L();
-    //msg.data[3] = controller_slider_read_R();
-    //msg.data[4] = controller_button_read();
+    msg.data[1] = controller_joystick_read_Y();
+    msg.data[2] = controller_slider_read_L();
+    msg.data[3] = controller_slider_read_R();
+    msg.data[4] = controller_button_read();
     CAN_write_message(msg);
 }

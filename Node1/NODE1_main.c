@@ -31,20 +31,25 @@ int main(void)
     //OLED_menu_interface();
 	 
     CAN_initialize();
-
+    
     printf("CANSTAT: %d\n\r", MCP_read(MCP_CANSTAT));
     message_t msg;
     msg.ID = 0;
     msg.length = 2;
     msg.data[0] = 'A';
     msg.data[1] = 'B';
+
+    message_t res;
     while(1) {
         _delay_ms(100);
         //printf("X=%d\tY=%d\n\r", controller_joystick_read_X(), controller_joystick_read_Y());
-        CAN_write_message(msg);
-        printf("Node 1 write: %c\n\r", msg.data[0]);
-        printf("Node 1 receive: %c\n\r", CAN_receive_message());
-        //controller_CAN_send();
+        //CAN_write_message(msg);
+        //printf("Node 1 write: %c\n\r", msg.data[0]);
+        //res = CAN_receive_message();
+        //printf("Node 1 receive: %c\n\r", res.data[0]);
+        controller_CAN_send();
+
+        
     }
 }
 

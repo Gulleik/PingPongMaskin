@@ -27,14 +27,24 @@ int main(void)
 
     printf("CANSTAT: %d\n\r", MCP_read(MCP_CANSTAT));
 
-    servo_driver_pwm_init();
-    uint8_t X_pos;
+    //servo_driver_pwm_init();
+
     message_t msg;
+    message_t res;
+    msg.ID = 0;
+    msg.length = 2;
+    msg.data[0] = 'E';
+    msg.data[1] = 'F';
     while(1) {
         _delay_ms(300);
-        msg = CAN_receive_message();
-        printf("Node 2 receive: \n\r", msg.data[0]);
-        //servo_driver_pwm_controller(X_pos);
+        //CAN_write_message(msg);
+        //printf("Node 2 write: %c\n\r", msg.data[0]);
+        res = CAN_receive_message();
+        printf("Length: %d, Node 2 receive:\n\r\t\t\t", res.length);
+        for (int i = 0; i < res.length; i++){
+            printf("%d ", res.data[i]);
+        }
+        printf("\n\r");
     }
 }
 
