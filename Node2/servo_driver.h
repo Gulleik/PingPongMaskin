@@ -4,4 +4,4 @@
 
 void servo_driver_pwm_init();
 
-void servo_driver_pwm_controller(char sig);
+void servo_driver_pwm_controller(uint8_t sig);

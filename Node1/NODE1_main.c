@@ -39,6 +39,7 @@ int main(void)
     msg.data[0] = 'A';
     msg.data[1] = 'B';
 
+    char B;
     message_t res;
     while(1) {
         _delay_ms(100);
@@ -48,7 +49,6 @@ int main(void)
         //res = CAN_receive_message();
         //printf("Node 1 receive: %c\n\r", res.data[0]);
         controller_CAN_send();
-
         
     }
 }

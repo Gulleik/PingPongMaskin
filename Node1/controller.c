@@ -24,15 +24,15 @@ uint8_t controller_slider_read_R(){
 
 char controller_button_read(){
     DDRB &= ~(1 << DDB1) & ~(1 << DDB2) & ~(1 << DDB3);
-
+    
     char B = PINB;
-    if(B==0){
+    if(B==48){
         return 'j';
-    }else if(B > 6 && B <= 10){
+    }else if(B > 58 && B <= 59){
         return 'r';
-    }else if(B > 1 && B <= 6){
+    }else if(B > 60 && B <= 61){
         return 'l';
-    }else if(B > 10 && B <= 14){
+    }else if(B > 62 && B <= 64){
         return 'b';
     }else{
         return 0;

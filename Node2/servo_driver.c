@@ -1,6 +1,7 @@
 #include "servo_driver.h"
 #include <avr/interrupt.h>
 
+//RANGE: 1800 - 4200, 3000 median
 uint16_t servo_pos = 3000;
 
 void servo_driver_pwm_init(){
@@ -29,8 +30,9 @@ void servo_driver_pwm_init(){
 
 }
 
-void servo_driver_pwm_controller(char pos){
-    servo_pos = 3000 + pos*12;
+void servo_driver_pwm_controller(uint8_t pos){
+    servo_pos = 1800 + ((pos*120)/13);
+    printf("pos: %d\n\r", pos);
     OCR1A = servo_pos;
 }
 
