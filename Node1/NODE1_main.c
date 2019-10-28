@@ -10,6 +10,7 @@
 
 #include <avr/io.h>
 #include <util/delay.h>
+#include <avr/interrupt.h>
 #include "UART_driver.h"
 #include "XMEM_driver.h"
 #include "ADC_driver.h"
@@ -19,7 +20,6 @@
 #include "CAN_driver.h"
 #include "MCP_driver.h"
 #include "lib.h"
-#include <avr/interrupt.h>
 
 int main(void)
 {
@@ -29,7 +29,7 @@ int main(void)
     //OLED_home();
 
     //OLED_menu_interface();
-	 
+	
     CAN_initialize();
     
     printf("CANSTAT: %d\n\r", MCP_read(MCP_CANSTAT));
@@ -53,9 +53,3 @@ int main(void)
     }
 }
 
-/*
-ISR(INT0_vect){
-    cli();
-    printf("Interrupted");
-    sei();
-}*/

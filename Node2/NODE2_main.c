@@ -29,11 +29,12 @@ int main(void)
     IR_internal_ADC_init();
 
     message_t msg;
-    uint8_t X;
+    uint8_t var;
     while(1) {
         _delay_ms(300);
         msg = CAN_receive_message();
-        printf("ADC result: %x\n\r", IR_internal_ADC_read());
+        var = IR_internal_ADC_read();
+        printf("ADC result: %x\n\r", var);
     }
 }
 
