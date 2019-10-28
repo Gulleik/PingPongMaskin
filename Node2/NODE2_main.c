@@ -33,7 +33,7 @@ int main(void)
         _delay_ms(300);
         msg = CAN_receive_message();
         X = msg.data[0];
-        printf("Node 2 receive: X = %d\n\r", X);
+        printf("Node 2 receive: X = %d, Y = %d, SL = %d, SR = %d, B = %d\n\r", X, msg.data[1], msg.data[2], msg.data[3], msg.data[4]);
         servo_driver_pwm_controller(X);
     }
 }

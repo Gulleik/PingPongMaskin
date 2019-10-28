@@ -32,7 +32,6 @@ void servo_driver_pwm_init(){
 
 void servo_driver_pwm_controller(uint8_t pos){
     servo_pos = 1800 + ((pos*120)/13);
-    printf("pos: %d\n\r", pos);
     OCR1A = servo_pos;
 }
 
