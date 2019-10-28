@@ -26,15 +26,14 @@ int main(void)
     CAN_initialize();
 
     servo_driver_pwm_init();
+    IR_internal_ADC_init();
 
     message_t msg;
     uint8_t X;
     while(1) {
         _delay_ms(300);
         msg = CAN_receive_message();
-        X = msg.data[0];
-        printf("Node 2 receive: X = %d, Y = %d, SL = %d, SR = %d, B = %d\n\r", X, msg.data[1], msg.data[2], msg.data[3], msg.data[4]);
-        servo_driver_pwm_controller(X);
+        printf("ADC result: %x\n\r", IR_internal_ADC_read());
     }
 }
 
