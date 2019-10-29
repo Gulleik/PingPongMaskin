@@ -19,6 +19,7 @@ void CAN_initialize(){
     MCP_bit_modify(MCP_CANCTRL, (0b111<<5), MODE_NORMAL);
 }
 
+
 void CAN_write_message(message_t msg) {
 
     MCP_write(MCP_TXB0SIDH, (uint8_t) msg.ID>>3);

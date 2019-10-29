@@ -15,8 +15,6 @@ volatile message_t latest_message;
 
 void CAN_initialize();
 
-ISR(INT0_vect);
-
 void CAN_write_message(message_t msg);
 
 message_t CAN_receive_message();

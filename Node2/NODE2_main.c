@@ -29,18 +29,19 @@ int main(void)
     IR_internal_ADC_init();
 
     message_t msg;
+    msg.length = 1;
+    msg.ID = 0;
+    msg.data[0] = 'a';
     uint8_t var;
     while(1) {
         _delay_ms(300);
         msg = CAN_receive_message();
-        var = IR_internal_ADC_read();
-        printf("ADC result: %x\n\r", var);
+        //var = IR_internal_ADC_read();
+        //printf("ADC result: %x\n\r", var);
+        printf("NODE2 receive: %c\n\r", msg.data[0]);
+        //if (UART_receive() == 'e') {
+        //    CAN_write_message(msg);
+        //    printf("Node 2 write: %c\n\r", msg.data[0]);
+        //}
     }
 }
-
-/*
-ISR(INT0_vect){
-    cli();
-    printf("Interrupted");
-    sei();
-}*/

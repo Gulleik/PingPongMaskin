@@ -44,11 +44,12 @@ int main(void)
     while(1) {
         _delay_ms(100);
         //printf("X=%d\tY=%d\n\r", controller_joystick_read_X(), controller_joystick_read_Y());
-        //CAN_write_message(msg);
-        //printf("Node 1 write: %c\n\r", msg.data[0]);
+        CAN_write_message(msg);
+        printf("Node 1 write: %c\n\r", msg.data[0]);
         //res = CAN_receive_message();
         //printf("Node 1 receive: %c\n\r", res.data[0]);
-        controller_CAN_send();
+        //printf("helo");
+        //controller_CAN_send();
         
     }
 }

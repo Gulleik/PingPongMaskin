@@ -23,10 +23,10 @@ uint8_t IR_internal_ADC_read() {
     /*Set ADSC bit to start conversion*/
     ADCSRA |= (1<<ADSC);
 
-    sei(); //TENK PÅ Å TESTE INTERRUPTS SKIKKELIG
+    //sei(); //TENK PÅ Å TESTE INTERRUPTS SKIKKELIG
     /*Busy wait for completed conversion*/
     while (!(ADCSRA << ADIF));
-    cli();
+    //cli();
     
     /*Return digitally converted analog signal, with precition of 8 bits*/
     return ADCH;
