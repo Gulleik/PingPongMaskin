@@ -15,33 +15,22 @@
 #include "MCP_driver.h"
 #include "lib.h"
 #include "servo_driver.h"
+#include "Motor_driver.h"
 #include <avr/interrupt.h>
 
 int main(void)
 {
 	UART_initialize(); 
-
-    //OLED_home();
-	 
     CAN_initialize();
-
     servo_driver_pwm_init();
     IR_internal_ADC_init();
 
-    message_t msg;
-    msg.length = 1;
-    msg.ID = 0;
-    msg.data[0] = 'a';
-    uint8_t var;
     while(1) {
-        _delay_ms(300);
-        msg = CAN_receive_message();
-        //var = IR_internal_ADC_read();
-        //printf("ADC result: %x\n\r", var);
-        printf("NODE2 receive: %c\n\r", msg.data[0]);
-        //if (UART_receive() == 'e') {
-        //    CAN_write_message(msg);
-        //    printf("Node 2 write: %c\n\r", msg.data[0]);
-        //}
+        if (UART_receive() == 'e') {
+            printf("latest received message: %c\n\r", latest_message.data[0]);
+        }
+        //motor_driver_run(msg.data[0]);
+
+        _delay_ms(500);
     }
 }

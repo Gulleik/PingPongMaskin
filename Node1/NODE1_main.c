@@ -26,31 +26,22 @@ int main(void)
 	UART_initialize();
     XMEM_initialize();   
     OLED_initialize(); 
-    //OLED_home();
+    CAN_initialize();
 
     //OLED_menu_interface();
-	
-    CAN_initialize();
     
-    printf("CANSTAT: %d\n\r", MCP_read(MCP_CANSTAT));
     message_t msg;
-    msg.ID = 0;
-    msg.length = 2;
     msg.data[0] = 'A';
-    msg.data[1] = 'B';
-
-    char B;
-    message_t res;
     while(1) {
-        _delay_ms(100);
-        //printf("X=%d\tY=%d\n\r", controller_joystick_read_X(), controller_joystick_read_Y());
-        CAN_write_message(msg);
-        printf("Node 1 write: %c\n\r", msg.data[0]);
-        //res = CAN_receive_message();
-        //printf("Node 1 receive: %c\n\r", res.data[0]);
-        //printf("helo");
         //controller_CAN_send();
-        
+
+        if (UART_receive() == 'e') {
+            CAN_write_message(msg);
+            printf("Node 1 write: %c\n\r", msg.data[0]);
+            msg.data[0] += 1;
+        }
+
+        _delay_ms(200);
     }
 }
 

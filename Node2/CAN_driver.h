@@ -11,6 +11,7 @@ struct message_t {
     uint8_t length;
 } typedef message_t;
 
+volatile message_t latest_message;
 
 void CAN_initialize();
 

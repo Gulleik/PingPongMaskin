@@ -49,5 +49,6 @@ void controller_CAN_send() {
     msg.data[2] = controller_slider_read_L();
     msg.data[3] = controller_slider_read_R();
     msg.data[4] = controller_button_read();
+    printf("X: %d, Y: %d, SL: %d, SR: %d, B: %d\n\r", msg.data[0], msg.data[1], msg.data[2], msg.data[3], msg.data[4]);
     CAN_write_message(msg);
 }
