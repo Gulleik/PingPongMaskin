@@ -15,6 +15,7 @@
 #include "MCP_driver.h"
 #include "lib.h"
 #include "servo_driver.h"
+#include "IR_driver.h"
 #include "Motor_driver.h"
 #include <avr/interrupt.h>
 
@@ -31,14 +32,13 @@ int main(void)
         //if (UART_receive() == 'e') {
         //    printf("latest received message: %c\n\r", latest_message.data[0]);
         //}
-        msg = latest_message;
-        IR_internal_ADC_read();
         
-        printf("X: %d, Y: %d, SL: %d, SR: %d, B: %d\n\r", msg.data[0], msg.data[1], msg.data[2], msg.data[3], msg.data[4]);
+        //printf("X: %d, Y: %d, SL: %d, SR: %d, B: %d\n\r", latest_message.data[0], latest_message.data[1], latest_message.data[2], latest_message.data[3], latest_message.data[4]);
+        //motor_driver_update_ref(latest_message.data[0]);
 
-        printf("Speed: %d\n\r", motor_driver_calculate_speed(msg.data[0]));
-        //motor_driver_run(msg.data[0]);
-
+        servo_driver_pwm_controller(latest_message.data[0]);
+        IR_internal_ADC_read();
+        printf("isBlocked: %d\n\r", is_blocked);
 
         _delay_ms(200);
     }
