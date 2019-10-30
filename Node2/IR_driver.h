@@ -1,7 +1,9 @@
 #include <stdint.h>
 
+int8_t is_blocked;
+
 void IR_internal_ADC_init();
 
-uint8_t IR_internal_ADC_read();
+void IR_internal_ADC_read();
 
-uint8_t IR_is_blocked();
+void IR_is_blocked();

@@ -1,12 +1,14 @@
 #include "IR_driver.h"
 #include <avr/io.h>
+#include <avr/interrupt.h>
 //#include <stdint.h>
 
 void IR_internal_ADC_init() {
     /*Enable ADC*/
     ADCSRA |= (1<<ADEN);
-    /*Enable interrupt on completed conversion*/
+    /*Enable interrupt on completed conversion and set global interrupt flag*/
     ADCSRA |= (1<<ADIE);
+    sei();
 
     /*Set ADC0 as input channel*/
     ADCSRB &= (1<<MUX5);
@@ -19,19 +21,22 @@ void IR_internal_ADC_init() {
     ADMUX |= (1<<ADLAR);
 }
 
-uint8_t IR_internal_ADC_read() {
+void IR_internal_ADC_read() {
     /*Set ADSC bit to start conversion*/
     ADCSRA |= (1<<ADSC);
 
-    //sei(); //TENK PÅ Å TESTE INTERRUPTS SKIKKELIG
     /*Busy wait for completed conversion*/
-    while (!(ADCSRA << ADIF));
-    //cli();
+    //while (!(ADCSRA << ADIF)); //REDUNDANT WITH ISR
     
     /*Return digitally converted analog signal, with precition of 8 bits*/
-    return ADCH;
+    //return ADCH; //REDUNDANT WITH ISR
 }
 
-uint8_t IR_is_blocked() {
-    return !(IR_internal_ADC_read() > 0xAF);
+ISR(ADC_vect) {
+    cli();
+    /*Check digitally converted analog signal,against constant treshold*/
+    uint8_t temp = ADCH;
+    is_blocked = !(temp > 0xAF);
+    printf("ADC interrupt, ADCH = %d\n\r", temp);
+    sei();
 }

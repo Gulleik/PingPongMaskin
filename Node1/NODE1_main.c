@@ -33,13 +33,13 @@ int main(void)
     message_t msg;
     msg.data[0] = 'A';
     while(1) {
-        //controller_CAN_send();
+        controller_CAN_send();
 
-        if (UART_receive() == 'e') {
-            CAN_write_message(msg);
-            printf("Node 1 write: %c\n\r", msg.data[0]);
-            msg.data[0] += 1;
-        }
+        //if (UART_receive() == 'e') {
+        //    CAN_write_message(msg);
+        //    printf("Node 1 write: %c\n\r", msg.data[0]);
+        //    msg.data[0] += 1;
+        //}
 
         _delay_ms(200);
     }

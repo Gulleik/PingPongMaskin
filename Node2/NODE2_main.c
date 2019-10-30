@@ -24,13 +24,22 @@ int main(void)
     CAN_initialize();
     servo_driver_pwm_init();
     IR_internal_ADC_init();
+    motor_driver_initialise();
+    message_t msg;
 
     while(1) {
-        if (UART_receive() == 'e') {
-            printf("latest received message: %c\n\r", latest_message.data[0]);
-        }
+        //if (UART_receive() == 'e') {
+        //    printf("latest received message: %c\n\r", latest_message.data[0]);
+        //}
+        msg = latest_message;
+        IR_internal_ADC_read();
+        
+        printf("X: %d, Y: %d, SL: %d, SR: %d, B: %d\n\r", msg.data[0], msg.data[1], msg.data[2], msg.data[3], msg.data[4]);
+
+        printf("Speed: %d\n\r", motor_driver_calculate_speed(msg.data[0]));
         //motor_driver_run(msg.data[0]);
 
-        _delay_ms(500);
+
+        _delay_ms(200);
     }
 }

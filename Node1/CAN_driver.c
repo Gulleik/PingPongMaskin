@@ -52,7 +52,6 @@ message_t CAN_receive_message(){
 }
 
 ISR(INT0_vect){
-    printf("Interrupted\n\r");
     cli();
     CAN_receive_message();
     sei();

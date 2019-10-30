@@ -9,9 +9,9 @@ void CAN_initialize(){
 
     /*Setup for external interrupt operation*/
     sei();  //Enable global interrupts
-    EIMSK |= (1 << INT0);    //Set INT0 pin as external interrupt-pin
-    EICRA |= (0b10 << ISC00);  //Interrupt trigger on falling edge
-    EIFR |= (1 << INTF0);   //Clear interrupt flag on INT0
+    EIMSK |= (1 << INT2);    //Set INT2 pin as external interrupt-pin
+    EICRB |= (0b10 << ISC20);  //Interrupt trigger on INT2 on falling edge
+    EIFR |= (1 << INTF2);   //Clear interrupt flag on INT2
     MCP_bit_modify(MCP_CANINTF, 0x1, 0x00); //Clear interrupt flag on CAN reception
     MCP_bit_modify(MCP_CANINTE, 0x1, 0xFF); //Enable Interrupts on CAN reception
     
@@ -51,8 +51,7 @@ message_t CAN_receive_message(){
     return latest_message;
 }
 
-ISR(INT0_vect){
-    printf("Interrupted\n\r");
+ISR(INT2_vect){
     cli();
     CAN_receive_message();
     sei();
