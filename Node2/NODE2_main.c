@@ -28,18 +28,17 @@ int main(void)
     servo_driver_pwm_init();
     IR_internal_ADC_init();
     motor_driver_initialise();
-    //solenoid_init();
+    solenoid_init();
 
     while(1) {
         motor_driver_update_slider_ref(latest_message.data[3]);
-        printf("curr_pos: %d\tencoder: %d\n\r", curr_pos, motor_driver_encoder_read_byte());
+        //printf("curr_pos: %d\tencoder: %d\n\r", curr_pos, motor_driver_encoder_read_byte());
         motor_driver_update_pos();
-        //motor_driver_update_pos();
-        //servo_driver_pwm_controller(130);
-        //IR_internal_ADC_read();
-        //printf("isBlocked: %d\n\r", is_blocked);
-        //solenoid_shoot();
-        _delay_ms(100);
+        servo_driver_pwm_controller(latest_message.data[0]);
+        IR_internal_ADC_read();
+        if(latest_message.data[4] != 0){
+            solenoid_shoot();
+        }
     }
 
     
