@@ -41,7 +41,7 @@ int main(void)
         //    msg.data[0] += 1;
         //}
 
-        _delay_ms(200);
+        _delay_ms(50);
     }
 }
 

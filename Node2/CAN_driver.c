@@ -5,15 +5,17 @@
 
 
 void CAN_initialize(){
+    /*Reset MCP*/
     MCP_driver_reset();
 
     /*Setup for external interrupt operation*/
-    sei();  //Enable global interrupts
+    cli();
     EIMSK |= (1 << INT2);    //Set INT2 pin as external interrupt-pin
     EICRB |= (0b10 << ISC20);  //Interrupt trigger on INT2 on falling edge
     EIFR |= (1 << INTF2);   //Clear interrupt flag on INT2
     MCP_bit_modify(MCP_CANINTF, 0x1, 0x00); //Clear interrupt flag on CAN reception
     MCP_bit_modify(MCP_CANINTE, 0x1, 0xFF); //Enable Interrupts on CAN reception
+    sei();  //Enable global interrupts
     
     /*Set MCP to normal mode*/
     MCP_bit_modify(MCP_CANCTRL, (0b111<<5), MODE_NORMAL);
@@ -55,4 +57,7 @@ ISR(INT2_vect){
     cli();
     CAN_receive_message();
     sei();
+}
+
+ISR(BADISR_vect){
 }
