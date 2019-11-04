@@ -37,18 +37,26 @@ void CAN_write_message(message_t msg) {
 }
 
 message_t CAN_receive_message(){
-    /*Update latest_message with new received data*/
-    latest_message.ID = (MCP_read(MCP_RXB0SIDH) << 3);
-    latest_message.ID |= (MCP_read(MCP_RXB0SIDL) >> 5);
-    latest_message.length = (MCP_read(MCP_RXB0DLC) & 0x0F);
-    
-    for(uint8_t i = 0;i < latest_message.length;i++){
-        latest_message.data[i] = MCP_read(MCP_RXB0D0+i);
+    /*Update latest_msg with new received data*/
+    latest_msg.ID = (MCP_read(MCP_RXB0SIDH) << 3);
+    latest_msg.ID |= (MCP_read(MCP_RXB0SIDL) >> 5);
+    latest_msg.length = (MCP_read(MCP_RXB0DLC) & 0x0F);
+    for (uint8_t i = 0; i < latest_msg.length; i++) {
+        latest_msg.data[i] = MCP_read(MCP_RXB0D0+i);
+    }
+
+    /*Save if controls message*/
+    if (latest_msg.ID == CONTROLS) {
+        controls_msg.ID = latest_msg.ID;
+        controls_msg.length = latest_msg.length;
+        for (uint8_t i = 0; i < latest_msg.length; i++) {
+            controls_msg.data[i] = latest_msg.data[i];
+        }
     }
 
     /*Clear interrupt flag on CAN reception*/
     MCP_bit_modify(MCP_CANINTF, 0x01, 0);
-    return latest_message;
+    return latest_msg;
 }
 
 ISR(INT0_vect){

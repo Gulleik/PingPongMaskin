@@ -41,14 +41,19 @@ char controller_button_read(){
 
 
 void controller_CAN_send() {
-    message_t msg;
-    msg.length = 5;
-    msg.ID = 0;
-    msg.data[0] = controller_joystick_read_X();
-    msg.data[1] = controller_joystick_read_Y();
-    msg.data[2] = controller_slider_read_L();
-    msg.data[3] = controller_slider_read_R();
-    msg.data[4] = controller_button_read();
-    printf("X: %d, Y: %d, SL: %d, SR: %d, B: %d\n\r", msg.data[0], msg.data[1], msg.data[2], msg.data[3], msg.data[4]);
-    CAN_write_message(msg);
+    controls_msg.length = 5;
+    controls_msg.ID = CONTROLS;
+    controls_msg.data[0] = controller_joystick_read_X();
+    controls_msg.data[1] = controller_joystick_read_Y();
+    controls_msg.data[2] = controller_slider_read_L();
+    controls_msg.data[3] = controller_slider_read_R();
+    controls_msg.data[4] = controller_button_read();
+    printf("X: %d, Y: %d, SL: %d, SR: %d, B: %d\n\r", 
+        controls_msg.data[0],
+        controls_msg.data[1],
+        controls_msg.data[2],
+        controls_msg.data[3],
+        controls_msg.data[4]
+    );
+    CAN_write_message(controls_msg);
 }
