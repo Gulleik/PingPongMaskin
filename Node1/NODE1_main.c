@@ -16,7 +16,7 @@
 #include "ADC_driver.h"
 #include "controller.h"
 #include "OLED.h"
-#include "OLED_interface.h"
+//#include "OLED_interface.h"
 #include "CAN_driver.h"
 #include "MCP_driver.h"
 #include "lib.h"
@@ -26,9 +26,12 @@ int main(void)
 	UART_initialize();
     CAN_initialize();
     XMEM_initialize();   
-    OLED_initialize();
+    //OLED_initialize();
 
-    OLED_interface();
-    while(1);
+    //OLED_interface();
+    while(1) {
+        controller_CAN_send();
+        _delay_ms(100);
+    }
 }
 

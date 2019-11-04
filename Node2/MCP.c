@@ -43,7 +43,6 @@ void MCP_write(uint8_t address, uint8_t data){
     MCP_enable(OFF);
 }
 
-
 void MCP_Request_To_Send(uint8_t buffer){
     MCP_enable(ON);
     switch (buffer) {
@@ -57,16 +56,7 @@ void MCP_Request_To_Send(uint8_t buffer){
             SPI_write_byte(MCP_RTS_TX2);
             break;
     }
-    SPI_write_byte(MCP_RTS_TX0);
     MCP_enable(OFF);
-}
-
-uint8_t MCP_read_status(){
-    MCP_enable(ON);
-    SPI_write_byte(MCP_READ_STATUS);
-    uint8_t data = SPI_read_byte();
-    MCP_enable(OFF);
-    return data;
 }
 
 void MCP_bit_modify(uint8_t address, uint8_t mask, uint8_t data){
@@ -79,4 +69,14 @@ void MCP_bit_modify(uint8_t address, uint8_t mask, uint8_t data){
     MCP_enable(OFF);
     
 }
+
+uint8_t MCP_read_status(){
+    MCP_enable(ON);
+    SPI_write_byte(MCP_READ_STATUS);
+    uint8_t data = SPI_read_byte();
+    MCP_enable(OFF);
+    return data;
+}
+
+
 

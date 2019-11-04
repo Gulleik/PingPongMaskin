@@ -12,7 +12,7 @@
 #include <util/delay.h>
 #include "UART.h"
 
-#include "CAN_driver.h"
+#include "CAN.h"
 #include "MCP.h"
 #include "lib.h"
 #include "Servo.h"
@@ -22,7 +22,6 @@
 
 int main(void)
 {
-    
 	UART_initialize(); 
     CAN_initialize();
     Servo_initialize();
@@ -31,15 +30,16 @@ int main(void)
     solenoid_init();
 
     while(1) {
-        Motor_update_slider_ref(latest_message.data[3]);
+        Motor_update_slider_ref(latest_msg.data[2]);
         
         //printf("curr_pos: %d\tencoder: %d\n\r", curr_pos, motor_driver_encoder_read_byte());
         Motor_position_controller();
-        Servo_set_position(latest_message.data[0]);
-        IR_internal_ADC_read();
-        if(latest_message.data[4] != 0){
+        Servo_set_position(latest_msg.data[0]);
+        //IR_internal_ADC_read();
+        if(latest_msg.data[4] != 0){
             solenoid_shoot();
         }
+        _delay_ms(100);
     }
 
     

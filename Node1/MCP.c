@@ -1,5 +1,6 @@
-#include "SPI_communication_driver.h"
-#include "MCP_driver.h"
+#include "SPI.h"
+#include "MCP.h"
+#include "MCP_registers.h"
 #include <avr/io.h>
 #include <stdint.h>
 
@@ -36,7 +37,6 @@ void MCP_write(uint8_t address, uint8_t data){
     SPI_write_byte(data);
     MCP_disable();
 }
-
 
 void MCP_RTS(uint8_t buffer){
     MCP_enable();

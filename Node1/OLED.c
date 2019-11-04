@@ -1,6 +1,6 @@
 
 #include "OLED.h"
-#include "UART.h"
+#include "UART_driver.h"
 #include "fonts.h"
 #include <util/delay.h>
 #include <avr/pgmspace.h>
@@ -297,7 +297,7 @@ void OLED_home(){
 	}
 	
 }
-
+/*
 const char ss0[] = "";
 const char ss1[] = "`-:-.   ,-;*`-:-.   ,-;*";
 const char ss2[] = "   `=`,'=/     `=`,'=/  ";
@@ -321,4 +321,4 @@ void OLED_screensaver() {
 	}
 	while (c != 13) {//While enter not pressed
 	}
-}
+}*/

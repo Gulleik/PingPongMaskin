@@ -31,11 +31,19 @@ uint8_t MCP_read(uint8_t address);
 void MCP_write(uint8_t address, uint8_t data);
 
 /**
- * Reads data from the AVR
- * @param buffer; the adress that is to be read from
+ * Request to send data on a spesific pin
+ * @param buffer; the buffer pin we want to send data on.
 */
 void MCP_Request_To_Send(uint8_t buffer);
 
+
+/**
+ * Modify data on a spesific address
+ * @param addres; the address to read from.
+*/
 void MCP_bit_modify(uint8_t address, uint8_t mask, uint8_t data);
 
+/**
+ * Read status of MCP
+*/
 uint8_t MCP_read_status();
