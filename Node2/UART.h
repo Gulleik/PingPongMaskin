@@ -15,6 +15,7 @@ void UART_initialize();
 unsigned char UART_receive();
 
 /**
- * Initialize UART hardware
+ * Transmit data
+ * @param data; data to be transmitted.
 */
 void UART_transmit(char data);

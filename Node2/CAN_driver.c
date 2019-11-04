@@ -6,7 +6,7 @@
 
 void CAN_initialize(){
     /*Reset MCP*/
-    MCP_driver_reset();
+    MCP_reset();
 
     /*Setup for external interrupt operation*/
     cli();
@@ -35,7 +35,7 @@ void CAN_write_message(message_t msg) {
     //Initiate transmission on buffer 0
     MCP_write(MCP_TXB0CTRL, 1<<3); //1<<3 = TXREQ
 
-    MCP_RTS(0x00); //RTS buffer 0
+    MCP_Request_To_Send(0x00); //RTS buffer 0
 }
 
 message_t CAN_receive_message(){

@@ -1,19 +1,20 @@
-#include "servo_driver.h"
+#include "Servo.h"
 #include <avr/interrupt.h>
 
 //RANGE: 1800 - 4200, 3000 median
 uint16_t servo_pos = 3000;
 
-void servo_driver_pwm_init(){
+void Servo_initialize(){
     //start TC module
     PRR0 &= ~(1 << PRTIM1);
 
     DDRB |= (1 << PB6);
-    // set fast pwm where top is set by OCRn
-    TCCR1A |= (0 << COM1B0 | 1 << COM1B1 | 1 << WGM11 | 0 << WGM10);
+    // set non-inverting fast pwm where top is set by OCRn
+    TCCR1A |= (1 << COM1B1 | 0 << COM1B0 | 1 << WGM11 | 0 << WGM10);
+    // set prescaler to divide by 8
     TCCR1B |= (0 << CS12 | 1 << CS11 | 0 << CS10 | 1 << WGM13 | 1 << WGM12);
 
-    //set top
+    //set top aka period
     ICR1H = 0x9C;
     ICR1L = 0x3F;
     OCR1A = servo_pos;
@@ -30,11 +31,10 @@ void servo_driver_pwm_init(){
 
 }
 
-void servo_driver_pwm_controller(uint8_t pos){
+void Servo_set_position(uint8_t pos){
     servo_pos = 1800 + ((pos*120)/13);
     OCR1A = servo_pos;
 }
-
 
 ISR (TIMER1_OVF_vect){
 	OCR1B = servo_pos;

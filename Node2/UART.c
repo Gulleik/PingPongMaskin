@@ -1,8 +1,7 @@
-#include "UART_driver.h"
+#include "UART.h"
 #define FOSC 16000000// Clock Speed
 #define BAUD 9600
 
-//#include <avr/io.h>
 #include <avr/io.h>
 
 void UART_initialize() {
@@ -15,6 +14,13 @@ void UART_initialize() {
 	fdevopen(UART_transmit, UART_receive);
 }
 
+unsigned char UART_receive() {
+	/* Wait for data to be received */
+	loop_until_bit_is_set(UCSR0A, RXC0);
+	/* Get and return received data from buffer */
+	return UDR0;
+}
+
 void UART_transmit(char data) {
 
     /* Wait for empty transmit buffer */
@@ -23,15 +29,6 @@ void UART_transmit(char data) {
     /* Put data into buffer, sends the data */
     UDR0 = data;
 } 
-
-
-unsigned char UART_receive() {
-	/* Wait for data to be received */
-	loop_until_bit_is_set(UCSR0A, RXC0);
-	/* Get and return received data from buffer */
-	return UDR0;
-}
-
 
 
 

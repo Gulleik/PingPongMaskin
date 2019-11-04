@@ -1,4 +1,4 @@
-#include "SPI_communication_driver.h"
+#include "SPI.h"
 
 void SPI_master_initialize(){
     /* Set MOSI, SS and SCK output, all others input */

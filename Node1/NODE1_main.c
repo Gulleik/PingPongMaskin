@@ -28,6 +28,11 @@ int main(void)
     OLED_initialize(); 
     CAN_initialize();
 
+    OLED_clear();
+    OLED_reset_position();
+
+    SRAM_test();
+
     //OLED_menu_interface();
     
     message_t msg;

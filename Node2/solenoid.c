@@ -1,6 +1,5 @@
 #define F_CPU 16000000 // clock frequency in Hz
 
-#define F_CPU 16000000 // clock frequency in Hz
 #include "solenoid.h"
 #include <util/delay.h>
 
