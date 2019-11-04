@@ -24,29 +24,11 @@
 int main(void)
 {
 	UART_initialize();
-    XMEM_initialize();   
-    OLED_initialize(); 
     CAN_initialize();
+    XMEM_initialize();   
+    OLED_initialize();
 
-    OLED_clear();
-    OLED_reset_position();
-
-    SRAM_test();
-
-    //OLED_menu_interface();
-    
-    message_t msg;
-    msg.data[0] = 'A';
-    while(1) {
-        controller_CAN_send();
-
-        //if (UART_receive() == 'e') {
-        //    CAN_write_message(msg);
-        //    printf("Node 1 write: %c\n\r", msg.data[0]);
-        //    msg.data[0] += 1;
-        //}
-
-        _delay_ms(50);
-    }
+    OLED_interface();
+    while(1);
 }
 

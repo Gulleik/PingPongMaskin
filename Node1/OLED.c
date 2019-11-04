@@ -1,5 +1,6 @@
 
 #include "OLED.h"
+#include "UART.h"
 #include "fonts.h"
 #include <util/delay.h>
 #include <avr/pgmspace.h>
@@ -295,4 +296,29 @@ void OLED_home(){
 		
 	}
 	
+}
+
+const char ss0[] = "";
+const char ss1[] = "`-:-.   ,-;*`-:-.   ,-;*";
+const char ss2[] = "   `=`,'=/     `=`,'=/  ";
+const char ss3[] = "     y==/        y==/   ";
+const char ss4[] = "   ,=,-<=`.    ,=,-<=`. ";
+const char ss5[] = ",-'-'   `-=_,-'-'   `-=_";
+const char ss6[] = "";
+const char ss7[] = "";
+
+char* ScreenSaver[] = {
+	ss0, ss1, ss2, ss3, ss4, ss5, ss6, ss7,
+};
+
+void OLED_screensaver() {
+	char c = UART_receive();
+	OLED_clear();
+	for (int i = 1; i <= 5; i++) {
+		OLED_goto_page(i);
+		OLED_goto_column(0);
+		OLED_print_string(ScreenSaver[i]);
+	}
+	while (c != 13) {//While enter not pressed
+	}
 }

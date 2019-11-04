@@ -87,5 +87,7 @@ void OLED_clear_page(int page);
  * @param page; Page to be inverted
 */
 void OLED_invert_page(int page);
-
-void OLED_home();
+/*
+ * /brief Display screensaver
+*/
+void OLED_screensaver()
