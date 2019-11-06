@@ -8,7 +8,6 @@
 void CAN_initialize(){
     /*Reset MCP*/
     MCP_initialize();
-    printf("helo\n\r");
 
     /*Setup for external interrupt operation*/
     cli();
@@ -40,28 +39,46 @@ void CAN_write_message(message_t msg) {
     MCP_Request_To_Send(0x00); //RTS buffer 0
 }
 
-message_t CAN_receive_message(){
-    /*Update latest_msg with new received data*/
-    latest_msg.ID = (MCP_read(MCP_RXB0SIDH) << 3);
-    latest_msg.ID |= (MCP_read(MCP_RXB0SIDL) >> 5);
-    latest_msg.length = (MCP_read(MCP_RXB0DLC) & 0x0F);
+void CAN_receive_message(){
+    message_t msg;
+    /*Update msg with new received data*/
+    msg.ID = (MCP_read(MCP_RXB0SIDH) << 3);
+    msg.ID |= (MCP_read(MCP_RXB0SIDL) >> 5);
+    msg.length = (MCP_read(MCP_RXB0DLC) & 0x0F);
 
-    for(uint8_t i = 0;i < latest_msg.length;i++){
-        latest_msg.data[i] = MCP_read(MCP_RXB0D0+i);
+    for(uint8_t i = 0;i < msg.length;i++){
+        msg.data[i] = MCP_read(MCP_RXB0D0+i);
     }
 
-    /*Save if controls message*/
-    if (latest_msg.ID == CONTROLS) {
-        controls_msg.ID = latest_msg.ID;
-        controls_msg.length = latest_msg.length;
-        for (uint8_t i = 0; i < latest_msg.length; i++) {
-            controls_msg.data[i] = latest_msg.data[i];
-        }
+    /*Save to corresponding message types*/
+    switch(msg.ID) {
+        case NODE2_STATE:
+            node2_state_msg.ID = msg.ID;
+            node2_state_msg.length = msg.length;
+            for (uint8_t i = 0; i < msg.length; i++) {
+                node2_state_msg.data[i] = msg.data[i];
+            }
+            break;
+        case CONFIG:
+            config_msg.ID = msg.ID;
+            config_msg.length = msg.length;
+            for (uint8_t i = 0; i < msg.length; i++) {
+                config_msg.data[i] = msg.data[i];
+            }
+            break;
+        case CONTROLS:
+            controls_msg.ID = msg.ID;
+            controls_msg.length = msg.length;
+            for (uint8_t i = 0; i < msg.length; i++) {
+                controls_msg.data[i] = msg.data[i];
+            }
+            break;
+        default:
+            break;
     }
 
     /*Clear interrupt flag on CAN reception*/
     MCP_bit_modify(MCP_CANINTF, 0x01, 0);
-    return latest_msg;
 }
 
 ISR(INT2_vect){

@@ -104,8 +104,7 @@ void Motor_enable_motor(uint8_t state){
         printf("Enabling\n\r");
         PORTH |= (1 << EN);
     }else{
-        
-    PORTH &= ~(1 << EN);
+        PORTH &= ~(1 << EN);
     }
 }
 

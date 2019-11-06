@@ -5,6 +5,7 @@
         "uart_driver.h": "c",
         "motor_driver.h": "c",
         "spi.h": "c",
-        "motor.h": "c"
+        "motor.h": "c",
+        "mcp_registers.h": "c"
     }
 }

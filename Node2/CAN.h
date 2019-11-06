@@ -11,11 +11,16 @@ struct message_t {
     uint8_t length;
 } typedef message_t;
 
-enum message_IDs {
-	INTERRUPT, CONTROLS = 5
+enum MESSAGE_ID {
+	NODE2_STATE, CONFIG, CONTROLS
 };
 
-volatile message_t latest_msg;
+enum BUTTON {
+    UNDEF, JOYSTICK, LEFT, RIGHT, BOTH
+};
+
+volatile message_t node2_state_msg;
+volatile message_t config_msg;
 volatile message_t controls_msg;
 
 /**
@@ -33,4 +38,4 @@ void CAN_write_message(message_t msg);
  * Receive message over the Can bus
    @param msg; message to be sent.
 */
-message_t CAN_receive_message();
+void CAN_receive_message();

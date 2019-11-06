@@ -1,5 +1,6 @@
 #include "CAN_driver.h"
-#include "MCP_driver.h"
+#include "MCP.h"
+#include "MCP_registers.h"
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
@@ -36,18 +37,19 @@ void CAN_write_message(message_t msg) {
     MCP_RTS(0x00); //RTS buffer 0
 }
 
-message_t CAN_receive_message(){
-    /*Update latest_msg with new received data*/
-    latest_msg.ID = (MCP_read(MCP_RXB0SIDH) << 3);
-    latest_msg.ID |= (MCP_read(MCP_RXB0SIDL) >> 5);
-    latest_msg.length = (MCP_read(MCP_RXB0DLC) & 0x0F);
-    for (uint8_t i = 0; i < latest_msg.length; i++) {
-        latest_msg.data[i] = MCP_read(MCP_RXB0D0+i);
+void CAN_receive_message(){
+    message_t msg;
+    /*Update msg with new received data*/
+    msg.ID = (MCP_read(MCP_RXB0SIDH) << 3);
+    msg.ID |= (MCP_read(MCP_RXB0SIDL) >> 5);
+    msg.length = (MCP_read(MCP_RXB0DLC) & 0x0F);
+
+    for(uint8_t i = 0;i < msg.length;i++){
+        msg.data[i] = MCP_read(MCP_RXB0D0+i);
     }
 
     /*Clear interrupt flag on CAN reception*/
     MCP_bit_modify(MCP_CANINTF, 0x01, 0);
-    return latest_msg;
 }
 
 ISR(INT0_vect){

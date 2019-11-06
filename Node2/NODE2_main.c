@@ -22,7 +22,7 @@
 
 int main(void)
 {
-	UART_initialize(); 
+	UART_initialize();
     CAN_initialize();
     Servo_initialize();
     IR_internal_ADC_init();
@@ -30,16 +30,21 @@ int main(void)
     solenoid_init();
 
     while(1) {
-        Motor_update_slider_ref(latest_msg.data[2]);
-        
-        //printf("curr_pos: %d\tencoder: %d\n\r", curr_pos, motor_driver_encoder_read_byte());
+        Motor_update_slider_ref(controls_msg.data[3]);
         Motor_position_controller();
-        Servo_set_position(latest_msg.data[0]);
+        Servo_set_position(controls_msg.data[0]);
         //IR_internal_ADC_read();
-        if(latest_msg.data[4] != 0){
+        printf("X: %d, Y: %d, SL: %d, SR: %d, B: %d\n\r", 
+            controls_msg.data[0],
+            controls_msg.data[1],
+            controls_msg.data[2],
+            controls_msg.data[3],
+            controls_msg.data[4]
+        );
+        if(controls_msg.data[4] == RIGHT){
             solenoid_shoot();
         }
-        _delay_ms(100);
+        _delay_ms(50);
     }
 
     

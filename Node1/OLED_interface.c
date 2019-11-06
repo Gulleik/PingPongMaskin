@@ -1,5 +1,8 @@
+#define F_CPU 4915200 // clock frequency in Hz
+
 #include "OLED_interface.h"
 #include "OLED.h"
+#include "CAN_driver.h"
 #include "controller.h"
 #include <avr/pgmspace.h>
 #include <util/delay.h>
@@ -119,89 +122,104 @@ enum menu_options {
 };
 
 uint8_t enter() {
-	return controller_button_read() == 'j';
+	return controls_msg.data[4] == LEFT;
 }
 
 void play_game() {
 	OLED_clear();
 	OLED_invert_page(2);
 	OLED_invert_page(4);
-	char c;
+	int i = 0;
+
 	do {
-		c = UART_receive();
+		i++;
 		controller_CAN_send();
-		_delay_ms(100);
-	} while (c != 13); // Loop while enter is not pressed
+        printf("X: %d, Y: %d, SL: %d, SR: %d, B: %d\n\r", 
+			controls_msg.data[0],
+			controls_msg.data[1],
+			controls_msg.data[2],
+			controls_msg.data[3],
+			controls_msg.data[4]
+        );
+		//controller_button_read();
+        _delay_ms(50);
+	} while (!enter() || i < 10); // Loop while enter is not pressed
 }
 
 uint8_t OLED_FSM(enum menu_options *option) {
 	uint8_t screen = *option / 8;
 	//Traverse up and down on screen
-	char c = UART_receive();
-	if (c == 'l'/*controller_joystick_read_Y() < -95*/) { //DOWN
+	_delay_ms(200);
+	controller_joystick_read_Y();
+	controller_button_read();
+	if (controls_msg.data[1] < 50) { //DOWN
 		do {
 			*option = screen * 8 + (*option + 1) % 8; // Increment option and loop if out of bounds
-		} while (ALTMenuItemPointers[*option][0] == '\0' || *option % 8 == 0); // Skip empty options
-		return 1; //Traversion -> Redraw screen
+		} while (ALTMenuItemPointers[*option][0] == '\0' || *option % 8 == 0); // Skip empty options and header
+		return REDRAW_SCREEN;
 	}
-	else if (c == 'o'/*controller_joystick_read_Y() > 95*/) { //UP
+	else if (controls_msg.data[1] > 200) { //UP
 		do {
 			*option = screen * 8 + (*option - 1) % 8; // Increment option and loop if out of bounds
-		} while (ALTMenuItemPointers[*option][0] == '\0' || *option % 8 == 0);  // Skip empty options
-		return 1;
+		} while (ALTMenuItemPointers[*option][0] == '\0' || *option % 8 == 0);  // Skip empty options and header
+		return REDRAW_SCREEN;
 	}
 	/*FSM*/
 	switch (*option) {
 		case (HOME1): //Play Game
-			if (c == 13/*enter()*/) {
-				//RUN PLAY GAME FUNC
+			if (enter()) {
+				node2_state_msg.data[0] = 1; // Node 2 Run state
+				CAN_write_message(node2_state_msg);
+				play_game();
+				node2_state_msg.data[0] = 0; // Node 2 Idle state
+				CAN_write_message(node2_state_msg);
 				return REDRAW_SCREEN;
 			}
 			break;
 		case (HOME2): //Options
-			if (c == 13/*enter()*/) {
+			if (enter()) {
 				*option = OPTIONS1; // Goto options screen
 				return REDRAW_SCREEN;
 			}
 			break;
 		case (HOME3): //Extras
-			if (c == 13/*enter()*/) {
+			if (enter()) {
 				*option = EXTRAS1; //Goto extras screen
 				return REDRAW_SCREEN;
 			}
 			break;
 		case (OPTIONS1): //Controls
-			if (c == 13/*enter()*/) {
+			if (enter()) {
 				*option = CONTROLS1; //Goto controls screen
 				return REDRAW_SCREEN;
 			}
 			break;
 		case (OPTIONS2): //Motor
-			if (c == 13/*enter()*/) {
+			if (enter()) {
 				*option = MOTOR1; //Goto motor screen
 				return REDRAW_SCREEN;
 			}
 			break;
 		case (OPTIONS_RETURN): //Return
-			if (c == 13/*enter()*/) {
+			if (enter()) {
 				*option = HOME1; //Return to home screen
 				return REDRAW_SCREEN;
 			}
 			break;
 		case (CONTROLS_RETURN): //Return
-			if (c == 13/*enter()*/) {
+			if (enter()) {
 				*option = OPTIONS1; //Return to options screen
 				return REDRAW_SCREEN;
 			}
 			break;
 		case (MOTOR_RETURN): //Return
-			if (c == 13/*enter()*/) {
+			if (enter()) {
 				*option = OPTIONS1; //Return to options screen
 				return REDRAW_SCREEN;
 			}
 			break;
 		case (EXTRAS_RETURN): //Return
-			if (c == 13/*enter()*/) {
+			if (enter()) {
 				*option = HOME1; //Return to home screen
 				return REDRAW_SCREEN;
 			}
@@ -218,15 +236,26 @@ void OLED_interface() {
 	/*
 	int i = 0;
 	while(1) {
-		_delay_ms(2000);
-		OLED_reset_position();
-		//OLED_print_string((char *)pgm_read_byte(&MenuItemPointers[i]));
-		OLED_print_string(ALTMenuItemPointers[i]);
-		if (i == 2) i = 0;
-		else i++;
+		_delay_msHOME1
+		OLED_reseHOME1
+		//OLED_prHOME1
+		OLED_prinHOME1
+		if (i == HOME1
+		else i++;HOME1
 	}*/
 	OLED_clear();
 	OLED_reset_position();
+
+	/*Initiate node 2 to idle state and default configuration*/
+	node2_state_msg.ID = NODE2_STATE;
+	node2_state_msg.length = 1;
+	config_msg.ID = CONFIG;
+	config_msg.length = 1;
+	node2_state_msg.data[0] = 0; //Idle state
+	config_msg.data[0] = 0; //Default configuration
+	CAN_write_message(node2_state_msg);
+	_delay_ms(10);
+	CAN_write_message(config_msg);
 
 	/*Initialize default option to first option at home screen (HOME1)*/
 	enum menu_options option = HOME1;
