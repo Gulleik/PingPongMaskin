@@ -2,9 +2,9 @@
 #ifndef MCP
 #define MCP
 
-#endif
 #define ON 1
 #define OFF 0
+#endif
 
 void MCP_reset();
 

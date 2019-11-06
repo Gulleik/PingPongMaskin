@@ -4,7 +4,6 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
-
 void CAN_initialize(){
     MCP_reset();
 

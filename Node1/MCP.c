@@ -13,6 +13,11 @@ void MCP_enable(uint8_t state){
     }
 }
 
+void MCP_reset(){
+    MCP_enable(ON);
+    SPI_write_byte(MCP_RESET);
+    MCP_enable(OFF);
+}
 
 void MCP_driver_reset(){
     SPI_master_initialize();

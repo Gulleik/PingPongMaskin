@@ -2,7 +2,7 @@
 
 #include "OLED_interface.h"
 #include "OLED.h"
-#include "CAN_driver.h"
+#include "CAN.h"
 #include "controller.h"
 #include <avr/pgmspace.h>
 #include <util/delay.h>

@@ -13,17 +13,18 @@
 #include <avr/interrupt.h>
 #include "UART.h"
 #include "XMEM.h"
-#include "ADC_driver.h"
+#include "ADC.h"
 #include "controller.h"
 #include "OLED.h"
 #include "OLED_interface.h"
-#include "CAN_driver.h"
+#include "CAN.h"
 #include "MCP.h"
 #include "MCP_registers.h"
 #include "lib.h"
 
 int main(void)
 {
+    printf("helo");
     controller_initialize();
 	UART_initialize();
     CAN_initialize();
