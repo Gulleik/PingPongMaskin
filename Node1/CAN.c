@@ -1,4 +1,4 @@
-#include "CAN_driver.h"
+#include "CAN.h"
 #include "MCP.h"
 #include "MCP_registers.h"
 #include <avr/io.h>
@@ -6,7 +6,7 @@
 
 
 void CAN_initialize(){
-    MCP_driver_reset();
+    MCP_reset();
 
     /*Setup for external interrupt operation*/
     sei();  //Enable global interrupts
@@ -34,7 +34,7 @@ void CAN_write_message(message_t msg) {
     //Initiate transmission on buffer 0
     MCP_write(MCP_TXB0CTRL, 1<<3); //1<<3 = TXREQ
 
-    MCP_RTS(0x00); //RTS buffer 0
+    MCP_Request_To_Send(0x00); //RTS buffer 0
 }
 
 void CAN_receive_message(){

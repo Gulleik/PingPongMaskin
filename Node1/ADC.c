@@ -1,5 +1,5 @@
-#include "ADC_driver.h"
-#include "XMEM_driver.h"
+#include "ADC.h"
+#include "XMEM.h"
 #include <util/delay.h>
 
 
