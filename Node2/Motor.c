@@ -1,6 +1,7 @@
 #define F_CPU 16000000 // clock frequency in Hz
 
 #include "Motor.h"
+#include "CAN.h"
 #include "TWI_Master.h"
 
 #include <avr/io.h>
@@ -13,12 +14,12 @@ uint16_t MIN_pos;
 int16_t i_error = 0;
 int16_t d_error = 0;
 int16_t previos_error = 0;
-uint16_t K_p = 80;
-uint16_t K_i = 10;
-uint16_t K_d = 100;
+uint16_t K_p;   //DEFAULT 80
+uint16_t K_i;   //DEFAULT 10
+uint16_t K_d;   //DEFAULT 100
 
 // Max speed a value between 0 and 255
-uint8_t Max_speed = 120; 
+uint8_t Max_speed; //DEFAULT 120
 
 void Motor_reset_encoder(){
     PORTH &= ~(1 << RST); //resetting encoder pos
@@ -71,7 +72,7 @@ void Motor_initialise(){
     DDRH = 0xFF;
     DDRK = 0x00;
     Motor_enable_motor(ON);
-    Motor_calibrate();
+    //Motor_calibrate();
 }
 
 void Motor_calibrate(){
@@ -114,6 +115,12 @@ void Motor_update_slider_ref(uint8_t slider_pos){
 }
 
 void Motor_position_controller(){
+    /*Get config data*/
+    K_p = config_msg.data[1]; //1 = Data pos for K_p
+    K_i = config_msg.data[2]; //2 = Data pos for K_i
+    K_d = config_msg.data[3]; //3 = Data pos for K_d
+    Max_speed = config_msg.data[0];
+
     int16_t e = (position_ref - Motor_encoder_read_data());
     e = e/100;
     i_error += e;
@@ -131,7 +138,6 @@ void Motor_position_controller(){
     }
     Motor_adjust_speed(u);
     previos_error = e;
-
 }
 
 /*

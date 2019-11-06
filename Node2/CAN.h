@@ -1,6 +1,11 @@
 #ifndef CAN_H
 #define CAN_H
 
+#define CONF_DEFAULT_TOP_SPEED 128
+#define CONF_DEFAULT_Kp 80
+#define CONF_DEFAULT_Ki 10
+#define CONF_DEFAULT_Kd 100
+
 #endif
 
 #include <stdint.h>

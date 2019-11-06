@@ -19,6 +19,10 @@ static uint8_t current_column;
 static uint8_t current_page;
 
 
+void OLED_print_char_inverted(unsigned char character);
+
+void OLED_print_string_inverted(unsigned char* string);
+
 /**
   Structure with command initializations of OLED
 */
@@ -50,10 +54,7 @@ void OLED_print_string(unsigned char* string);
 
 void OLED_clear();
 
-/**
-  Fetches / creates main menu and lets you scrool through it.
-*/
-void OLED_home();
+
 void OLED_goto_page(unsigned char new_page);
 void OLED_goto_column(unsigned char new_column);
 void OLED_reset_position();

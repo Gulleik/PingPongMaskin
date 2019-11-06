@@ -1,6 +1,6 @@
 
 #include "OLED.h"
-#include "UART_driver.h"
+#include "UART.h"
 #include "fonts.h"
 #include <util/delay.h>
 #include <avr/pgmspace.h>
@@ -170,6 +170,18 @@ void OLED_print_string(unsigned char* string){
 	}
 }
 
+void OLED_print_char_inverted(unsigned char character) {
+	for (int i = 0; i < 5; i++) {
+		OLED_write_d(~pgm_read_byte(&font[character - 32][i]));
+	}
+}
+
+void OLED_print_string_inverted(unsigned char* string){
+	for (unsigned char i = 0; i < strlen(string); i++) {
+		OLED_print_char_inverted(string[i]);
+	}
+}
+
 void OLED_goto_page(unsigned char new_page){
   	OLED_write_c(0x22);
   	OLED_write_c(new_page);
@@ -192,6 +204,7 @@ void OLED_reset_position() {
 }
 
 void OLED_clear(){
+	OLED_reset_position();
 	for (int i = 0; i<8; i++){
 		for (int f = 0; f<128;f++){
 			OLED_write_d(0x00);
@@ -231,8 +244,6 @@ void OLED_navigate_xpos_with_joystick(int x){
 	}
 }
 
-
-
 void OLED_clear_page(int page){
 	OLED_goto_page(page);
 	OLED_goto_column(0);
@@ -250,53 +261,6 @@ void OLED_invert_page(int page) {
 	}
 }
 
-void OLED_home(){
-	// initialize home menu
-	OLED_clear();
-	OLED_print_string("git pull out");
-	OLED_goto_page(1);
-	OLED_goto_column(0);
-	OLED_print_string("git come");
-	OLED_goto_page(2);
-	OLED_goto_column(0);
-	OLED_print_string("git no baby");
-
-	OLED_goto_page(0);
-	OLED_goto_column(0);
-	while(1){
-		OLED_navigate_ypos_with_joystick(controller_joystick_read_Y(),2);
-		if(page == 0){
-			OLED_clear_page(page);
-			_delay_ms(500);
-			OLED_goto_page(0);
-			OLED_goto_column(0);
-			OLED_print_string("git pull out");
-			_delay_ms(500);
-			printf("page=0\n\r");
-		}
-		else if(page == 1){
-			OLED_clear_page(page);
-			_delay_ms(500);
-			OLED_goto_page(1);
-			OLED_goto_column(0);
-			OLED_print_string("git come");
-			_delay_ms(500);
-			printf("page=1\n\r");
-		}
-
-		else if(page == 2){
-			OLED_clear_page(page);
-			_delay_ms(500);
-			OLED_goto_page(2);
-			OLED_goto_column(0);
-			OLED_print_string("git no baby");
-			_delay_ms(500);
-			printf("page=2\n\r");
-		}
-		
-	}
-	
-}
 /*
 const char ss0[] = "";
 const char ss1[] = "`-:-.   ,-;*`-:-.   ,-;*";
