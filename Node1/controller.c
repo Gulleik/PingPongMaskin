@@ -1,5 +1,5 @@
 #include "controller.h"
-#include "CAN_driver.h"
+#include "CAN.h"
 #include <avr/io.h>
 
 void controller_initialize() {
