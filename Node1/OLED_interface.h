@@ -6,8 +6,8 @@
 
 #endif
 
-#include <stdlib.h> 
-#include <string.h>
-
+/**
+ * Show interface for human interaction over OLED screen. Includes FSM for system operation
+*/
 void OLED_interface();
 

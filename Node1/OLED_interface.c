@@ -17,45 +17,43 @@
 
 
 /*
-  .  . .  .  . .  .  . .  .  . . .  . .  .  . .  .  . .  .  . .  .  . .  .  . .  .  . .  .  . .  .  
-   .       .       .       .     .  . .  .  . .  .  . .   .       .       .       .       .       . 
-     .  .    .  .    .  .    .. ----------------------- .    . .    .  .    .  .    .  .    .  .    
- .       .       .       .    . |                     | .  .     .      .       .       .       .  .
-   .  .    .  .    .  .    .  . |                     |. .    .    . .    .  .    .  .    .  .      
-  .    .  .    .  .    .  .   . |        HOME         | .   .   .      .   .   .   .   .   .   . .  
-    .       .       .       . . |                     |   .   .   .  .   .   .   .   .   .   .     .
-  .   . .    .  .    .  .     . |                     |..              .       .       .        .   
-    .     .    .  .    .  .  .. ----------------------- .  . .  . . .     . .     . .     . .     . 
-  .    .   .       .      .  ../.. .    . | .   . .   \        .         .  .    .       .       . .   
-     .   .   .  .   .. ...    /   . . .   |.. .        \  .. . .        .   . .     . .  .     .
-  .    .      .    . _--------_    ---------------.  --------------- . .  .         . .         .   
-    .     . .    .. /          \   |             | . |             |    .   . .  .     .  .  .   . 
-  .   .          . |  PLAY GAME |  |   OPTIONS   |  .|   EXTRAS    | .     .        .     .     .   
-    .   . .  .   .  \          /   |             | . |             |   .      . . .   .     . .    .
-  .         .  .     '--------'    ---------------   ---------------  .   .  .          . .       .  
-     . .  .      .                 /:. .. .      \ . . .. . .  . .    .   .   .  . .      .  .     
-  .          .  .          .  .  :/ .       .. .  \ . .      .     .    .   .        .  .      . . 
-    .  . . .   .   .   . . ---------------. --------------- .   .  .  .         .  .    .   . .     
-  .       .       .       .|             | .|             |      .       .       .       .       . 
-  .          .    .  .    .|  CONTROLS   | .|    MOTOR    |             .  .  .   .  .    .      .  
-    . .  .      .       . .|             | .|             |  . . .  .     .     .      .    .  .   .
-  .       . .      .  .  . ---------------  --------------- .        .  . .   . .    .     .       .  
-   .       .       .       .     .  . .  .  . .  . | . .   .       .       .       .       .       . 
-    .  .      .  .   .   .      .   .        . .  .|.  .  .    .  .   .    .         .  . .   .     
-    .  . . .   .   .   . .           ...  . --------------- .   .  .  .         .  .    .   . .     
-  .       .       .       .      .         .|             |      .       .       .       .       . 
-  .          .    .  .    .  . .     . .   .|   PARAMS    |             .  .  .   .  .    .      .  
-    . .  .      .       . .       .        .|             |  . . .  .     .     .      .    .  .   .
-  .       . .      .  .  .  . . .   .       --------------- .        .  . .   . .    .     .       .  
-     . .      . .   .     .          ...     .  . . . .  . .  .  .               .   . .   .  .     
-  .      .  .     .    .   .  .   .      . .                 .      .  .  .  . .   .        .   .  .
-    .  .      .  .   .   .      .   .        . .  . .  .  .    .  .   .    .         .  . .   .     
-  .      . .       .        . .       . .  .     .    .     .    .   .  .     .  .               .  
-/**********************************************************************
+  .  . .  .   . .  .  . .  .  . . .  . .  .  . .  .  . .  .  . .  .  . .  .  . .  .  . . 
+   .       .        .       .     .  . .  .  . .  .  . .   .       .       .       .     
+ .  .    .  .     .  .   .    .. ----------------------- .    . .    .  .    .  .    .  .
+ .       .        .       .    . |                     | .  .     .      .       .       
+   .  .    .  .     .  .    .  . |                     |. .    .    . .    .  .    .  .  
+  .    .  .    .   .    .  .   . |        HOME         | .   .   .      .   .   .   .   .
+    .       .        .       . . |                     |   .   .   .  .   .   .   .   .  
+  .   . .    .  .     .  .     . |                     |..              .       .       .
+    .      .    .  .    .  .  .. ----------------------- .  . .  . . .     . .     . .   
+  .     .   .       .      .  . /   .    . | .   . .   \        .         .  .    .      
+ .   .  .     .  .   .. ...    /   . . .   |.. .        \  .. . .        .   . .     . . 
+  .    .       .    . _--------_    ---------------.  --------------- . .  .         . . 
+    .      . .    .. /          \   |             | . |             |    .   . .  .     .
+  .   .           . |  PLAY GAME |  |   OPTIONS   |  .|   EXTRAS    | .     .        .   
+    .   . .   .   .  \          /   |             | . |             |   .      . . .    .
+  .          .  .     '--------'    ---------------   ---------------  .   .  .          
+.    . .  .       .                 /:. .. .      \ . . .. . .  . .    .   .   .  . .   .
+  .          .   .          .  .  :/ .       .. .  \ . .      .     .    .   .        .  
+    .  . . .    .   .   . . ---------------. --------------- .   .  .  .         .  .    
+  .       .        .       .|             | .|             |      .       .       .      
+  .          .     .  .    .|  CONTROLS   | .|    MOTOR    |             .  .  .   .  .  
+    . .  .      .        . .|             | .|             |  . . .  .     .     .      .
+  .       . .       .  .  . ---------------  --------------- .        .  . .   . .    .  
+   .       .       .        .     .  . .  .  . .  . | . .   .       .       .       .    
+    .  .      .  .    .   .      .   .        . .  .|.  .  .    .  .   .    .         .  
+    .  . . .   .   .    . .           ...  . --------------- .   .  .  .         .  .    
+  .       .       .        .      .         .|             |      .       .       .      
+  .          .    .  .     .  . .     . .   .|   PARAMS    |             .  .  .   .  . .
+    . .  .      .       .  .       .        .|             |  . . .  .     .     .      .
+  .       . .      .  .  .   . . .   .       --------------- .        .  . .   . .    .  
+    .  .      .  .   .   .       .   .        . .  . .  .  .    .  .   .    .         .  
+  .      . .       .         . .       . .  .     .    .     .    .   .  .     .  .      
+/****************************************************************************************
  * 
  * CONFIGURE MENU
  * 
-***********************************************************************/
+*****************************************************************************************/
 
 /*Home*/
 //      SCREEN SIZE: "-------------------------."
@@ -78,7 +76,7 @@ const char opt3[] = "";
 const char opt4[] = "";
 const char opt5[] = "";
 const char opt6[] = "";
-const char opt_return[] = "Return"; //Return to home screen
+const char opt_return[] = "Return";
 
 /*Home -> Options -> Controls*/
 //      SCREEN SIZE: "-------------------------."
@@ -89,7 +87,7 @@ const char ctrl3[] = "";
 const char ctrl4[] = "";
 const char ctrl5[] = "";
 const char ctrl6[] = "";
-const char ctrl_return[] = "Return"; //Return to options screen
+const char ctrl_return[] = "Return";
 
 /*Home -> Options -> Motor*/
 //     SCREEN SIZE: "-------------------------."
@@ -100,7 +98,7 @@ const char mot3[] = "";
 const char mot4[] = "";
 const char mot5[] = "";
 const char mot6[] = "";
-const char mot_return[] = "Return"; //Return to options screen
+const char mot_return[] = "Return";
 
 /*Home -> Options -> Motor -> Params*/
 //     SCREEN SIZE: "-------------------------."
@@ -111,7 +109,7 @@ const char par3[] = "Kd";
 const char par4[] = "";
 const char par5[] = "";
 const char par6[] = "";
-const char par_return[] = "Return"; //Return to motor screen
+const char par_return[] = "Return";
 
 /*Home -> Extras*/
 //     SCREEN SIZE: "-------------------------."
@@ -122,9 +120,9 @@ const char ext3[] = "";
 const char ext4[] = "";
 const char ext5[] = "";
 const char ext6[] = "";
-const char ext_return[] = "Return"; //Return to home screen
+const char ext_return[] = "Return";
 
-char* ALTMenuItemPointers[] = {
+char* menu_string_pointers[] = {
 	home0, home1, home2, home3, home4, home5, home6, home7,
 	opt0, opt1, opt2, opt3, opt4, opt5, opt6, opt_return,
 	ctrl0, ctrl1, ctrl2, ctrl3, ctrl4, ctrl5, ctrl6, ctrl_return,
@@ -142,27 +140,36 @@ enum menu_options {
 	EXTRAS0, EXTRAS1, EXTRAS2, EXTRAS3, EXTRAS4, EXTRAS5, EXTRAS6, EXTRAS_RETURN
 };
 
+/*****************************************************************************************
+ * 
+*****************************************************************************************/
+
 uint8_t enter_joystick_r() {
+	/*Read joystick input and check if over treshold*/
 	controller_joystick_read_X();
 	return controls_msg.data[0] > 200;
 }
 
 uint8_t enter_joystick_l() {
+	/*Read joystick input and check if over treshold*/
 	controller_joystick_read_X();
 	return controls_msg.data[0] < 50;
 }
 
 uint8_t enter_joystick_u() {
+	/*Read joystick input and check if over treshold*/
 	controller_joystick_read_Y();
 	return controls_msg.data[1] > 200;
 }
 
 uint8_t enter_joystick_d() {
+	/*Read joystick input and check if over treshold*/
 	controller_joystick_read_Y();
 	return controls_msg.data[1] < 50;
 }
 
 uint8_t enter_button(enum BUTTON B) {
+	/*Check if param button is pressed*/
 	controller_button_read();
 	return controls_msg.data[4] == B;
 }
@@ -193,27 +200,37 @@ void play_game() {
 	OLED_goto_column(10);
 	OLED_print_string("HOLD JOYSTICK TO QUIT");*/
 
+	/*Loop until joystick is pressed*/
 	do {
+		/*Send all controller inputs by CAN*/
 		controller_CAN_send();
-        printf("X: %d, Y: %d, SL: %d, SR: %d, B: %d\n\r", 
+        /*printf("X: %d, Y: %d, SL: %d, SR: %d, B: %d\n\r", 
 			controls_msg.data[0],
 			controls_msg.data[1],
 			controls_msg.data[2],
 			controls_msg.data[3],
 			controls_msg.data[4]
-        );
+        );*/
         _delay_ms(50);
-	} while (!enter_button(JOYSTICK)); // Loop while enter is not pressed
+	} while (!enter_button(JOYSTICK));
 }
 
 void show_slider_selection(uint8_t page) {
+	/*Loop until joystick is pressed*/
 	do {
+		/*Read slider input*/
+		controller_slider_read_R();
+
+		/*Print Min */
 		OLED_clear_page(page);
 		OLED_goto_page(page);
 		OLED_print_string("Min");
-		controller_slider_read_R();
+
+		/*Print slider indicator*/
 		OLED_goto_column(controls_msg.data[3]/3 + 20);
 		OLED_write_d(0xFF);
+
+		/*Print Max*/
 		OLED_goto_column(107);
 		OLED_print_string("Max");
 		_delay_ms(50);
@@ -221,14 +238,16 @@ void show_slider_selection(uint8_t page) {
 }
 
 void show_and_increment_value(char name[], uint8_t def, volatile uint8_t *value, uint8_t page) {
+	/*Loop until joystick is pressed*/
 	do {
-		printf("show_and_increment() ran\n\r");
 		OLED_clear_page(page);
 		OLED_goto_page(page);
+
+		/*Print param value as string*/
 		char val_str[] = "";
-		char def_str[] = "";
-		itoa(*value, val_str, 10); //Convert int value to str in order to print to OLED
+		itoa(*value, val_str, 10);
 		
+		/*Print param name and increment/decrement operators according to joystick input*/
 		OLED_print_string(name);
 		if (enter_joystick_l()) {
 			*value -= 5;
@@ -241,8 +260,11 @@ void show_and_increment_value(char name[], uint8_t def, volatile uint8_t *value,
 			*value += 5;
 			OLED_print_string(" +");
 		}
+
+		/*Print default value as string*/
 		OLED_goto_column(80);
 		OLED_print_string("def: ");
+		char def_str[] = "";
 		itoa(def, def_str, 10);
 		OLED_print_string(def_str);
 
@@ -252,67 +274,98 @@ void show_and_increment_value(char name[], uint8_t def, volatile uint8_t *value,
 
 uint8_t OLED_FSM(enum menu_options *option) {
 	uint8_t screen = *option / 8;
-	//Traverse up and down on screen
+
+	/*Traverse up and down on screen*/
 	_delay_ms(200);
-	if (enter_joystick_d()) { //DOWN
+	if (enter_joystick_d()) {
+		/*Loop if option ar header or empty line*/
 		do {
-			*option = screen * 8 + (*option + 1) % 8; // Increment option and loop if out of bounds
-		} while (ALTMenuItemPointers[*option][0] == '\0' || *option % 8 == 0); // Skip empty options and header
+			/*Increment option and loop to top if option "below" screen*/
+			*option = screen * 8 + (*option + 1) % 8;
+		} while (menu_string_pointers[*option][0] == '\0' || *option % 8 == 0);
 		return REDRAW_SCREEN;
 	}
-	else if (enter_joystick_u()) { //UP
+	else if (enter_joystick_u()) {
+		/*Loop if option ar header or empty line*/
 		do {
-			*option = screen * 8 + (*option - 1) % 8; // Increment option and loop if out of bounds
-		} while (ALTMenuItemPointers[*option][0] == '\0' || *option % 8 == 0);  // Skip empty options and header
+			/*Increment option and loop to bottom if option "above" screen*/
+			*option = screen * 8 + (*option - 1) % 8;
+		} while (menu_string_pointers[*option][0] == '\0' || *option % 8 == 0);
 		return REDRAW_SCREEN;
 	}
 	
 	/*FSM*/
 	switch (*option) {
-		case (HOME1): //Play Game
+		/*Home: Play Game*/
+		case (HOME1):
 			if (enter_joystick_r()) {
-				node2_state_msg.data[0] = 1; // Node 2 Run state
+				/*Set node 2 to RUN state and send by CAN*/
+				node2_state_msg.data[0] = 1;
 				CAN_write_message(node2_state_msg);
+
+				/*Initiate main play_game function*/
 				play_game();
-				node2_state_msg.data[0] = 0; // Node 2 Idle state
+
+				/*Set node 2 to IDLE state*/
+				node2_state_msg.data[0] = 0;
 				CAN_write_message(node2_state_msg);
 				return REDRAW_SCREEN;
 			}
 			break;
-		case (HOME2): //Options
+
+		/*Home: Options*/
+		case (HOME2):
 			if (enter_joystick_r()) {
-				*option = OPTIONS1; // Goto options screen
+				/*Goto options screen*/
+				*option = OPTIONS1;
 				return REDRAW_SCREEN;
 			}
 			break;
-		case (HOME3): //Extras
+
+		/*Home: Extras*/
+		case (HOME3):
 			if (enter_joystick_r()) {
-				*option = EXTRAS1; //Goto extras screen
+				/*Goto extras screen*/
+				*option = EXTRAS1;
 				return REDRAW_SCREEN;
 			}
 			break;
-		case (OPTIONS1): //Controls
+
+		/*Home->Options: Controls*/
+		case (OPTIONS1):
 			if (enter_joystick_r()) {
-				*option = CONTROLS1; //Goto controls screen
+				/*Goto controls screen*/
+				*option = CONTROLS1;
 				return REDRAW_SCREEN;
 			}
 			break;
-		case (OPTIONS2): //Motor
+
+		/*Home->Options: Motor*/
+		case (OPTIONS2):
 			if (enter_joystick_r()) {
-				*option = MOTOR1; //Goto motor screen
+				/*Goto motor screen*/
+				*option = MOTOR1;
 				return REDRAW_SCREEN;
 			}
 			break;
-		case (OPTIONS_RETURN): //Return
+
+		/*Home->Options: Return*/
+		case (OPTIONS_RETURN):
 			if (enter_joystick_r()) {
-				*option = HOME2; //Return to home screen
+				/*Return to home screen*/
+				*option = HOME2;
 				return REDRAW_SCREEN;
 			}
 			break;
-		case (CONTROLS1): //Invert servo
+
+		/*Home->Options->Controls: Invert servo*/
+		case (CONTROLS1):
 			if (enter_joystick_r()) {
-				config_msg.data[4] = ~config_msg.data[4]; // Configure node 2 servo dir
+				/*Confure node 2 servo dir and send by CAN*/
+				config_msg.data[4] = ~config_msg.data[4];
 				CAN_write_message(config_msg);
+
+				/*Print Selection to screen*/
 				OLED_goto_page(*option % 8);
 				OLED_goto_column(60);
 				if (config_msg.data[4]) {
@@ -320,15 +373,19 @@ uint8_t OLED_FSM(enum menu_options *option) {
 				} else {
 					OLED_print_string_inverted("  False");
 				}
-				CAN_write_message(config_msg);
 				_delay_ms(1000);
 				return REDRAW_SCREEN;
 			}
 			break;
-		case (CONTROLS2): //Invert motor
+
+		/*Home->Options->Controls: Invert motor*/
+		case (CONTROLS2):
 			if (enter_joystick_r()) {
-				config_msg.data[5] = ~config_msg.data[5]; // Configure node 2 motor dir
+				/*Confure node 2 motor dir and send by CAN*/
+				config_msg.data[5] = ~config_msg.data[5];
 				CAN_write_message(config_msg);
+
+				/*Show selection to screen and let user select*/
 				OLED_goto_page(*option % 8);
 				OLED_goto_column(60);
 				if (config_msg.data[5]) {
@@ -336,67 +393,95 @@ uint8_t OLED_FSM(enum menu_options *option) {
 				} else {
 					OLED_print_string_inverted("  False");
 				}
-				CAN_write_message(config_msg);
 				_delay_ms(1000);
 				return REDRAW_SCREEN;
 			}
 			break;
-		case (CONTROLS_RETURN): //Return
+
+		/*Home->Options->Controls: Return*/
+		case (CONTROLS_RETURN):
 			if (enter_joystick_r()) {
-				*option = OPTIONS1; //Return to options screen
+				/*Return to options screen*/
+				*option = OPTIONS1;
 				return REDRAW_SCREEN;
 			}
 			break;
-		case (MOTOR1): //Top speed
+
+		/*Home->Options->Motor: Top speed*/
+		case (MOTOR1):
 			if (enter_joystick_r()) {
+				/*Show slider selection and let user select*/
 				show_slider_selection(*option % 8);
+
+				/*Configure node 2 top speed and send by CAN*/
 				config_msg.data[0] = controls_msg.data[3]; // Configure node 2 top speed
 				CAN_write_message(config_msg);
 				return REDRAW_SCREEN;
 			}
 			break;
-		case (MOTOR2): //Controller params
+
+		/*Home->Options->Motor: Controller params*/
+		case (MOTOR2):
 			if (enter_joystick_r()) {
-				*option = PARAM1; //Goto params screen
+				/*Goto params screen*/
+				*option = PARAM1;
 				return REDRAW_SCREEN;
 			}
 			break;
-		case (MOTOR_RETURN): //Return
+
+		/*Home->Options->Motor: Return*/
+		case (MOTOR_RETURN):
 			if (enter_joystick_r()) {
-				*option = OPTIONS2; //Return to options screen
+				/*Return to options screen*/
+				*option = OPTIONS2;
 				return REDRAW_SCREEN;
 			}
 			break;
-		case (PARAM1): //Kp
+
+		/*Home->Options->Motor: Kp*/
+		case (PARAM1):
 			if (enter_joystick_r() || enter_joystick_l()) {
-				show_and_increment_value("Kp", CONF_DEFAULT_Kp, &config_msg.data[1], *option % 8); //Configure node 2 Kp
+				/*Show value and let user increment value, configure node 2 and send by CAN*/
+				show_and_increment_value("Kp", CONF_DEFAULT_Kp, &config_msg.data[1], *option % 8);
 				CAN_write_message(config_msg);
 				return REDRAW_SCREEN;
 			}
 			break;
-		case (PARAM2): //Ki
+
+		/*Home->Options->Motor: Ki*/
+		case (PARAM2):
 			if (enter_joystick_r() || enter_joystick_l()) {
-				show_and_increment_value("Ki", CONF_DEFAULT_Ki, &config_msg.data[2], *option % 8); //Configure node 2 Ki
+				/*Show value and let user increment value, configure node 2 and send by CAN*/
+				show_and_increment_value("Ki", CONF_DEFAULT_Ki, &config_msg.data[2], *option % 8);
 				CAN_write_message(config_msg);
 				return REDRAW_SCREEN;
 			}
 			break;
-		case (PARAM3): //Kd
+
+		/*Home->Options->Motor: Kd*/
+		case (PARAM3):
 			if (enter_joystick_r() || enter_joystick_l()) {
-				show_and_increment_value("Kd", CONF_DEFAULT_Kd, &config_msg.data[3], *option % 8); //COnfigure node 2 Kd
+				/*Show value and let user increment value, configure node 2 and send by CAN*/
+				show_and_increment_value("Kd", CONF_DEFAULT_Kd, &config_msg.data[3], *option % 8);
 				CAN_write_message(config_msg);
 				return REDRAW_SCREEN;
 			}
 			break;
-		case (PARAM_RETURN): //Return
+
+		/*Home->Options->Motor: Return*/
+		case (PARAM_RETURN):
 			if (enter_joystick_r()) {
+				/*Return to motor screen*/
 				*option = MOTOR1; //Return to motor screen
 				return REDRAW_SCREEN;
 			}
 			break;
-		case (EXTRAS_RETURN): //Return
+
+		/*Home->Extras: Return*/
+		case (EXTRAS_RETURN):
 			if (enter_joystick_r()) {
-				*option = HOME1; //Return to home screen
+				/*Return to home screen*/
+				*option = HOME1;
 				return REDRAW_SCREEN;
 			}
 			break;
@@ -406,35 +491,26 @@ uint8_t OLED_FSM(enum menu_options *option) {
 	return RETAIN_SCREEN;
 }
 
-
 void OLED_interface() {
-	/*Testing PROGMEM strings*/
-	/*
-	int i = 0;
-	while(1) {
-		_delay_msHOME1
-		OLED_reseHOME1
-		//OLED_prHOME1
-		OLED_prinHOME1
-		if (i == HOME1
-		else i++;HOME1
-	}*/
 	OLED_clear();
 	OLED_reset_position();
 
-	/*Initiate node 2 to idle state and default configuration*/
+	/*Configure node2_state and config to appropriate values*/
 	node2_state_msg.ID = NODE2_STATE;
 	node2_state_msg.length = 1;
 	config_msg.ID = CONFIG;
 	config_msg.length = 6;
 
-	node2_state_msg.data[0] = 0; //Idle state
-	config_msg.data[0] = CONF_DEFAULT_TOP_SPEED; //Default top speed
-	config_msg.data[1] = CONF_DEFAULT_Kp; //Default Kp
-	config_msg.data[2] = CONF_DEFAULT_Ki; //Default Ki
-	config_msg.data[3] = CONF_DEFAULT_Kd; //Default Kd
-	config_msg.data[4] = 0; //Default Invert servo
-	config_msg.data[5] = 0; //Default Invert motor
+	/*Initiate node 2 to idle state and default configuration*/
+	node2_state_msg.data[0] = STATE_IDLE;
+	config_msg.data[0] = CONF_DEFAULT_TOP_SPEED;
+	config_msg.data[1] = CONF_DEFAULT_Kp;
+	config_msg.data[2] = CONF_DEFAULT_Ki;
+	config_msg.data[3] = CONF_DEFAULT_Kd;
+	config_msg.data[4] = CONF_DEFAULT_INV_SERVO;
+	config_msg.data[5] = CONF_DEFAULT_INV_MOTOR;
+
+	/*Send node 2 default configuration and state by CAN*/
 	CAN_write_message(node2_state_msg);
 	_delay_ms(1);
 	CAN_write_message(config_msg);
@@ -447,7 +523,7 @@ void OLED_interface() {
             config_msg.data[4],
             config_msg.data[5],
             config_msg.data[6]
-        );
+    );
 
 	/*Initialize default option to first option at home screen (HOME1)*/
 	enum menu_options option = HOME1;
@@ -457,11 +533,13 @@ void OLED_interface() {
 			OLED_goto_column(0);
 			OLED_clear_page(page);
 			OLED_goto_page(page);
-			OLED_print_string(ALTMenuItemPointers[(option / 8) * 8 + page]);
+			OLED_print_string(menu_string_pointers[(option / 8) * 8 + page]);
 		}
 		
-		OLED_invert_page(option % 8); //Highlight chosen option
+		/*Highlight chosed option*/
+		OLED_invert_page(option % 8);
 		
-		while (!OLED_FSM(&option)); //Run FSM until REDRAW_SCREEN is passed
+		/*Run FSM until REDRAW_SCREEN is passed*/
+		while (!OLED_FSM(&option));
 	}
 }

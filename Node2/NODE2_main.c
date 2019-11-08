@@ -22,6 +22,7 @@
 
 int main(void)
 {
+    /*Initialize modules*/
 	UART_initialize();
     CAN_initialize();
     Servo_initialize();
@@ -30,6 +31,7 @@ int main(void)
     solenoid_init();
 
     uint8_t Motor_calibrated;
+    
     /*Initiate node 2 to idle state and default configuration*/
 	node2_state_msg.ID = NODE2_STATE;
 	config_msg.ID = CONFIG;
@@ -45,10 +47,11 @@ int main(void)
             config_msg.data[5]
         );
         switch (node2_state_msg.data[0]) {
-            case 0: //IDLE STATE
+            case STATE_IDLE:
                 Motor_calibrated = 0;
                 break;
-            case 1: //PLAY STATE
+
+            case STATE_PLAY:
                 if (!Motor_calibrated) {
                     Motor_calibrate();
                     Motor_calibrated = 1;
