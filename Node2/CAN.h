@@ -11,7 +11,6 @@
 #define CONF_DEFAULT_INV_SERVO 0
 #define CONF_DEFAULT_INV_MOTOR 0
 
-#endif
 
 #include <stdint.h>
 
@@ -34,18 +33,20 @@ volatile message_t config_msg;
 volatile message_t controls_msg;
 
 /**
- * initialize can driver
+ * @brief Initialize can driver
 */
 void CAN_initialize();
 
 /**
- * Write message over the Can bus
+ * @brief Write message over the Can bus
    @param msg; message to be sent.
 */
 void CAN_write_message(message_t msg);
 
 /**
- * Receive message over the Can bus
+ * @brief Receive message over the Can bus
    @param msg; message to be sent.
 */
 void CAN_receive_message();
+
+#endif

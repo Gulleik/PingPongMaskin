@@ -7,9 +7,11 @@
 #define SRAM_BASE_ADDR 0x1800
 #define SRAM_OLED_BASE_ADDR 0x1c00
 
-#endif
+
 
 /**
  * Tests that SRAM is connected properly and operational.
 */
 void SRAM_test(void);
+
+#endif

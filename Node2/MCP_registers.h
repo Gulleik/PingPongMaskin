@@ -1,3 +1,6 @@
+#ifndef MCP_REGISTERS_H
+#define CAN_REGISTERS_H
+
 /*
 mcp2515.h
 
@@ -8,6 +11,11 @@ Version     Date        Description
 v1.00       2003/12/11  Initial release
 
 Copyright 2003 Kimberly Otten Software Consulting
+*/
+
+/**
+ * @file
+ * @brief Initialize SPI and MCP 
 */
 
 // Define MCP2515 register addresREADses
@@ -158,3 +166,6 @@ Copyright 2003 Kimberly Otten Software Consulting
 #define MCP_ERRIF		0x20
 #define MCP_WAKIF		0x40
 #define MCP_MERRF		0x80
+
+
+#endif

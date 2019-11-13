@@ -4,13 +4,14 @@
 #include "stdint.h"
 
 
-#endif
 /**
- * Initialize input pins for analog controller input
+ * @brief Initialize input pins for analog controller input
 */
 void controller_initialize();
 
 /**
- * Send controller data over CAN bus
+ *  @brief Send controller data over CAN bus
 */
 void controller_CAN_send();
+
+#endif

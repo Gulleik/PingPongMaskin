@@ -1,13 +1,16 @@
-
+#ifndef SOLENOID_H
+#define SOLENOID_H
 
 #include <avr/io.h>
 
 /**
- * Initialize solenoid
+ * @brief Initialize solenoid
 */
 void solenoid_initialize();
 
 /**
- * send a pulse through the solenoid
+ * @brief Send a pulse through the solenoid
 */
 void solenoid_pulse();
+
+#endif
