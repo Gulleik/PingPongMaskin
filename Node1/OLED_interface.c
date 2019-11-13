@@ -204,13 +204,6 @@ void play_game() {
 	do {
 		/*Send all controller inputs by CAN*/
 		controller_CAN_send();
-        /*printf("X: %d, Y: %d, SL: %d, SR: %d, B: %d\n\r", 
-			controls_msg.data[0],
-			controls_msg.data[1],
-			controls_msg.data[2],
-			controls_msg.data[3],
-			controls_msg.data[4]
-        );*/
         _delay_ms(50);
 	} while (!enter_button(JOYSTICK));
 }

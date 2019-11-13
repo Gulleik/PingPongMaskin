@@ -1,7 +1,6 @@
 
-#ifndef MCP
-#define MCP
-#endif
+#ifndef MCP_H
+#define MCP_H
 
 #define ON 1
 #define OFF 0

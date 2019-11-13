@@ -1,1 +1,6 @@
-build/
+Node1/build/**
+Node2/build/**
+**/.vscode
+html/search/**
+html/**
+latex/**

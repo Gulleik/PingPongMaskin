@@ -3,7 +3,6 @@
 #include <avr/interrupt.h>
 
 void IR_internal_ADC_initialize() {
-    printf("Initializing ADC\n\r");
     /*Enable ADC*/
     ADCSRA |= (1<<ADEN);
     /*Enable interrupt on completed conversion and set global interrupt flag*/
@@ -42,7 +41,7 @@ ISR(ADC_vect) {
     cli();
     /*Check digitally converted analog signal against constant treshold*/
     uint8_t temp = ADCH;
-    printf("ADCH: %d\n\r", temp);
+    //printf("ADCH: %d\n\r", temp);
     is_blocked = !(temp > 50); //Min: 0, Max: 255
     sei();
 }

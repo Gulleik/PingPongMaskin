@@ -22,17 +22,30 @@
 #include "MCP_registers.h"
 #include "lib.h"
 
+void NODE1_initialize() {
+	UART_initialize();
+    printf("Node 1 initializing...\n\r");
+
+    /*Initialize modules*/
+    printf("\tUART\t\tOK\r\n");
+    printf("\tCAN");
+    CAN_initialize();
+    printf("\t\tOK\r\n");
+    printf("\tXMEM");
+    XMEM_initialize(); 
+    printf("\t\tOK\r\n");
+    printf("\tOLED");
+    OLED_initialize();
+    printf("\t\tOK\r\n");
+
+    printf("Completed with no errors\n\r");
+}
+
 int main(void)
 {
-    controller_initialize();
-	UART_initialize();
-    CAN_initialize();
-    XMEM_initialize();   
-    OLED_initialize();
+    NODE1_initialize();
 
     OLED_interface();
-    while(1){
-        printf("main loop\n\r");
-    }
+    while(1);
 }
 
