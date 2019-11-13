@@ -71,11 +71,9 @@ void Motor_initialize(){
     DDRH = 0xFF;
     DDRK = 0x00;
     Motor_enable_motor(ON);
-    //Motor_calibrate();
 }
 
 void Motor_calibrate(){
-
     Motor_set_dir(MOTOR_RIGHT);
 	Motor_adjust_speed(80);
 	_delay_ms(1000);
@@ -95,7 +93,11 @@ void Motor_calibrate(){
     _delay_ms(100);
 	MAX_pos = Motor_encoder_read_data();
 
-	//printf("Motor is calibrated, min_pos: %d\tmax_pos: %d\n\r", MIN_pos, MAX_pos);
+	/*Get config data from node 1*/
+    K_p = config_msg.data[1]; //1 = Data pos for K_p
+    K_i = config_msg.data[2]; //2 = Data pos for K_i
+    K_d = config_msg.data[3]; //3 = Data pos for K_d
+    Max_speed = config_msg.data[0];
 }
 
 void Motor_enable_motor(uint8_t state){
@@ -112,11 +114,8 @@ void Motor_update_slider_ref(uint8_t slider_pos){
 }
 
 void Motor_position_controller(){
-    /*Get config data*/
-    K_p = config_msg.data[1]; //1 = Data pos for K_p
-    K_i = config_msg.data[2]; //2 = Data pos for K_i
-    K_d = config_msg.data[3]; //3 = Data pos for K_d
-    Max_speed = config_msg.data[0];
+    /*Update reference in accordance with slider position*/
+    Motor_update_slider_ref(controls_msg.data[3]);
 
     int16_t e = (position_ref - Motor_encoder_read_data());
     e = e/100;

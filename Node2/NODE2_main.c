@@ -18,6 +18,7 @@
 #include "IR.h"
 #include "Motor.h"
 #include "solenoid.h"
+#include "timer.h"
 
 void NODE2_initialize() {
 	UART_initialize();
@@ -40,22 +41,25 @@ void NODE2_initialize() {
     printf("\tSolenoid");
     solenoid_initialize();
     printf("\tOK\r\n");
+    printf("\tTimer");
+    timer_initialize();
+    printf("\tOK\r\n");
 
-    printf("Completed with no errors\n\r");
+    printf("Initialization complete\n\r");
 }
 
 int main(void)
 {
     NODE2_initialize();
 
-    uint8_t Motor_calibrated;
+    uint8_t prev_state = -1;
     
     /*Initiate node 2 to idle state and default configuration*/
 	node2_state_msg.ID = NODE2_STATE;
 	config_msg.ID = CONFIG;
 
     while(1) {
-        printf("STATE: %d CONFIGS: speed = %d, Kp = %d, Ki = %d, Kd = %d, Inv_ser = %d, Inv_mot = %d\n\r",
+        /*printf("STATE: %d CONFIGS: speed = %d, Kp = %d, Ki = %d, Kd = %d, Inv_ser = %d, Inv_mot = %d\n\r",
             node2_state_msg.data[0],
             config_msg.data[0],
             config_msg.data[1],
@@ -63,23 +67,24 @@ int main(void)
             config_msg.data[3],
             config_msg.data[4],
             config_msg.data[5]
-        );
+        );*/
 
         switch (node2_state_msg.data[0]) {
             case STATE_IDLE:
-                Motor_calibrated = 0;
+                if (prev_state != STATE_IDLE) {
+                    prev_state = STATE_IDLE;
+                    timer_disable(IR_ADC_TIMER);
+                    timer_disable(CONTROLLER_TIMER);
+                }
                 break;
 
             case STATE_PLAY:
-                if (!Motor_calibrated) {
+                if (prev_state != STATE_PLAY) {
+                    prev_state = STATE_PLAY;
+                    timer_enable(IR_ADC_TIMER);
+                    timer_enable(CONTROLLER_TIMER);
                     Motor_calibrate();
-                    Motor_calibrated = 1;
                 }
-
-                Motor_update_slider_ref(controls_msg.data[3]);
-                Motor_position_controller();
-                Servo_set_position(controls_msg.data[0]);
-                //IR_internal_ADC_read();
                 /*printf("X: %d, Y: %d, SL: %d, SR: %d, B: %d\n\r", 
                     controls_msg.data[0],
                     controls_msg.data[1],
