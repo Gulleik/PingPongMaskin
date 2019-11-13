@@ -7,6 +7,11 @@
 #define OFF 0
 
 /**
+ * @file
+ * @brief MCP driver NODE1
+*/
+
+/**
  * @brief Initialize SPI and MCP 
 */
 void MCP_initialize();

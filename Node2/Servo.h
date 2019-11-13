@@ -6,6 +6,11 @@
 #define FREC 
 
 /**
+ * @file
+ * @brief Servo driver
+*/
+
+/**
  * @brief Initialises the Servo, enables fast pwm, overflow interupts, and sets prescaler to divide by 8
 */
 void Servo_initialize();

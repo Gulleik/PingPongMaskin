@@ -7,7 +7,10 @@
 #define SRAM_BASE_ADDR 0x1800
 #define SRAM_OLED_BASE_ADDR 0x1c00
 
-
+/**
+ * @file
+ * @brief SRAM test
+*/
 
 /**
  * Tests that SRAM is connected properly and operational.

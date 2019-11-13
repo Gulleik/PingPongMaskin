@@ -4,7 +4,13 @@
 
 #include <stdint.h>
 
+/**
+ * @file
+ * @brief IR driver
+*/
+
 int8_t is_blocked;
+
 
 
 /**

@@ -4,6 +4,10 @@
 #define REDRAW_SCREEN 1
 #define RETAIN_SCREEN 0
 
+/**
+ * @file
+ * @brief Oled interface driver
+*/
 
 /**
  * @brief Show interface for human interaction over OLED screen. Includes FSM for system operation

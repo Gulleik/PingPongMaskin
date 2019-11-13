@@ -3,6 +3,10 @@
 
 #include "stdint.h"
 
+/**
+ * @file
+ * @brief Driver for controller input
+*/
 
 /**
  * @brief Initialize input pins for analog controller input

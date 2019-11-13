@@ -1,10 +1,13 @@
-
 #ifndef MCP
 #define MCP
 
-
 #define ON 1
 #define OFF 0
+
+/**
+ * @file
+ * @brief MCP driver NODE2
+*/
 
 /**
  * @brief Initialize SPI and MCP 

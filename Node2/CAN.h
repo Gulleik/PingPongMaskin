@@ -11,8 +11,12 @@
 #define CONF_DEFAULT_INV_SERVO 0
 #define CONF_DEFAULT_INV_MOTOR 0
 
-
 #include <stdint.h>
+
+/**
+ * @file
+ * @brief Can driver NODE2
+*/
 
 struct message_t {
     uint16_t ID;

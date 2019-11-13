@@ -1,10 +1,13 @@
 #ifndef SPI
 #define SPI
 
-
-
 #include <avr/io.h>
 #include <stdint.h>
+
+/**
+ * @file
+ * @brief SPI driver NODE1
+*/
 
 /**
  * @brief Initialize ATmega 2560 as SPI master

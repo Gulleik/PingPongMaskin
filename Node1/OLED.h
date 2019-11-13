@@ -6,6 +6,12 @@
 #include "lib.h"
 #include <stdint.h>
 
+/**
+ * @file
+ * @brief OLED driver
+*/
+
+
 static uint8_t current_column;
 static uint8_t current_page;
 

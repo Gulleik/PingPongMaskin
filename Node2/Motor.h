@@ -15,6 +15,11 @@
 
 #include <stdint.h>
 
+/**
+ * @file
+ * @brief Motor driver
+*/
+
 uint16_t position_ref;
 
 

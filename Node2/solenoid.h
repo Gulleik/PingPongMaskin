@@ -4,6 +4,11 @@
 #include <avr/io.h>
 
 /**
+ * @file
+ * @brief Solenoid driver
+*/
+
+/**
  * @brief Initialize solenoid
 */
 void solenoid_initialize();

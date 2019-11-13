@@ -1,7 +1,10 @@
 #ifndef UART_H
 #define UART_H
 
-
+/**
+ * @file
+ * @brief UART driver NODE2
+*/
 
 /**
  * @brief Initialize UART hardware

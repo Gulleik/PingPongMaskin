@@ -1,5 +1,5 @@
 #ifndef MCP_REGISTERS_H
-#define CAN_REGISTERS_H
+#define MCP_REGISTERS_H
 
 /*
 mcp2515.h
@@ -15,7 +15,7 @@ Copyright 2003 Kimberly Otten Software Consulting
 
 /**
  * @file
- * @brief Initialize SPI and MCP 
+ * @brief Collection of MCP register MAKROs 
 */
 
 // Define MCP2515 register addresREADses

@@ -11,6 +11,11 @@
 #define DD_SCK PB1
 
 /**
+ * @file
+ * @brief SPI driver NODE2
+*/
+
+/**
  * @brief Initialize ATmega 2560 as SPI master
 */
 void SPI_master_initialize();
