@@ -19,6 +19,11 @@ void MCP_reset(){
     MCP_enable(OFF);
 }
 
+uint8_t MCP_initialize() {
+    SPI_master_initialize();
+    MCP_reset();
+}
+
 void MCP_driver_reset(){
     SPI_master_initialize();
     MCP_enable(ON);

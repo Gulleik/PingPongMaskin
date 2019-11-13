@@ -16,19 +16,39 @@
 #include "MCP.h"
 #include "lib.h"
 #include "Servo.h"
-#include "IR_driver.h"
+#include "IR.h"
 #include "Motor.h"
 #include "solenoid.h"
 
+void NODE2_initialize() {
+    printf("Node 2 initializing...\n\r");
+
+    /*Initialize modules*/
+    printf("\tUART");
+	UART_initialize();
+    printf("\tOK\r\n");
+    printf("\tCAN");
+    CAN_initialize();
+    printf("\tOK\r\n");
+    printf("\tServo");
+    Servo_initialize();
+    printf("\tOK\r\n");
+    printf("\tIR");
+    IR_internal_ADC_initialize();
+    printf("\tOK\r\n");
+    printf("\tMotor");
+    Motor_initialize();
+    printf("\tOK\r\n");
+    printf("\tSolenoid");
+    solenoid_initialize();
+    printf("\tOK\r\n");
+
+    printf("Completed with no errors\n\r");
+}
+
 int main(void)
 {
-    /*Initialize modules*/
-	UART_initialize();
-    CAN_initialize();
-    Servo_initialize();
-    IR_internal_ADC_init();
-    Motor_initialise();
-    solenoid_init();
+    NODE2_initialize();
 
     uint8_t Motor_calibrated;
     
@@ -37,7 +57,7 @@ int main(void)
 	config_msg.ID = CONFIG;
 
     while(1) {
-        printf("STATE: %d CONFIGS: speed = %d, Kp = %d, Ki = %d, Kd = %d, Inv_ser = %d, Inv_mot = %d\n\r",
+        /*printf("STATE: %d CONFIGS: speed = %d, Kp = %d, Ki = %d, Kd = %d, Inv_ser = %d, Inv_mot = %d\n\r",
             node2_state_msg.data[0],
             config_msg.data[0],
             config_msg.data[1],
@@ -45,10 +65,13 @@ int main(void)
             config_msg.data[3],
             config_msg.data[4],
             config_msg.data[5]
-        );
+        );*/
+
         switch (node2_state_msg.data[0]) {
             case STATE_IDLE:
                 Motor_calibrated = 0;
+                IR_internal_ADC_read();
+                _delay_ms(50);
                 break;
 
             case STATE_PLAY:

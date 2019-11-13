@@ -6,7 +6,7 @@
 
 
 void CAN_initialize(){
-    /*Reset MCP*/
+    /*Initialize MCP*/
     MCP_initialize();
 
     /*Setup for external interrupt operation*/

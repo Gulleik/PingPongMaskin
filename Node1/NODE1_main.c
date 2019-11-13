@@ -24,7 +24,6 @@
 
 int main(void)
 {
-    printf("helo");
     controller_initialize();
 	UART_initialize();
     CAN_initialize();
@@ -32,6 +31,8 @@ int main(void)
     OLED_initialize();
 
     OLED_interface();
-    while(1);
+    while(1){
+        printf("main loop\n\r");
+    }
 }
 

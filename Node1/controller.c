@@ -34,7 +34,6 @@ uint8_t controller_button_read(){
     uint8_t B = PINB & 0b00001110;
 
     enum BUTTON ret;
-    //printf("B: %d\n\r", B);
 
     if(B==0){
         ret =  JOYSTICK;
@@ -47,6 +46,7 @@ uint8_t controller_button_read(){
     }else{
         ret = UNDEF;
     }
+    //printf("Raw B: %d,B: %d\n\r", B, ret);
     controls_msg.data[4] = (uint8_t) ret;
 }
 
@@ -54,14 +54,9 @@ void controller_CAN_send() {
     controls_msg.length = 5;
     controls_msg.ID = CONTROLS;
     controller_joystick_read_X();
-    //controls_msg.data[0] = controller_joystick_read_X();
     controller_joystick_read_Y();
-    //controls_msg.data[1] = controller_joystick_read_Y();
     controller_slider_read_L();
-    //controls_msg.data[2] = controller_slider_read_L();
     controller_slider_read_R();
-    //controls_msg.data[3] = controller_slider_read_R();
     controller_button_read();
-    //controls_msg.data[4] = controller_button_read();
     CAN_write_message(controls_msg);
 }

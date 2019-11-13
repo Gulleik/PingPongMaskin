@@ -5,7 +5,7 @@
 /**
  * Initialize solenoid
 */
-void solenoid_init();
+void solenoid_initialize();
 
 /**
  * send a pulse through the solenoid

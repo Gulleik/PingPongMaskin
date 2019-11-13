@@ -5,7 +5,7 @@
 #include <avr/interrupt.h>
 
 void CAN_initialize(){
-    MCP_reset();
+    MCP_initialize();
 
     /*Setup for external interrupt operation*/
     sei();  //Enable global interrupts

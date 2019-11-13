@@ -1,9 +1,9 @@
-#include "IR_driver.h"
+#include "IR.h"
 #include <avr/io.h>
 #include <avr/interrupt.h>
-//#include <stdint.h>
 
-void IR_internal_ADC_init() {
+void IR_internal_ADC_initialize() {
+    printf("Initializing ADC\n\r");
     /*Enable ADC*/
     ADCSRA |= (1<<ADEN);
     /*Enable interrupt on completed conversion and set global interrupt flag*/
@@ -12,21 +12,23 @@ void IR_internal_ADC_init() {
 
     ADCSRA |= (1 << ADPS0) | (1 << ADPS1) | (1 << ADPS2);
 
-    /*Set ADC0 as input channel*/
+    /*Set ADC1 as input channel*/
     ADCSRB &= ~(1<<MUX5);
     ADMUX &= ~((1<<MUX4) |(1<<MUX3) | (1<<MUX2) | (1<<MUX1));// & (1<<MUX0);
     ADMUX |= (1<<MUX0);
     /*Set AVCC as voltage reference, with external cap. at AREF*/
     ADMUX &= ~(1 << REFS1);
     ADMUX |= (1 << REFS0);
-    //ADMUX |= (1 << REFS0);
 
     /*Set left adjustment, only 8 bit precition is required*/
     ADMUX |= (1<<ADLAR);
+
+    
 }
 
 void IR_internal_ADC_read() {
     
+    /*Start Conversion*/
     ADCSRA |= (1<<ADSC);
 
     /*Busy wait for completed conversion*/
@@ -40,7 +42,7 @@ ISR(ADC_vect) {
     cli();
     /*Check digitally converted analog signal against constant treshold*/
     uint8_t temp = ADCH;
-    //printf("ADCH: %d\n\r", temp);
-    is_blocked = !(temp > 5); //Min: 0, Max: 255
+    printf("ADCH: %d\n\r", temp);
+    is_blocked = !(temp > 50); //Min: 0, Max: 255
     sei();
 }

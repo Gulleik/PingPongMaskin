@@ -65,8 +65,7 @@ void Motor_adjust_speed(uint8_t speed){
     TWI_Start_Transceiver_With_Data(msg,3);
 }
 
-void Motor_initialise(){
-    printf("Motor initializing...\n\r");
+void Motor_initialize(){
     TWI_Master_Initialise();
     position_ref = 0;
     DDRH = 0xFF;
@@ -76,7 +75,6 @@ void Motor_initialise(){
 }
 
 void Motor_calibrate(){
-    printf("Motor calibrating...\n\r");
 
     Motor_set_dir(MOTOR_RIGHT);
 	Motor_adjust_speed(80);
@@ -97,12 +95,11 @@ void Motor_calibrate(){
     _delay_ms(100);
 	MAX_pos = Motor_encoder_read_data();
 
-	printf("Motor is calibrated, min_pos: %d\tmax_pos: %d\n\r", MIN_pos, MAX_pos);
+	//printf("Motor is calibrated, min_pos: %d\tmax_pos: %d\n\r", MIN_pos, MAX_pos);
 }
 
 void Motor_enable_motor(uint8_t state){
     if (state){
-        printf("Enabling\n\r");
         PORTH |= (1 << EN);
     }else{
         PORTH &= ~(1 << EN);

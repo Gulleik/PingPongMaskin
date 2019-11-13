@@ -20,9 +20,9 @@ uint16_t position_ref;
 
 
 /**
- * initialise Motor and TWI, turns motor on and calls calibration function
+ * initialize Motor and TWI, turns motor on and calls calibration function
 */
-void Motor_initialise();
+void Motor_initialize();
 
 /**
  * sets MAX_pos and Min_pos for the motor
