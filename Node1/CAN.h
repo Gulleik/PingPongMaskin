@@ -25,7 +25,7 @@ struct message_t {
 } typedef message_t;
 
 enum MESSAGE_ID {
-	NODE2_STATE, CONFIG, CONTROLS
+	NODE2_STATE, CONFIG, CONTROLS, SCORE
 };
 
 enum BUTTON {
@@ -35,6 +35,8 @@ enum BUTTON {
 volatile message_t node2_state_msg;
 volatile message_t config_msg;
 volatile message_t controls_msg;
+volatile uint16_t score = 0;
+
 
 /**
  * @brief Initialize the Can bus

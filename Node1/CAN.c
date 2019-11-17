@@ -49,6 +49,15 @@ void CAN_receive_message(){
 
     /*Clear interrupt flag on CAN reception*/
     MCP_bit_modify(MCP_CANINTF, 0x01, 0);
+
+        switch(msg.ID) {
+        case SCORE:
+            score +=1
+            break;
+
+        default:
+            break;
+    }
 }
 
 ISR(INT0_vect){
