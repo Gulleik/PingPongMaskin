@@ -16,11 +16,9 @@ void OLED_write_c(unsigned char command) {
 }
 
 void OLED_write_d(unsigned char data) {
-	cli();
 	/*Write to new data to SRAM memory*/
 	volatile char *ext_OLED_mem = (char *) SRAM_OLED_BASE_ADDR;
 	ext_OLED_mem[current_page * 128 + current_column] = data;
-	printf("P: %d, C: %d\n\r", current_page, current_column);
 
 	/*Update current_column and current_page variables*/
 	if (current_column < 127) {
@@ -32,18 +30,21 @@ void OLED_write_d(unsigned char data) {
 	if (current_page > 7) {
 		current_page = 0;
 	}
-	sei();
 }
 
 void OLED_update_image() {
 	volatile char *ext_OLED_mem = (char *) SRAM_OLED_BASE_ADDR;
 	volatile char *ext_OLED = (char *) OLED_DATA_BASE_ADDR;
+	uint8_t temp_col = current_column;
+	uint8_t temp_page = current_page;
 	OLED_reset_position();
 	for (int page = 0; page<8; page++){
 		for (int column = 0; column<128; column++){
 			ext_OLED[0] = ext_OLED_mem[page * 128 + column];
 		}
 	}
+	current_column = temp_col;
+	current_page = temp_page;
 }
 
 void OLED_initialize(){
