@@ -4,6 +4,7 @@
 #include "OLED_refresh.h"
 #include "OLED.h"
 #include "CAN.h"
+#include "Score.h"
 #include "controller.h"
 #include <avr/pgmspace.h>
 #include <util/delay.h>
@@ -59,9 +60,9 @@
 /*Home*/
 //      SCREEN SIZE: "-------------------------."
 const char home0[] = "        _-'HOME'-_";
-const char home1[] = "Play Game";
-const char home2[] = "Options";
-const char home3[] = "Extras";
+const char home1[] = " Play Game";
+const char home2[] = " Options";
+const char home3[] = " Extras";
 const char home4[] = "";
 const char home5[] = "";
 const char home6[] = "";
@@ -116,7 +117,7 @@ const char par_return[] = "Return";
 //     SCREEN SIZE: "-------------------------."
 const char ext0[] = "       _-'EXTRAS'-_";
 const char ext1[] = "Screensaver";
-const char ext2[] = "";
+const char ext2[] = " 2 Player mode: OFF";
 const char ext3[] = "";
 const char ext4[] = "";
 const char ext5[] = "";
@@ -141,6 +142,7 @@ enum menu_options {
 	EXTRAS0, EXTRAS1, EXTRAS2, EXTRAS3, EXTRAS4, EXTRAS5, EXTRAS6, EXTRAS_RETURN
 };
 
+volatile uint8_t game_mode = 0;
 /*****************************************************************************************
  * 
 *****************************************************************************************/
@@ -203,14 +205,38 @@ void play_game() {
 	OLED_goto_column(10);
 	OLED_print_string("HOLD JOYSTICK TO QUIT");
 
+	/*check if 2 player mode is enabled*/
+	OLED_goto_page(5);
+	OLED_goto_column(10);
+	if(ext2[17] == "N"){
+		OLED_print_string("2 Player mode");
+		game_mode = 1;
+	} else{
+		OLED_print_string("Single player");
+	}
+
+	/*Print score*/
+	OLED_goto_page(6);
+	OLED_goto_column(10);
+	if(game_mode){
+		OLED_print_string("Score: ");
+	} else{
+		OLED_print_string("Opponent score:");
+	}
+	char score_str[] = "";
+	unit16_t s = 0;
 	OLED_update_image();
 
 	/*Loop until joystick is pressed*/
 	do {
 		/*Send all controller inputs by CAN*/
+		itoa(s, score_str, 10);
+		OLED_goto_column(50);
+		OLED_print_string(score_str);
 		controller_CAN_send();
-        _delay_ms(50);
-	} while (!enter_button(JOYSTICK));
+		s = Score_calculate(game_mode);
+
+	} while (!enter_button(JOYSTICK) && s < 65530);
 }
 
 void show_slider_selection(uint8_t page) {
@@ -521,6 +547,17 @@ uint8_t OLED_FSM(enum menu_options *option) {
 				/*Show screensaver*/
 				OLED_screensaver();
 				return REDRAW_SCREEN;
+			}
+			break;
+
+		/*Home->Extras: 2 player mode: */
+		case (EXTRAS2):
+			if (enter_joystick_r()) {
+				if(ext2[17] == "F"){
+					ext2[] = " 2 Player mode: ON";
+				}else{
+					ext2[] = " 2 Player mode: OFF";
+				}
 			}
 			break;
 
