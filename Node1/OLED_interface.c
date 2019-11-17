@@ -8,6 +8,7 @@
 #include "controller.h"
 #include <avr/pgmspace.h>
 #include <util/delay.h>
+#include <avr/interrupt.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -248,6 +249,8 @@ void show_slider_selection(uint8_t page) {
 		/*Read slider input*/
 		controller_slider_read_R();
 
+		/*Disable interrupts to prevent screen flickering*/
+		cli();
 		/*Print Min */
 		OLED_clear_page(page);
 		OLED_goto_page(page);
@@ -260,6 +263,10 @@ void show_slider_selection(uint8_t page) {
 		/*Print Max*/
 		OLED_goto_column(107);
 		OLED_print_string("Max");
+
+		/*Enable interrupts*/
+		sei();
+
 		_delay_ms(50);
 	} while (!enter_button(JOYSTICK));
 
@@ -279,7 +286,10 @@ void show_and_increment_value(char name[], uint8_t def, volatile uint8_t *value,
 		/*Print param value as string*/
 		char val_str[] = "";
 		itoa(*value, val_str, 10);
-		
+
+		/*Disable interrupts to prevent screen flickering*/
+		cli();
+
 		/*Print param name and increment/decrement operators according to joystick input*/
 		OLED_print_string(name);
 		if (enter_joystick_l()) {
@@ -301,6 +311,8 @@ void show_and_increment_value(char name[], uint8_t def, volatile uint8_t *value,
 		itoa(def, def_str, 10);
 		OLED_print_string(def_str);
 
+		/*Enable interrupts*/
+		sei();
 		_delay_ms(50);
 	} while (!enter_button(JOYSTICK));
 
@@ -326,11 +338,9 @@ void OLED_screensaver() {
 	OLED_refresh_enable();
 	OLED_clear();
 	OLED_reset_position();
-	uint8_t data = 0;
-	do {
-		OLED_write_d(data++%0xFF);
-		_delay_ms(1);
-	} while (!enter_button(JOYSTICK));
+	
+	//Something cool
+
 	OLED_freeze_image();
 }
 
@@ -597,10 +607,8 @@ void OLED_interface() {
 	CAN_write_message(config_msg);
 
 	/*Initialize OLED refresh module with refresh rate of 30Hz*/
-    OLED_refresh_initialize(2);
+    OLED_refresh_initialize(60);
 
-	OLED_clear();
-	OLED_reset_position();
 
 	/*Set first option to top of home screen (HOME1)*/
 	enum menu_options option = HOME1;
