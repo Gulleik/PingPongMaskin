@@ -1,6 +1,11 @@
 #ifndef TIMER_H
 #define TIMER_H
 
+
+#include <stdint.h>
+volatile extern uint8_t timer_interrupt;
+
+
 enum TIMER {
     CONTROLLER_TIMER, IR_ADC_TIMER
 } typedef timer_t;

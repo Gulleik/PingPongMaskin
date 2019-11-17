@@ -1,6 +1,9 @@
 #include "timer.h"
+#include "CAN.h"
 #include <avr/io.h>
 #include <avr/interrupt.h>
+
+volatile uint8_t timer_interrupt = 0;
 
 void timer_initialize() {
     /*
@@ -97,8 +100,7 @@ void timer_disable(timer_t timer) {
 
 ISR (TIMER3_COMPA_vect) {
     //Every 20ms
-    Motor_position_controller();
-    Servo_set_position(controls_msg.data[0]);
+    timer_interrupt = 1;
 }
 
 ISR (TIMER3_OVF_vect) {
@@ -112,4 +114,4 @@ ISR (TIMER4_COMPA_vect) {
 
 ISR (TIMER4_OVF_vect) {
     
-}
+} 

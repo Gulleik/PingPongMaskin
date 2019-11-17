@@ -42,12 +42,12 @@ uint16_t Motor_encoder_read_data(){
 
     /*Read high Byte of signal*/
     PORTH &= ~(1 << SEL); //Set SEL low to get high byte
-    _delay_ms(20);
+    _delay_us(30);
     data = (PINK << 0x8);
 
     /*Read low Byte of signal*/
     PORTH |= (1 << SEL); //Set SEL high to get low byte
-    _delay_ms(20);
+    _delay_us(30);
     data |= PINK;
     /*Disable encoder*/
     PORTH |= (1 << OE);

@@ -38,7 +38,7 @@ void NODE1_initialize() {
     OLED_initialize();
     printf("\t\tOK\r\n");
 
-    printf("Completed with no errors\n\r");
+    printf("Initialization complete\n\r");
 }
 
 int main(void)
@@ -46,6 +46,15 @@ int main(void)
     NODE1_initialize();
 
     OLED_interface();
-    while(1);
+    //SRAM_test();
+    while(1) {
+        /*printf("X: %d, Y: %d, SL: %d, SR: %d, B: %d\n\r", 
+                    controls_msg.data[0],
+                    controls_msg.data[1],
+                    controls_msg.data[2],
+                    controls_msg.data[3],
+                    controls_msg.data[4]
+                );*/
+    }
 }
 

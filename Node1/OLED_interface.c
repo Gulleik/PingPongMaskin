@@ -177,7 +177,8 @@ uint8_t enter_button(enum BUTTON B) {
 void play_game() {
 	OLED_clear();
 	
-	/*OLED_goto_page(2);
+	/*Show parameters on OLED*/
+	OLED_goto_page(2);
 	OLED_goto_column(0);
 	OLED_print_string("Params.: Kp = ");
 	char Kp_str[] = "";
@@ -194,11 +195,12 @@ void play_game() {
 	OLED_print_string("Kd = ");
 	char Kd_str[] = "";
 	itoa(config_msg.data[3], Kd_str, 10); //Convert int value to str in order to print to OLED
-	OLED_print_string(Kd_str);*/
+	OLED_print_string(Kd_str);
 
-	/*OLED_goto_page(7);
+	/*Show quit message on OLED*/
+	OLED_goto_page(7);
 	OLED_goto_column(10);
-	OLED_print_string("HOLD JOYSTICK TO QUIT");*/
+	OLED_print_string("HOLD JOYSTICK TO QUIT");
 
 	/*Loop until joystick is pressed*/
 	do {

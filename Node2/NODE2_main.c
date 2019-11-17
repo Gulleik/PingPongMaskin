@@ -10,8 +10,8 @@
 
 #include <avr/io.h>
 #include <util/delay.h>
-#include "UART.h"
 
+#include "UART.h"
 #include "CAN.h"
 #include "MCP.h"
 #include "Servo.h"
@@ -22,7 +22,7 @@
 
 void NODE2_initialize() {
 	UART_initialize();
-    printf("Node 2 initializing...\n\r");
+    printf("\n\rNode 2 initializing...\n\r");
 
     /*Initialize modules*/
     printf("\tUART\t\tOK\r\n");
@@ -43,7 +43,7 @@ void NODE2_initialize() {
     printf("\tOK\r\n");
     printf("\tTimer");
     timer_initialize();
-    printf("\tOK\r\n");
+    printf("\t\tOK\r\n");
 
     printf("Initialization complete\n\r");
 }
@@ -85,14 +85,12 @@ int main(void)
                     timer_enable(CONTROLLER_TIMER);
                     Motor_calibrate();
                 }
-                /*printf("X: %d, Y: %d, SL: %d, SR: %d, B: %d\n\r", 
-                    controls_msg.data[0],
-                    controls_msg.data[1],
-                    controls_msg.data[2],
-                    controls_msg.data[3],
-                    controls_msg.data[4]
-                );*/
-                if(controls_msg.data[4] == RIGHT){
+                if( timer_interrupt == 1){
+                    Motor_position_controller();
+                    Servo_set_position(controls_msg.data[0]);
+                    timer_interrupt = 0;
+                }
+                else if(controls_msg.data[4] == RIGHT){
                     solenoid_shoot();
                 }
                 _delay_ms(50);
