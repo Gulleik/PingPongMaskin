@@ -1,6 +1,7 @@
 #define F_CPU 4915200 // clock frequency in Hz
 
 #include "OLED_interface.h"
+#include "OLED_refresh.h"
 #include "OLED.h"
 #include "CAN.h"
 #include "controller.h"
@@ -114,7 +115,7 @@ const char par_return[] = "Return";
 /*Home -> Extras*/
 //     SCREEN SIZE: "-------------------------."
 const char ext0[] = "       _-'EXTRAS'-_";
-const char ext1[] = "";
+const char ext1[] = "Screensaver";
 const char ext2[] = "";
 const char ext3[] = "";
 const char ext4[] = "";
@@ -178,7 +179,7 @@ void play_game() {
 	OLED_clear();
 	
 	/*Show parameters on OLED*/
-	OLED_goto_page(2);
+	/*OLED_goto_page(2);
 	OLED_goto_column(0);
 	OLED_print_string("Params.: Kp = ");
 	char Kp_str[] = "";
@@ -195,12 +196,14 @@ void play_game() {
 	OLED_print_string("Kd = ");
 	char Kd_str[] = "";
 	itoa(config_msg.data[3], Kd_str, 10); //Convert int value to str in order to print to OLED
-	OLED_print_string(Kd_str);
+	OLED_print_string(Kd_str);*/
 
 	/*Show quit message on OLED*/
 	OLED_goto_page(7);
 	OLED_goto_column(10);
 	OLED_print_string("HOLD JOYSTICK TO QUIT");
+
+	OLED_update_image();
 
 	/*Loop until joystick is pressed*/
 	do {
@@ -211,6 +214,9 @@ void play_game() {
 }
 
 void show_slider_selection(uint8_t page) {
+	/*Enable screen refresh at specified refresh rate*/
+	OLED_refresh_enable();
+
 	/*Loop until joystick is pressed*/
 	do {
 		/*Read slider input*/
@@ -230,9 +236,15 @@ void show_slider_selection(uint8_t page) {
 		OLED_print_string("Max");
 		_delay_ms(50);
 	} while (!enter_button(JOYSTICK));
+
+	/*Freeze image*/
+	OLED_freeze_image();
 }
 
 void show_and_increment_value(char name[], uint8_t def, volatile uint8_t *value, uint8_t page) {
+	/*Enable screen refresh at specified refresh rate*/
+	OLED_refresh_enable();
+
 	/*Loop until joystick is pressed*/
 	do {
 		OLED_clear_page(page);
@@ -265,6 +277,35 @@ void show_and_increment_value(char name[], uint8_t def, volatile uint8_t *value,
 
 		_delay_ms(50);
 	} while (!enter_button(JOYSTICK));
+
+	/*Freeze image*/
+	OLED_freeze_image();
+}
+
+/*
+const char ss0[] = "";
+const char ss1[] = "`-:-.   ,-;*`-:-.   ,-;*";
+const char ss2[] = "   `=`,'=/     `=`,'=/  ";
+const char ss3[] = "     y==/        y==/   ";
+const char ss4[] = "   ,=,-<=`.    ,=,-<=`. ";
+const char ss5[] = ",-'-'   `-=_,-'-'   `-=_";
+const char ss6[] = "";
+const char ss7[] = "";
+
+char* ScreenSaver[] = {
+	ss0, ss1, ss2, ss3, ss4, ss5, ss6, ss7,
+};
+*/
+void OLED_screensaver() {
+	OLED_refresh_enable();
+	OLED_clear();
+	OLED_reset_position();
+	uint8_t data = 0;
+	do {
+		OLED_write_d(data++%0xFF);
+		_delay_ms(1);
+	} while (!enter_button(JOYSTICK));
+	OLED_freeze_image();
 }
 
 uint8_t OLED_FSM(enum menu_options *option) {
@@ -368,6 +409,7 @@ uint8_t OLED_FSM(enum menu_options *option) {
 				} else {
 					OLED_print_string_inverted("  False");
 				}
+				OLED_update_image();
 				_delay_ms(1000);
 				return REDRAW_SCREEN;
 			}
@@ -388,6 +430,7 @@ uint8_t OLED_FSM(enum menu_options *option) {
 				} else {
 					OLED_print_string_inverted("  False");
 				}
+				OLED_update_image();
 				_delay_ms(1000);
 				return REDRAW_SCREEN;
 			}
@@ -472,6 +515,15 @@ uint8_t OLED_FSM(enum menu_options *option) {
 			}
 			break;
 
+		/*Home->Extras: Screensaver*/
+		case (EXTRAS1):
+			if (enter_joystick_r()) {
+				/*Show screensaver*/
+				OLED_screensaver();
+				return REDRAW_SCREEN;
+			}
+			break;
+
 		/*Home->Extras: Return*/
 		case (EXTRAS_RETURN):
 			if (enter_joystick_r()) {
@@ -487,16 +539,13 @@ uint8_t OLED_FSM(enum menu_options *option) {
 }
 
 void OLED_interface() {
-	OLED_clear();
-	OLED_reset_position();
-
-	/*Configure node2_state and config to appropriate values*/
+	/*Initialize CAN messages*/
 	node2_state_msg.ID = NODE2_STATE;
 	node2_state_msg.length = 1;
 	config_msg.ID = CONFIG;
 	config_msg.length = 6;
 
-	/*Initiate node 2 to idle state and default configuration*/
+	/*Set node 2 to idle state and default configuration*/
 	node2_state_msg.data[0] = STATE_IDLE;
 	config_msg.data[0] = CONF_DEFAULT_TOP_SPEED;
 	config_msg.data[1] = CONF_DEFAULT_Kp;
@@ -505,22 +554,18 @@ void OLED_interface() {
 	config_msg.data[4] = CONF_DEFAULT_INV_SERVO;
 	config_msg.data[5] = CONF_DEFAULT_INV_MOTOR;
 
-	/*Send node 2 default configuration and state by CAN*/
+	/*Send state and configuration to node 2*/
 	CAN_write_message(node2_state_msg);
 	_delay_ms(1);
 	CAN_write_message(config_msg);
 
-	printf("CONFIGS: speed = %d, Kp = %d, Ki = %d, Kd = %d, Inv_ser = %d, Inv_mot = %d\n\r",
-            config_msg.data[0],
-            config_msg.data[1],
-            config_msg.data[2],
-            config_msg.data[3],
-            config_msg.data[4],
-            config_msg.data[5],
-            config_msg.data[6]
-    );
+	/*Initialize OLED refresh module with refresh rate of 30Hz*/
+    OLED_refresh_initialize(2);
 
-	/*Initialize default option to first option at home screen (HOME1)*/
+	OLED_clear();
+	OLED_reset_position();
+
+	/*Set first option to top of home screen (HOME1)*/
 	enum menu_options option = HOME1;
 	while(1) {
 		/*Print entire screen*/
@@ -533,6 +578,8 @@ void OLED_interface() {
 		
 		/*Highlight chosed option*/
 		OLED_invert_page(option % 8);
+
+		OLED_update_image();
 		
 		/*Run FSM until REDRAW_SCREEN is passed*/
 		while (!OLED_FSM(&option));

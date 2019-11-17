@@ -56,6 +56,8 @@ int main(void)
     
     /*Initiate node 2 to idle state and default configuration*/
 	node2_state_msg.ID = NODE2_STATE;
+    score_msg.ID = SCORE;
+    score_msg.data[0] = 1;
 	config_msg.ID = CONFIG;
 
     while(1) {

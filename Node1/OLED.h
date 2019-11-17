@@ -21,34 +21,18 @@ static uint8_t current_page;
 void OLED_initialize();
 
 /**
-  @brief Write command to OLED_command
-  @param command; Char value to be written to OLED_command register
-*/
-void OLED_write_c(unsigned char command);
-
-/**
   @brief Write data to OLED_data using dual buffering. Data is saved to address space 0x1c00-0x2000 (?) of SRAM
   @param data; Char value to be written to OLED_data register
 */
 void OLED_write_d(unsigned char data);
 
-/**
-  @brief Print character to current line and column of OLED screen
-  @param string; String to be printed, has to be in double exclamation marks. => ""
-*/
-void OLED_print_char(unsigned char character);
+void OLED_update_image();
 
 /**
   @brief Print string to current line and column of OLED screen
   @param string; String to be printed, has to be in double exclamation marks. => ""
 */
 void OLED_print_string(unsigned char* string);
-
-/**
-  @brief Print inverted character to current line and column of OLED screen
-  @param string; String to be printed, has to be in double exclamation marks. => ""
-*/
-void OLED_print_char_inverted(unsigned char character);
 
 /**
   @brief Print inverted string to current line and column of OLED screen
@@ -77,27 +61,6 @@ void OLED_goto_column(unsigned char new_column);
 void OLED_reset_position();
 
 /**
- * @brief Set both current column and current page for OLED_write_d operation to input values
- * @param row; Current row to be set
- * @param column; Current column to be set
-*/
-void OLED_pos(int row, int column);
-
-/**
-  @brief Set X-position on OLED with joystick. One movement equaks one char size (8X5 pixels)
-  @param x; X position on joystick
-*/
-void OLED_navigate_Xpos_with_joystick(int x);
-
-/**
-  @brief Set Y-position on OLED with joystick. One movement equals one char size (8X5 pixels)
-  @param x; Y position on joystick
-  @param lower_page_limit; Lower limit of Ypos (for menus)
-*/
-void OLED_navigate_Ypos_with_joystick(int y, int lower_page_limit);
-
-
-/**
   @brief Clears an entire page
   @param pageNR; Page to be cleared
 */
@@ -109,9 +72,6 @@ void OLED_clear_page(int page);
 */
 void OLED_invert_page(int page);
 
-/*
- * Display screensaver
-*//*
-void OLED_screensaver()*/
+
 
 #endif

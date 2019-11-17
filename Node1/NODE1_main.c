@@ -6,7 +6,7 @@
 
 //helo from armon
 //ttyS0
-#define F_CPU 16000000 // clock frequency in Hz
+#define F_CPU 4915200 // clock frequency in Hz
 
 #include <avr/io.h>
 #include <util/delay.h>
@@ -45,8 +45,8 @@ int main(void)
 {
     NODE1_initialize();
 
+    SRAM_test();
     OLED_interface();
-    //SRAM_test();
     while(1) {
         /*printf("X: %d, Y: %d, SL: %d, SR: %d, B: %d\n\r", 
                     controls_msg.data[0],

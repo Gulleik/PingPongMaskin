@@ -1,9 +1,11 @@
 
-#include "OLED.h"
-#include "UART.h"
 #include <util/delay.h>
 #include <avr/pgmspace.h>
 #include <string.h>
+#include <avr/interrupt.h>
+
+#include "OLED.h"
+#include "UART.h"
 #include "controller.h"
 #include "fonts.h"
 
@@ -14,13 +16,13 @@ void OLED_write_c(unsigned char command) {
 }
 
 void OLED_write_d(unsigned char data) {
-	/*Write to OLED data and dual buffer to SRAM*/
-	volatile char *ext_OLED = (char *) OLED_DATA_BASE_ADDR;
+	cli();
+	/*Write to new data to SRAM memory*/
 	volatile char *ext_OLED_mem = (char *) SRAM_OLED_BASE_ADDR;
-	ext_OLED[0] = data;
 	ext_OLED_mem[current_page * 128 + current_column] = data;
+	printf("P: %d, C: %d\n\r", current_page, current_column);
 
-	/*Update current coumn and current_page variables*/
+	/*Update current_column and current_page variables*/
 	if (current_column < 127) {
 		current_column++;
 	} else {
@@ -29,6 +31,18 @@ void OLED_write_d(unsigned char data) {
 	}
 	if (current_page > 7) {
 		current_page = 0;
+	}
+	sei();
+}
+
+void OLED_update_image() {
+	volatile char *ext_OLED_mem = (char *) SRAM_OLED_BASE_ADDR;
+	volatile char *ext_OLED = (char *) OLED_DATA_BASE_ADDR;
+	OLED_reset_position();
+	for (int page = 0; page<8; page++){
+		for (int column = 0; column<128; column++){
+			ext_OLED[0] = ext_OLED_mem[page * 128 + column];
+		}
 	}
 }
 
@@ -168,29 +182,3 @@ void OLED_invert_page(int page) {
 		OLED_write_d(~ext_OLED_mem[page * 128 + f]);
 	}
 }
-
-/*
-const char ss0[] = "";
-const char ss1[] = "`-:-.   ,-;*`-:-.   ,-;*";
-const char ss2[] = "   `=`,'=/     `=`,'=/  ";
-const char ss3[] = "     y==/        y==/   ";
-const char ss4[] = "   ,=,-<=`.    ,=,-<=`. ";
-const char ss5[] = ",-'-'   `-=_,-'-'   `-=_";
-const char ss6[] = "";
-const char ss7[] = "";
-
-char* ScreenSaver[] = {
-	ss0, ss1, ss2, ss3, ss4, ss5, ss6, ss7,
-};
-
-void OLED_screensaver() {
-	char c = UART_receive();
-	OLED_clear();
-	for (int i = 1; i <= 5; i++) {
-		OLED_goto_page(i);
-		OLED_goto_column(0);
-		OLED_print_string(ScreenSaver[i]);
-	}
-	while (c != 13) {//While enter not pressed
-	}
-}*/

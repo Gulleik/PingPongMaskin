@@ -1,4 +1,5 @@
 #include "IR.h"
+#include "CAN.h"
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
@@ -42,6 +43,8 @@ ISR(ADC_vect) {
     /*Check digitally converted analog signal against constant treshold*/
     uint8_t temp = ADCH;
     //printf("ADCH: %d\n\r", temp);
-    is_blocked = !(temp > 50); //Min: 0, Max: 255
+    if(!(temp > 50)){
+        CAN_write_message(score_msg);
+    }; //Min: 0, Max: 255
     sei();
 }
