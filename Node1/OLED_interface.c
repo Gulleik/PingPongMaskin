@@ -311,9 +311,21 @@ char* ScreenSaver[] = {
 void OLED_screensaver() {
 	OLED_refresh_enable();
 	OLED_clear();
-	OLED_reset_position();
 	
-	//Something cool
+	uint8_t x_pos = rand() % 128;
+	uint8_t y_pos = rand() % 64;
+
+	while(1) {
+		cli();
+		if (x_pos > 127) {
+			x_pos = 0;
+		} else if (y_pos > 63) {
+			y_pos = 0;
+		}
+		OLED_set_pixel(x_pos++, y_pos++);
+		sei();
+		_delay_ms(1);
+	}
 
 	OLED_freeze_image();
 }

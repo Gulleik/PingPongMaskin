@@ -100,7 +100,15 @@ void OLED_initialize(){
 	
     OLED_reset_position();
     OLED_clear();
-} 
+}
+
+void OLED_set_pixel(uint8_t x_pos, uint8_t y_pos) {
+	uint8_t value = (1 << (y_pos % 8));
+	
+	OLED_goto_page(y_pos / 8);
+	OLED_goto_column(x_pos);
+	OLED_write_d(value);
+}
 
 void OLED_print_char(unsigned char character) {
 	/*Using font defined in fonts.h, write specified charater to current page and column*/

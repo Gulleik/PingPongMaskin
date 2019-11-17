@@ -12,8 +12,8 @@
 */
 
 
-static uint8_t current_column;
-static uint8_t current_page;
+volatile uint8_t current_column;
+volatile uint8_t current_page;
 
 /**
   @brief Structure with command initializations of OLED
@@ -21,11 +21,19 @@ static uint8_t current_page;
 void OLED_initialize();
 
 /**
+ * @brief Set value of one pixel to 1
+*/
+void OLED_set_pixel(uint8_t pos_x, uint8_t pos_y);
+
+/**
   @brief Write data to OLED_data using dual buffering. Data is saved to address space 0x1c00-0x2000 (?) of SRAM
   @param data; Char value to be written to OLED_data register
 */
 void OLED_write_d(unsigned char data);
 
+/**
+ * @brief Iterate through entire address space of OLED screen in SRAM and rewrite everything exactly once
+*/
 void OLED_update_image();
 
 /**
