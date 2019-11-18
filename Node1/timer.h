@@ -1,7 +1,14 @@
 #ifndef TIMER_H
 #define TIMER_H
 
+#include <avr/io.h>
+#include <avr/interrupt.h>
 #include <stdint.h>
+
+/**
+ * @file
+ * @brief Driver for timer control
+*/
 
 /**
  * @brief seconds passed since game timer enabled

@@ -1,11 +1,11 @@
-
-#include "MCP_registers.h"
-
 #ifndef MCP_H
 #define MCP_H
 
-#define ON 1
-#define OFF 0
+#define MCP_ON 1
+#define MCP_OFF 0
+
+#include "SPI.h"
+#include "MCP_registers.h"
 
 /**
  * @file

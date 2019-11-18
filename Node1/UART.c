@@ -1,9 +1,4 @@
 #include "UART.h"
-#define FOSC 4915200// Clock Speed
-#define BAUD 9600
-
-//#include <avr/io.h>
-#include <avr/io.h>
 
 void UART_initialize() {
 	UBRR0H = (unsigned char)((FOSC / 16 / BAUD - 1) >> 8);
@@ -16,7 +11,6 @@ void UART_initialize() {
 }
 
 void UART_transmit(char data) {
-
     /* Wait for empty transmit buffer */
     loop_until_bit_is_set(UCSR0A, UDRE0);
 

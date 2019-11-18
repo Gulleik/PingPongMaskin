@@ -1,27 +1,17 @@
-
-#define F_CPU 4915200 // clock frequency in Hz
-
-#include <util/delay.h>
-#include <avr/pgmspace.h>
-#include <avr/interrupt.h>
-#include <stdint.h>
 #include "OLED.h"
-#include "timer.h"
-#include "controller.h"
-#include "fonts.h"
 
 /*************************************************************
  * WRITE
 *************************************************************/
 void OLED_write_c(uint8_t command) {
 	/*Write to OLED command*/
-	volatile char *ext_OLED = (char *) OLED_COMMAND_BASE_ADDR;
+	uint8_t *ext_OLED = (uint8_t *) OLED_COMMAND_BASE_ADDR;
 	ext_OLED[0] = command;
 }
 
 void OLED_write_d(uint8_t data) {
 	/*Write new data to SRAM memory*/
-	volatile char *ext_OLED_mem = (char *) SRAM_OLED_BASE_ADDR;
+	uint8_t *ext_OLED_mem = (uint8_t *) SRAM_OLED_BASE_ADDR;
 	ext_OLED_mem[current_page * 128 + current_column] = data;
 
 	/*Update current_column and current_page variables*/
@@ -38,7 +28,7 @@ void OLED_write_d(uint8_t data) {
 
 void OLED_append_d(uint8_t data, uint8_t inverted) {
 	/*Append to new data to SRAM memory*/
-	volatile char *ext_OLED_mem = (char *) SRAM_OLED_BASE_ADDR;
+	uint8_t *ext_OLED_mem = (uint8_t *) SRAM_OLED_BASE_ADDR;
 	if (inverted) {
 		ext_OLED_mem[current_page * 128 + current_column] ^= data;
 	} else {
@@ -130,42 +120,42 @@ void OLED_set_pixel(uint8_t x_pos, uint8_t y_pos, uint8_t inverted) {
 	OLED_append_d(value, inverted);
 }
 
-void OLED_print_char(unsigned char character) {
+void OLED_print_char(char character) {
 	/*Using font defined in fonts.h, write specified charater to current page and column*/
-	for (int i = 0; i < 5; i++) {
+	for (uint8_t i = 0; i < 5; i++) {
 		OLED_write_d(pgm_read_byte(&font5[character - 32][i]));
 	}
 }
 
-void OLED_print_string(unsigned char* string){
+void OLED_print_string(char* string){
 	/*Loop through input string and print each separate character at current page and column*/
-	for (unsigned char i = 0; i < strlen(string); i++) {
+	for (uint8_t i = 0; i < strlen(string); i++) {
 		OLED_print_char(string[i]);
 	}
 }
 
-void OLED_print_string_P(const unsigned char* string){
+void OLED_print_string_P(const char* string){
 	/*Loop through input string and print each separate character at current page and column*/
 	while (pgm_read_byte(string) != 0x00) {
 		OLED_print_char(pgm_read_byte(string++));
 	}
 }
 
-void OLED_print_char_inverted(unsigned char character) {
+void OLED_print_char_inverted(char character) {
 	/*Using font defined in fonts.h, invert specified charater and write to current page and column*/
-	for (int i = 0; i < 5; i++) {
+	for (uint8_t i = 0; i < 5; i++) {
 		OLED_write_d(~pgm_read_byte(&font5[character - 32][i]));
 	}
 }
 
-void OLED_print_string_inverted(unsigned char* string){
+void OLED_print_string_inverted(char* string){
 	/*Loop through input string, invert and print each separate character at current page and column*/
-	for (unsigned char i = 0; i < strlen(string); i++) {
+	for (uint8_t i = 0; i < strlen(string); i++) {
 		OLED_print_char_inverted(string[i]);
 	}
 }
 
-void OLED_print_string_inverted_P(const unsigned char* string){
+void OLED_print_string_inverted_P(const char* string){
 	/*Loop through input string and print each separate character at current page and column*/
 	while (pgm_read_byte(string) != 0x00) {
 		OLED_print_char_inverted(pgm_read_byte(string++));
@@ -176,7 +166,7 @@ void OLED_print_string_inverted_P(const unsigned char* string){
 /*************************************************************
  * NAVIGATION 
 *************************************************************/
-void OLED_goto_page(unsigned char new_page){
+void OLED_goto_page(uint8_t new_page){
 	/*Set page start and end address*/
   	OLED_write_c(0x22);
   	OLED_write_c(new_page);
@@ -186,7 +176,7 @@ void OLED_goto_page(unsigned char new_page){
 	current_page = new_page;
 }
 
-void OLED_goto_column(unsigned char new_column){
+void OLED_goto_column(uint8_t new_column){
 	/*Set column start and end address*/
   	OLED_write_c(0x21);
 	OLED_write_c(new_column);
@@ -204,28 +194,28 @@ void OLED_reset_position() {
 void OLED_clear(){
 	OLED_reset_position();
 	/*Set value of all bytes on screen to 0 -> Clear all*/
-	for (int i = 0; i<8; i++){
-		for (int f = 0; f<128;f++){
+	for (uint8_t i = 0; i<8; i++){
+		for (uint8_t f = 0; f<128;f++){
 			OLED_write_d(0x00);
 		}
 	}
 }
 
-void OLED_clear_page(int page){
+void OLED_clear_page(uint8_t page){
 	OLED_goto_page(page);
 	OLED_goto_column(0);
 	/*Set value of all bytes on one line to 0 -> Clear line*/
-	for (int f = 0; f<128; f++) {
+	for (uint8_t f = 0; f<128; f++) {
 		OLED_write_d(0);
 	}
 }
 
-void OLED_invert_page(int page) {
-	volatile char *ext_OLED_mem = (char *) SRAM_OLED_BASE_ADDR;
+void OLED_invert_page(uint8_t page) {
+	uint8_t *ext_OLED_mem = (uint8_t *) SRAM_OLED_BASE_ADDR;
 	OLED_goto_page(page);
 	OLED_goto_column(0);
 	/*Access OLED address in SRAM to read set value and print values inverted*/
-	for (int f = 0; f<128; f++) {
+	for (uint8_t f = 0; f<128; f++) {
 		OLED_write_d(~ext_OLED_mem[page * 128 + f]);
 	}
 }

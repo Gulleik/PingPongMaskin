@@ -1,7 +1,14 @@
-#include <stdint.h>
 
 #ifndef ADC_H
 #define ADC_H
+
+#define ADC_BASE_ADDR 0x1400
+
+#define F_CPU 4915200 //Clock frequency in HZ
+
+#include <util/delay.h>
+#include <avr/io.h>
+#include <stdint.h>
 
 /**
  * @file
@@ -13,8 +20,7 @@
  * @param channel; ADC-channel to be read from
  * @return Recieved data
 */
-
-char ADC_read(uint8_t * channel);
+uint8_t ADC_read(uint8_t * channel);
 
 
 #endif

@@ -5,10 +5,6 @@ void SPI_master_initialize(){
     DDRB = (1<<DDB5)|(1<<DDB7)|(1<<DDB4);
     /* Enable SPI, Master, set clock rate fck/16 */
     SPCR = (1<<SPE)|(1<<MSTR)|(1<<SPR0);
-
-    //Enable SPI interrupts on end of transmission
-    //SPCR |= 1 << SPIE
-
 }
 
 void SPI_write_byte(uint8_t data) {
@@ -21,9 +17,10 @@ void SPI_write_byte(uint8_t data) {
 uint8_t SPI_read_byte() {
     volatile uint8_t data;
 
-    //Write arbitrary value to SPI
+    /*Write arbitrary value to SPI*/
     SPDR = 0xFF;
 
+    /*Busy wait for until value received*/
     while(!(SPSR & (1 << SPIF)));
 
     //Catch returned data
