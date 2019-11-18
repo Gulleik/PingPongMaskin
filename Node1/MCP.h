@@ -43,9 +43,5 @@ void MCP_Request_To_Send(uint8_t buffer);
 */
 void MCP_bit_modify(uint8_t address, uint8_t mask, uint8_t data);
 
-/**
- * @brief Read status of MCP
-*/
-uint8_t MCP_read_status();
 
 #endif
