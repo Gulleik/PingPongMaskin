@@ -1,7 +1,6 @@
 #define F_CPU 4915200 // clock frequency in Hz
 
 #include "OLED_interface.h"
-#include "OLED_refresh.h"
 #include "OLED.h"
 #include "CAN.h"
 #include "score.h"
@@ -60,70 +59,70 @@
 
 /*Home*/
 //      SCREEN SIZE: "-------------------------."
-const char home0[] = "        _-'HOME'-_";
-const char home1[] = " Play Game";
-const char home2[] = " Options";
-const char home3[] = " Extras";
-const char home4[] = "";
-const char home5[] = "";
-const char home6[] = "";
-const char home7[] = "";
+const PROGMEM char home0[] = "        _-'HOME'-_";
+const PROGMEM char home1[] = "Play Game";
+const PROGMEM char home2[] = "Options";
+const PROGMEM char home3[] = "Extras";
+const PROGMEM char home4[] = "";
+const PROGMEM char home5[] = "";
+const PROGMEM char home6[] = "";
+const PROGMEM char home7[] = "";
 
 
 /*Home -> Options*/
-//     SCREEN SIZE: "-------------------------."
-const char opt0[] = "      _-'OPTIONS'-_";
-const char opt1[] = "Controls";
-const char opt2[] = "Motor";
-const char opt3[] = "";
-const char opt4[] = "";
-const char opt5[] = "";
-const char opt6[] = "";
-const char opt_return[] = "Return";
+//             SCREEN SIZE: "-------------------------."
+const PROGMEM char opt0[] = "      _-'OPTIONS'-_";
+const PROGMEM char opt1[] = "Controls";
+const PROGMEM char opt2[] = "Motor";
+const PROGMEM char opt3[] = "";
+const PROGMEM char opt4[] = "";
+const PROGMEM char opt5[] = "";
+const PROGMEM char opt6[] = "";
+const PROGMEM char opt_return[] = "Return";
 
 /*Home -> Options -> Controls*/
-//      SCREEN SIZE: "-------------------------."
-const char ctrl0[] = "     _-'CONTROLS'-_";
-const char ctrl1[] = "Invert servo";
-const char ctrl2[] = "Invert motor";
-const char ctrl3[] = "";
-const char ctrl4[] = "";
-const char ctrl5[] = "";
-const char ctrl6[] = "";
-const char ctrl_return[] = "Return";
+//              SCREEN SIZE: "-------------------------."
+const PROGMEM char ctrl0[] = "     _-'CONTROLS'-_";
+const PROGMEM char ctrl1[] = "Invert servo";
+const PROGMEM char ctrl2[] = "Invert motor";
+const PROGMEM char ctrl3[] = "";
+const PROGMEM char ctrl4[] = "";
+const PROGMEM char ctrl5[] = "";
+const PROGMEM char ctrl6[] = "";
+const PROGMEM char ctrl_return[] = "Return";
 
 /*Home -> Options -> Motor*/
-//     SCREEN SIZE: "-------------------------."
-const char mot0[] = "       _-'MOTOR'-_";
-const char mot1[] = "Top speed";
-const char mot2[] = "Controller parameters";
-const char mot3[] = "";
-const char mot4[] = "";
-const char mot5[] = "";
-const char mot6[] = "";
-const char mot_return[] = "Return";
+//             SCREEN SIZE: "-------------------------."
+const PROGMEM char mot0[] = "       _-'MOTOR'-_";
+const PROGMEM char mot1[] = "Top speed";
+const PROGMEM char mot2[] = "Controller parameters";
+const PROGMEM char mot3[] = "";
+const PROGMEM char mot4[] = "";
+const PROGMEM char mot5[] = "";
+const PROGMEM char mot6[] = "";
+const PROGMEM char mot_return[] = "Return";
 
 /*Home -> Options -> Motor -> Params*/
-//     SCREEN SIZE: "-------------------------."
-const char par0[] = "    _-'CTRL. PAR.'-_";
-const char par1[] = "Kp";
-const char par2[] = "Ki";
-const char par3[] = "Kd";
-const char par4[] = "";
-const char par5[] = "";
-const char par6[] = "";
-const char par_return[] = "Return";
+//             SCREEN SIZE: "-------------------------."
+const PROGMEM char par0[] = "    _-'CTRL. PAR.'-_";
+const PROGMEM char par1[] = "Kp";
+const PROGMEM char par2[] = "Ki";
+const PROGMEM char par3[] = "Kd";
+const PROGMEM char par4[] = "";
+const PROGMEM char par5[] = "";
+const PROGMEM char par6[] = "";
+const PROGMEM char par_return[] = "Return";
 
 /*Home -> Extras*/
-//     SCREEN SIZE: "-------------------------."
-const char ext0[] = "       _-'EXTRAS'-_";
-const char ext1[] = "Screensaver";
-const char ext2[] = " 2 Player mode: OFF";
-const char ext3[] = "";
-const char ext4[] = "";
-const char ext5[] = "";
-const char ext6[] = "";
-const char ext_return[] = "Return";
+//             SCREEN SIZE: "-------------------------."
+const PROGMEM char ext0[] = "       _-'EXTRAS'-_";
+const PROGMEM char ext1[] = "Screensaver";
+const PROGMEM char ext2[] = "2 Player mode: OFF";
+const PROGMEM char ext3[] = "";
+const PROGMEM char ext4[] = "";
+const PROGMEM char ext5[] = "";
+const PROGMEM char ext6[] = "";
+const PROGMEM char ext_return[] = "Return";
 
 char* menu_string_pointers[] = {
 	home0, home1, home2, home3, home4, home5, home6, home7,
@@ -184,19 +183,19 @@ void play_game() {
 	/*Show parameters on OLED*/
 	/*OLED_goto_page(2);
 	OLED_goto_column(0);
-	OLED_print_string("Params.: Kp = ");
+	OLED_print_string_P(PSTR("Params.: Kp = "));
 	char Kp_str[] = "";
 	itoa(config_msg.data[1], Kp_str, 10); //Convert int value to str in order to print to OLED
 	OLED_print_string(Kp_str);
 	OLED_goto_page(3);
 	OLED_goto_column(45);
-	OLED_print_string("Ki = ");
+	OLED_print_string_P(PSTR("Ki = "));
 	char Ki_str[] = "";
 	itoa(config_msg.data[2], Ki_str, 10); //Convert int value to str in order to print to OLED
 	OLED_print_string(Ki_str);
 	OLED_goto_page(4);
 	OLED_goto_column(45);
-	OLED_print_string("Kd = ");
+	OLED_print_string_P(PSTR("Kd = "));
 	char Kd_str[] = "";
 	itoa(config_msg.data[3], Kd_str, 10); //Convert int value to str in order to print to OLED
 	OLED_print_string(Kd_str);*/
@@ -204,25 +203,25 @@ void play_game() {
 	/*Show quit message on OLED*/
 	/*OLED_goto_page(7);
 	OLED_goto_column(10);
-	OLED_print_string("HOLD JOYSTICK TO QUIT");
+	OLED_print_string_P(PSTR("HOLD JOYSTICK TO QUIT"));
 
 	/*check if 2 player mode is enabled*/
 	/*OLED_goto_page(5);
 	OLED_goto_column(10);
 	if(ext2[17] == "N"){
-		//OLED_print_string("2 Player mode");
+		//OLED_print_string_P(PSTR("2 Player mode"));
 		game_mode = 1;
 	} else{
-		//OLED_print_string("Single player");
+		//OLED_print_string_P(PSTR("Single player"));
 	}
 
 	/*Print score*/
 	/*OLED_goto_page(6);
 	OLED_goto_column(10);
 	if(game_mode){
-		//OLED_print_string("Score: ");
+		//OLED_print_string_P(PSTR("Score: "));
 	} else{
-		//OLED_print_string("Opponent score:");
+		//OLED_print_string_P(PSTR("Opponent score:"));
 	}
 	char score_str[] = "";
 	uint16_t s = 0;
@@ -253,7 +252,7 @@ void show_slider_selection(uint8_t page) {
 		/*Print Min */
 		OLED_clear_page(page);
 		OLED_goto_page(page);
-		OLED_print_string("Min");
+		OLED_print_string_P(PSTR("Min"));
 
 		/*Print slider indicator*/
 		OLED_goto_column(controls_msg.data[3]/3 + 20);
@@ -261,7 +260,7 @@ void show_slider_selection(uint8_t page) {
 
 		/*Print Max*/
 		OLED_goto_column(107);
-		OLED_print_string("Max");
+		OLED_print_string_P(PSTR("Max"));
 
 		/*Enable interrupts*/
 		sei();
@@ -293,19 +292,19 @@ void show_and_increment_value(char name[], uint8_t def, volatile uint8_t *value,
 		OLED_print_string(name);
 		if (enter_joystick_l()) {
 			*value -= 5;
-			OLED_print_string(" - ");
+			OLED_print_string_P(PSTR(" - "));
 		} else {
-			OLED_print_string("   ");
+			OLED_print_string_P(PSTR("   "));
 		}
 		OLED_print_string(val_str);
 		if (enter_joystick_r()) {
 			*value += 5;
-			OLED_print_string(" +");
+			OLED_print_string_P(PSTR(" +"));
 		}
 
 		/*Print default value as string*/
 		OLED_goto_column(80);
-		OLED_print_string("def: ");
+		OLED_print_string_P(PSTR("def: "));
 		char def_str[] = "";
 		itoa(def, def_str, 10);
 		OLED_print_string(def_str);
@@ -365,7 +364,7 @@ uint8_t OLED_FSM(enum menu_options *option) {
 		do {
 			/*Increment option and loop to top if option "below" screen*/
 			*option = screen * 8 + (*option + 1) % 8;
-		} while (menu_string_pointers[*option][0] == '\0' || *option % 8 == 0);
+		} while (pgm_read_byte(menu_string_pointers[*option]) == 0x00 || *option % 8 == 0);
 		return REDRAW_SCREEN;
 	}
 	else if (enter_joystick_u()) {
@@ -373,7 +372,7 @@ uint8_t OLED_FSM(enum menu_options *option) {
 		do {
 			/*Increment option and loop to bottom if option "above" screen*/
 			*option = screen * 8 + (*option - 1) % 8;
-		} while (menu_string_pointers[*option][0] == '\0' || *option % 8 == 0);
+		} while (pgm_read_byte(menu_string_pointers[*option]) == 0x00 || *option % 8 == 0);
 		return REDRAW_SCREEN;
 	}
 	
@@ -454,9 +453,9 @@ uint8_t OLED_FSM(enum menu_options *option) {
 				OLED_goto_page(*option % 8);
 				OLED_goto_column(70);
 				if (config_msg.data[4]) {
-					//OLED_print_string_inverted("True");
+					//OLED_print_string_inverted_P(PSTR("True"));
 				} else {
-					//OLED_print_string_inverted("False");
+					//OLED_print_string_inverted_P(PSTR("False"));
 				}
 				OLED_update_image();
 				_delay_ms(1000);
@@ -475,9 +474,9 @@ uint8_t OLED_FSM(enum menu_options *option) {
 				OLED_goto_page(*option % 8);
 				OLED_goto_column(70);
 				if (config_msg.data[5]) {
-					//OLED_print_string_inverted("True");
+					//OLED_print_string_inverted_P(PSTR("True"));
 				} else {
-					//OLED_print_string_inverted("False");
+					//OLED_print_string_inverted_P(PSTR("False"));
 				}
 				OLED_update_image();
 				_delay_ms(1000);
@@ -580,10 +579,10 @@ uint8_t OLED_FSM(enum menu_options *option) {
 				OLED_goto_page(*option % 8);
 				OLED_goto_column(65);
 				if (!game_mode) {
-					//OLED_print_string_inverted("True");
+					//OLED_print_string_inverted_P(PSTR("True"));
 					game_mode = 1;
 				} else {
-					//OLED_print_string_inverted("False");
+					//OLED_print_string_inverted_P(PSTR("False"));
 					game_mode = 0;
 				}
 				OLED_update_image();
@@ -627,10 +626,6 @@ void OLED_interface() {
 	_delay_ms(1);
 	CAN_write_message(config_msg);
 
-	/*Initialize OLED refresh module with refresh rate of 30Hz*/
-    OLED_refresh_initialize(60);
-
-
 	/*Set first option to top of home screen (HOME1)*/
 	enum menu_options option = HOME1;
 	while(1) {
@@ -639,7 +634,7 @@ void OLED_interface() {
 			OLED_goto_column(0);
 			OLED_clear_page(page);
 			OLED_goto_page(page);
-			OLED_print_string(menu_string_pointers[(option / 8) * 8 + page]);
+			OLED_print_string_P(menu_string_pointers[(option / 8) * 8 + page]);
 		}
 		
 		/*Highlight chosed option*/

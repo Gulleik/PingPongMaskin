@@ -1,4 +1,6 @@
 
+#include "MCP_registers.h"
+
 #ifndef MCP_H
 #define MCP_H
 

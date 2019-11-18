@@ -33,10 +33,16 @@ int main(void)
 {
     UART_initialize();
     XMEM_initialize();
-    OLED_initialize();
+    OLED_initialize(60); //60Hz refresh rate
+    CAN_initialize();
+    
+    //SRAM_test();
     OLED_interface();
+
     while(1) {
-        /*printf("X: %d, Y: %d, SL: %d, SR: %d, B: %d\n\r", 
+        //OLED_clear();   
+        /*controller_CAN_send();
+        printf("X: %d, Y: %d, SL: %d, SR: %d, B: %d\n\r", 
                     controls_msg.data[0],
                     controls_msg.data[1],
                     controls_msg.data[2],

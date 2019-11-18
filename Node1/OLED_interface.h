@@ -15,5 +15,7 @@
 */
 void OLED_interface();
 
+void progmem_test();
+
 
 #endif

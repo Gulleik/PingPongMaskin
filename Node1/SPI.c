@@ -14,7 +14,6 @@ void SPI_master_initialize(){
 void SPI_write_byte(uint8_t data) {
     //Write to SPI data bus
     SPDR = data;
-
     //Wait for data transfer
     while (!(SPSR & (1<<SPIF)));
 }

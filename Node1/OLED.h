@@ -16,9 +16,9 @@ volatile uint8_t current_column;
 volatile uint8_t current_page;
 
 /**
-  @brief Structure with command initializations of OLED
+  @brief Structure with command initializations of OLED, also clears OLED and enables 
 */
-void OLED_initialize();
+void OLED_initialize(uint8_t refresh_rate);
 
 /**
  * @brief Set value of one pixel to 1
@@ -38,15 +38,27 @@ void OLED_update_image();
 
 /**
   @brief Print string to current line and column of OLED screen
-  @param string; String to be printed, has to be in double exclamation marks. => ""
+  @param string; Pointer to string in internal memory
 */
 void OLED_print_string(unsigned char* string);
+
+/**
+ * @brief Print PROGMEM string to current line and column of OLED screen
+ * @param string; PROGMEM pointer to string in FLASH memory
+*/
+void OLED_print_string_P(unsigned char* string);
 
 /**
   @brief Print inverted string to current line and column of OLED screen
   @param string; String to be printed, has to be in double exclamation marks. => ""
 */
 void OLED_print_string_inverted(unsigned char* string);
+
+/**
+ * @brief Print PROGMEM string to current line and column of OLED screen
+ * @param string; PROGMEM pointer to string in FLASH memory
+*/
+void OLED_print_string_inverted_P(unsigned char* string);
 
 /**
  * @brief Clear entire OLED screen, i.e. pages 0-7
@@ -80,6 +92,14 @@ void OLED_clear_page(int page);
 */
 void OLED_invert_page(int page);
 
+/**
+ * @brief Enable timer to keep refresing image at refresh rate specified in initializer
+*/
+void OLED_refresh_enable();
 
+/**
+ * @brief Freeze image by disabling refresh timer
+*/
+void OLED_freeze_image();
 
 #endif

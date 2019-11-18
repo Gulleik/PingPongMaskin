@@ -6,6 +6,7 @@
 #include <string.h>
 #include <avr/interrupt.h>
 #include "OLED.h"
+#include "timer.h"
 #include "controller.h"
 #include "fonts.h"
 
@@ -47,7 +48,7 @@ void OLED_update_image() {
 	current_page = temp_page;
 }
 
-void OLED_initialize(){
+void OLED_initialize(uint8_t refresh_rate){
 	/*Display off*/
 	OLED_write_c(0xae); 
 
@@ -98,7 +99,9 @@ void OLED_initialize(){
 	/*Display on*/
 	OLED_write_c(0xaf);
 	
-    OLED_reset_position();
+	/*Initialize timer with interrupt rate as specified refresh_rate*/
+    timer_initialize(refresh_rate);
+
     OLED_clear();
 }
 
@@ -124,6 +127,13 @@ void OLED_print_string(unsigned char* string){
 	}
 }
 
+void OLED_print_string_P(unsigned char* string){
+	/*Loop through input string and print each separate character at current page and column*/
+	while (pgm_read_byte(string) != 0x00) {
+		OLED_print_char(pgm_read_byte(string++));
+	}
+}
+
 void OLED_print_char_inverted(unsigned char character) {
 	/*Using font defined in fonts.h, invert specified charater and write to current page and column*/
 	for (int i = 0; i < 5; i++) {
@@ -135,6 +145,13 @@ void OLED_print_string_inverted(unsigned char* string){
 	/*Loop through input string, invert and print each separate character at current page and column*/
 	for (unsigned char i = 0; i < strlen(string); i++) {
 		OLED_print_char_inverted(string[i]);
+	}
+}
+
+void OLED_print_string_inverted_P(unsigned char* string){
+	/*Loop through input string and print each separate character at current page and column*/
+	while (pgm_read_byte(string) != 0x00) {
+		OLED_print_char_inverted(pgm_read_byte(string++));
 	}
 }
 
@@ -190,4 +207,23 @@ void OLED_invert_page(int page) {
 	for (int f = 0; f<128; f++) {
 		OLED_write_d(~ext_OLED_mem[page * 128 + f]);
 	}
+}
+
+void OLED_refresh_enable() {
+    /*Enable timer by enabling interrupts*/
+    TIMSK |= (1 << OCIE1A);
+}
+
+void OLED_freeze_image() {
+    /*Disable timer by disabling interrupts*/
+    TIMSK &= ~(1 << OCIE1A);
+}
+
+ISR (TIMER1_COMPA_vect) {
+	//ISR for timer1, used for screen refresh
+    OLED_update_image();
+}
+
+ISR (TIMER1_OVF_vect) {
+    
 }

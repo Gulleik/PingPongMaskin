@@ -1,11 +1,11 @@
-#include "OLED_refresh.h"
+#include "timer.h"
 #include "OLED.h"
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <stdlib.h>
 #include <stdint.h>
 
-void OLED_refresh_initialize(uint8_t refresh_rate) {
+void timer_initialize(uint8_t refresh_rate) {
     /*
     Clock frequency is 4 915 200 Hz
     =>   Prescaler = 1    : 4 915 200 Hz
@@ -45,22 +45,4 @@ void OLED_refresh_initialize(uint8_t refresh_rate) {
 
     /*Enable global interrupts in case this has not been done already*/
     sei();
-}
-
-void OLED_refresh_enable() {
-    /*Enable timer by enabling interrupts*/
-    TIMSK |= (1 << OCIE1A);
-}
-
-void OLED_freeze_image() {
-    /*Disable timer by disabling interrupts*/
-    TIMSK &= ~(1 << OCIE1A);
-}
-
-ISR (TIMER1_COMPA_vect) {
-    OLED_update_image();
-}
-
-ISR (TIMER1_OVF_vect) {
-    
 }

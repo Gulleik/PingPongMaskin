@@ -1,6 +1,6 @@
 #include "CAN.h"
 #include "MCP.h"
-#include "MCP_registers.h"
+//#include "MCP_registers.h"
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
@@ -19,7 +19,6 @@ void CAN_initialize(){
 }
 
 void CAN_write_message(message_t msg) {
-
     MCP_write(MCP_TXB0SIDH, (uint8_t) msg.ID>>3);
     MCP_write(MCP_TXB0SIDL, (uint8_t) msg.ID<<5);
 
@@ -49,13 +48,8 @@ void CAN_receive_message(){
     /*Clear interrupt flag on CAN reception*/
     MCP_bit_modify(MCP_CANINTF, 0x01, 0);
 
-    switch(msg.ID) {
-    case SCORE:
+    if (msg.ID == SCORE) {
         score +=1;
-        break;
-
-    default:
-        break;
     }
 }
 
