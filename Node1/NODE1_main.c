@@ -12,7 +12,6 @@
 #include <util/delay.h>
 #include <avr/interrupt.h>
 #include "UART.h"
-#include "XMEM.h"
 #include "ADC.h"
 #include "controller.h"
 #include "OLED.h"
@@ -20,33 +19,21 @@
 #include "CAN.h"
 #include "MCP.h"
 #include "MCP_registers.h"
-#include "lib.h"
 
-void NODE1_initialize() {
-	UART_initialize();
+void XMEM_initialize(){
+    //Enabling External Memory Interface
+    MCUCR |= (1<<SRE);
     
-    printf("Node 1 initializing...\n\r");
-
-    /*Initialize modules*/
-    //printf("\tUART\t\tOK\r\n");
-    //printf("\tCAN");
-    CAN_initialize();
-    //printf("\t\tOK\r\n");
-    //printf("\tXMEM");
-    XMEM_initialize(); 
-    //printf("\t\tOK\r\n");
-    //printf("\tOLED");
-    OLED_initialize();
-    //printf("\t\tOK\r\n");
-
-    printf("Initialization complete\n\r");
+    //masking first four bits
+    SFIOR |= (1<<XMM2);
 }
+
 
 int main(void)
 {
-    NODE1_initialize();
-
-    SRAM_test();
+    UART_initialize();
+    XMEM_initialize();
+    OLED_initialize();
     OLED_interface();
     while(1) {
         /*printf("X: %d, Y: %d, SL: %d, SR: %d, B: %d\n\r", 

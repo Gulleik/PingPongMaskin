@@ -4,7 +4,7 @@
 #include "OLED_refresh.h"
 #include "OLED.h"
 #include "CAN.h"
-#include "Score.h"
+#include "score.h"
 #include "controller.h"
 #include <avr/pgmspace.h>
 #include <util/delay.h>
@@ -202,42 +202,41 @@ void play_game() {
 	OLED_print_string(Kd_str);*/
 
 	/*Show quit message on OLED*/
-	OLED_goto_page(7);
+	/*OLED_goto_page(7);
 	OLED_goto_column(10);
 	OLED_print_string("HOLD JOYSTICK TO QUIT");
 
 	/*check if 2 player mode is enabled*/
-	OLED_goto_page(5);
+	/*OLED_goto_page(5);
 	OLED_goto_column(10);
 	if(ext2[17] == "N"){
-		OLED_print_string("2 Player mode");
+		//OLED_print_string("2 Player mode");
 		game_mode = 1;
 	} else{
-		OLED_print_string("Single player");
+		//OLED_print_string("Single player");
 	}
 
 	/*Print score*/
-	OLED_goto_page(6);
+	/*OLED_goto_page(6);
 	OLED_goto_column(10);
 	if(game_mode){
-		OLED_print_string("Score: ");
+		//OLED_print_string("Score: ");
 	} else{
-		OLED_print_string("Opponent score:");
+		//OLED_print_string("Opponent score:");
 	}
 	char score_str[] = "";
-	unit16_t s = 0;
-	OLED_update_image();
-
+	uint16_t s = 0;
+	OLED_update_image();*/
 	/*Loop until joystick is pressed*/
 	do {
 		/*Send all controller inputs by CAN*/
-		itoa(s, score_str, 10);
-		OLED_goto_column(50);
-		OLED_print_string(score_str);
+		//itoa(s, score_str, 10);
+		//OLED_goto_column(50);
+		//OLED_print_string(score_str);
 		controller_CAN_send();
-		s = Score_calculate(game_mode);
+		//s = score_calculate(game_mode);
 
-	} while (!enter_button(JOYSTICK) && s < 65530);
+	} while (!enter_button(JOYSTICK) /*&& s < 65530*/);
 }
 
 void show_slider_selection(uint8_t page) {
@@ -382,7 +381,9 @@ uint8_t OLED_FSM(enum menu_options *option) {
 	switch (*option) {
 		/*Home: Play Game*/
 		case (HOME1):
-			if (enter_joystick_r()) {
+			if (enter_joystick_r())
+			    {
+					printf("1");
 				/*Set node 2 to RUN state and send by CAN*/
 				node2_state_msg.data[0] = 1;
 				CAN_write_message(node2_state_msg);
@@ -451,11 +452,11 @@ uint8_t OLED_FSM(enum menu_options *option) {
 
 				/*Print Selection to screen*/
 				OLED_goto_page(*option % 8);
-				OLED_goto_column(60);
+				OLED_goto_column(70);
 				if (config_msg.data[4]) {
-					OLED_print_string_inverted("  True");
+					//OLED_print_string_inverted("True");
 				} else {
-					OLED_print_string_inverted("  False");
+					//OLED_print_string_inverted("False");
 				}
 				OLED_update_image();
 				_delay_ms(1000);
@@ -472,11 +473,11 @@ uint8_t OLED_FSM(enum menu_options *option) {
 
 				/*Show selection to screen and let user select*/
 				OLED_goto_page(*option % 8);
-				OLED_goto_column(60);
+				OLED_goto_column(70);
 				if (config_msg.data[5]) {
-					OLED_print_string_inverted("  True");
+					//OLED_print_string_inverted("True");
 				} else {
-					OLED_print_string_inverted("  False");
+					//OLED_print_string_inverted("False");
 				}
 				OLED_update_image();
 				_delay_ms(1000);
@@ -548,8 +549,8 @@ uint8_t OLED_FSM(enum menu_options *option) {
 		case (PARAM3):
 			if (enter_joystick_r() || enter_joystick_l()) {
 				/*Show value and let user increment value, configure node 2 and send by CAN*/
-				show_and_increment_value("Kd", CONF_DEFAULT_Kd, &config_msg.data[3], *option % 8);
-				CAN_write_message(config_msg);
+				/*show_and_increment_value("Kd", CONF_DEFAULT_Kd, &config_msg.data[3], *option % 8);
+				CAN_write_message(config_msg);*/
 				return REDRAW_SCREEN;
 			}
 			break;
@@ -575,11 +576,19 @@ uint8_t OLED_FSM(enum menu_options *option) {
 		/*Home->Extras: 2 player mode: */
 		case (EXTRAS2):
 			if (enter_joystick_r()) {
-				if(ext2[17] == "F"){
-					ext2[] = " 2 Player mode: ON";
-				}else{
-					ext2[] = " 2 Player mode: OFF";
+				/*Print Selection to screen*/
+				OLED_goto_page(*option % 8);
+				OLED_goto_column(65);
+				if (!game_mode) {
+					//OLED_print_string_inverted("True");
+					game_mode = 1;
+				} else {
+					//OLED_print_string_inverted("False");
+					game_mode = 0;
 				}
+				OLED_update_image();
+				_delay_ms(1000);
+				return REDRAW_SCREEN;
 			}
 			break;
 

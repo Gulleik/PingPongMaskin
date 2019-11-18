@@ -24,13 +24,6 @@ void MCP_initialize() {
     MCP_reset();
 }
 
-void MCP_driver_reset(){
-    SPI_master_initialize();
-    MCP_enable(ON);
-    SPI_write_byte(MCP_RESET);
-    MCP_enable(OFF);
-}
-
 uint8_t MCP_read(uint8_t address) {
     MCP_enable(ON);
     SPI_write_byte(MCP_READ);
@@ -63,14 +56,6 @@ void MCP_Request_To_Send(uint8_t buffer){
     }
     SPI_write_byte(MCP_RTS_TX0);
     MCP_enable(OFF);
-}
-
-uint8_t MCP_read_status(){
-    MCP_enable(ON);
-    SPI_write_byte(MCP_READ_STATUS);
-    uint8_t data = SPI_read_byte();
-    MCP_enable(OFF);
-    return data;
 }
 
 void MCP_bit_modify(uint8_t address, uint8_t mask, uint8_t data){

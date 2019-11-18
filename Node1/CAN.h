@@ -35,7 +35,7 @@ enum BUTTON {
 volatile message_t node2_state_msg;
 volatile message_t config_msg;
 volatile message_t controls_msg;
-volatile uint16_t score = 0;
+volatile uint16_t score;
 
 
 /**

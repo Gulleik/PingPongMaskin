@@ -13,7 +13,6 @@ void CAN_initialize(){
     MCUCR |= (1 << ISC01);  //Interrupt trigger on rising edge
     GIFR |= (1 << INTF0);   //Clear interrupt flag on INT0
     MCP_bit_modify(MCP_CANINTE, 0x1, 0xFF); //Enable Interrupts on CAN reception
-    //MCP_bit_modify(MCP_CANINTF, 0x1, 0x00); //Clear interrupt flag on CAN reception
     
     /*Set MCP to normal mode*/
     MCP_bit_modify(MCP_CANCTRL, (0b111<<5), MODE_NORMAL);
@@ -50,13 +49,13 @@ void CAN_receive_message(){
     /*Clear interrupt flag on CAN reception*/
     MCP_bit_modify(MCP_CANINTF, 0x01, 0);
 
-        switch(msg.ID) {
-        case SCORE:
-            score +=1
-            break;
+    switch(msg.ID) {
+    case SCORE:
+        score +=1;
+        break;
 
-        default:
-            break;
+    default:
+        break;
     }
 }
 

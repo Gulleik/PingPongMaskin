@@ -1,8 +1,12 @@
 #include "controller.h"
 #include "CAN.h"
+#include "ADC.h"
 #include <avr/io.h>
 
 void controller_initialize() {
+    CAN_initialize();
+    ADC_init();
+
     DDRB &= ~((1 << DDB1) | ~(1 << DDB2) | ~(1 << DDB3));
 }
 
@@ -46,7 +50,7 @@ uint8_t controller_button_read(){
     }else{
         ret = UNDEF;
     }
-    //printf("Raw B: %d,B: %d\n\r", B, ret);
+    printf("Raw B: %d,B: %d\n\r", B, ret);
     controls_msg.data[4] = (uint8_t) ret;
 }
 
@@ -59,4 +63,11 @@ void controller_CAN_send() {
     controller_slider_read_R();
     controller_button_read();
     CAN_write_message(controls_msg);
+    printf("X: %d, Y: %d, SL: %d, SR: %d, B: %d\n\r", 
+                    controls_msg.data[0],
+                    controls_msg.data[1],
+                    controls_msg.data[2],
+                    controls_msg.data[3],
+                    controls_msg.data[4]
+                );
 }

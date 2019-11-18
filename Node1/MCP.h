@@ -16,11 +16,6 @@
 void MCP_initialize();
 
 /**
- *  @brief Resets MCP 
-*/
-void MCP_reset();
-
-/**
  *  @brief Reads data from the AVR
  * @param address; The adress that is to be read from
 */

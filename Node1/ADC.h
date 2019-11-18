@@ -6,11 +6,15 @@
  * @brief ADC driver for controller input
 */
 
+
+void ADC_init();
+
 /**
  * @brief Listen to data BUS and recieve converted ADC data
  * @param channel; ADC-channel to be read from
  * @return Recieved data
 */
+
 char ADC_read(char * channel);
 
 

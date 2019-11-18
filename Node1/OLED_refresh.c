@@ -1,5 +1,4 @@
 #include "OLED_refresh.h"
-#include "CAN.h"
 #include "OLED.h"
 #include <avr/io.h>
 #include <avr/interrupt.h>

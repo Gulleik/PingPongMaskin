@@ -1,11 +1,11 @@
 
+#define F_CPU 4915200 // clock frequency in Hz
+
 #include <util/delay.h>
 #include <avr/pgmspace.h>
 #include <string.h>
 #include <avr/interrupt.h>
-
 #include "OLED.h"
-#include "UART.h"
 #include "controller.h"
 #include "fonts.h"
 
