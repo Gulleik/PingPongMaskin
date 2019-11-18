@@ -113,14 +113,9 @@ void Motor_update_slider_ref(uint8_t slider_pos){
     position_ref = MAX_pos - scale*((uint16_t) slider_pos);
 }
 
-void Motor_position_controller(){
+void Motor_position_controller(uint8_t refference){
     /*Update reference in accordance with slider position*/
-    if(config_msg.data[5]){
-        Motor_update_slider_ref(controls_msg.data[2]);
-    }else{
-        Motor_update_slider_ref(controls_msg.data[3]);
-    }
-
+    Motor_update_slider_ref(refference);
     int16_t e = (position_ref - Motor_encoder_read_data());
     e = e/100;
     i_error += e;
@@ -139,34 +134,3 @@ void Motor_position_controller(){
     Motor_adjust_speed(u);
     previos_error = e;
 }
-
-/*
-uint8_t Motor_calculate_ref_speed(unsigned char pos){
-    if(pos < 131){
-        return (131-pos)*(248/131);
-    }else{
-        return 2*(pos-131);
-    }
-}
-
-void motor_update_joystic_ref(uint8_t joy_pos){
-    if (curr_pos > MAX_pos){
-        curr_pos = MAX_pos;
-    }
-    if( joy_pos != 132 && joy_pos != 131 && joy_pos != 130){
-        if(joy_pos < 130 && curr_pos > 0){
-            if((curr_pos - motor_driver_calculate_ref_speed(joy_pos)) > MAX_pos){
-                curr_pos = 0;
-            }else{
-                curr_pos -= motor_driver_calculate_ref_speed(joy_pos); 
-            }
-        }else if(curr_pos < MAX_pos && joy_pos > 132){
-            if((curr_pos + motor_driver_calculate_ref_speed(joy_pos)) > MAX_pos){
-                curr_pos = MAX_pos;
-            }else{
-                curr_pos += motor_driver_calculate_ref_speed(joy_pos); 
-            }
-        }
-    }
-    //printf("curr_pos = %d\t\t", curr_pos);
-}*/

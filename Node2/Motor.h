@@ -20,7 +20,8 @@
  * @brief Motor driver
 */
 
-uint16_t position_ref;
+
+uint16_t position_ref; /** < @brief position refference */
 
 
 
@@ -48,16 +49,8 @@ void Motor_update_slider_ref(uint8_t slider_pos);
 
 /**
  * @brief The position controller, ensuring that the position follows the refference
+ * @param refference, the position refference, value between 0 and 255.
 */
-void Motor_position_controller();
-
-
-
-
-/*
-void Motor_update_joystick_ref(uint8_t joy_pos);
-
-uint8_t Motor_calculate_ref_speed(unsigned char pos);
-*/
+void Motor_position_controller(uint8_t refference);
 
 #endif

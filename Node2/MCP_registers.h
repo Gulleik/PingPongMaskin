@@ -1,6 +1,7 @@
 #ifndef MCP_REGISTERS_H
 #define MCP_REGISTERS_H
 
+
 /*
 mcp2515.h
 

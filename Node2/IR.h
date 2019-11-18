@@ -9,8 +9,8 @@
  * @brief IR driver
 */
 
-int8_t is_blocked;
 
+int8_t is_blocked; /** @brief Status of IR sensor */
 
 
 /**
