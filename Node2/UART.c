@@ -1,7 +1,7 @@
 #include "UART.h"
-#define FOSC 16000000// Clock Speed
-#define BAUD 9600
 
+#define FOSC 16000000 // Clock Speed in Hz
+#define BAUD 9600
 
 void UART_initialize() {
 	UBRR0H = (unsigned char)((FOSC / 16 / BAUD - 1) >> 8);

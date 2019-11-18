@@ -1,9 +1,4 @@
 #include "CAN.h"
-#include "MCP.h"
-#include "MCP_registers.h"
-#include <avr/io.h>
-#include <avr/interrupt.h>
-
 
 void CAN_initialize(){
     /*Initialize MCP*/

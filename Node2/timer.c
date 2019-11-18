@@ -1,9 +1,4 @@
 #include "timer.h"
-#include "CAN.h"
-#include <avr/io.h>
-#include <avr/interrupt.h>
-
-
 
 void timer_initialize() {
     /*
@@ -100,7 +95,7 @@ void timer_disable(timer_t timer) {
 
 ISR (TIMER3_COMPA_vect) {
     //Every 20ms
-    timer_interrupt = 1;
+    controller_interrupt = 1;
 }
 
 ISR (TIMER3_OVF_vect) {

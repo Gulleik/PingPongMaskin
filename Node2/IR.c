@@ -1,7 +1,4 @@
 #include "IR.h"
-#include "CAN.h"
-#include <avr/io.h>
-#include <avr/interrupt.h>
 
 void IR_internal_ADC_initialize() {
     /*Enable ADC*/

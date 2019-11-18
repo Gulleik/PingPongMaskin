@@ -1,6 +1,4 @@
 #include "Servo.h"
-#include "CAN.h"
-#include <avr/interrupt.h>
 
 //RANGE: 1800 - 4200, 3000 median
 uint16_t servo_pos = 3000;
@@ -32,8 +30,8 @@ void Servo_initialize(){
 
 }
 
-void Servo_set_position(uint8_t pos){
-    if (config_msg.data[4]) {
+void Servo_set_position(uint8_t pos, uint8_t inverted){
+    if (inverted) {
         servo_pos = 4200 - ((pos*120)/13);
     } else {
         servo_pos = 1800 + ((pos*120)/13);

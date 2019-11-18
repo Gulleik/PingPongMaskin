@@ -1,10 +1,4 @@
-#include "SPI.h"
 #include "MCP.h"
-#include "MCP_registers.h"
-
-#include <avr/io.h>
-#include <stdint.h>
-
 
 void MCP_enable(uint8_t state){
     if(state){
