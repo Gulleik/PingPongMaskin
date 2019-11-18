@@ -20,6 +20,7 @@
 #include "CAN.h"
 #include "MCP.h"
 #include "MCP_registers.h"
+#include "timer.h"
 
 void XMEM_initialize(){
     //Enabling External Memory Interface
@@ -36,11 +37,13 @@ int main(void)
     XMEM_initialize();
     OLED_initialize(60); //60Hz refresh rate
     CAN_initialize();
+    timer_game_enable();
     
     //SRAM_test();
-    OLED_interface();
+    //OLED_interface();
 
     while(1) {
+        printf("Time: %d\n\r", time);
         //OLED_clear();   
         /*controller_CAN_send();
         printf("X: %d, Y: %d, SL: %d, SR: %d, B: %d\n\r", 

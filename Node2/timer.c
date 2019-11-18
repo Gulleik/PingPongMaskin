@@ -37,7 +37,7 @@ void timer_initialize() {
     OCR3AL = 0x88;
 
     /*Interrupt configuration*/
-    TIMSK3 = (1 << OCIE3A) //Enable interrupt on compare match at compare port A
+    TIMSK3 |= (1 << OCIE3A) //Enable interrupt on compare match at compare port A
            | (1 << ICIE3); //Enable interrupt on timer overflow
     
     /**********************************************************
@@ -62,7 +62,7 @@ void timer_initialize() {
     OCR4AL = 0x50;
 
     /*Interrupt configuration*/
-    TIMSK4 = (1 << OCIE4A) //Enable interrupt on compare match at compare port A
+    TIMSK4 |= (1 << OCIE4A) //Enable interrupt on compare match at compare port A
            | (1 << ICIE4); //Enable interrupt on timer overflow
 
     /*Initially disable all timers*/

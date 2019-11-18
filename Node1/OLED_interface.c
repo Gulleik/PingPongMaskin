@@ -351,7 +351,7 @@ void screensaver() {
 			y_dir ? y_pos++ : y_pos--, 1);
 
 		OLED_refresh_enable();
-		_delay_us(10);
+		_delay_us(1000);
 	} while (!enter_button(JOYSTICK));
 
 	OLED_freeze_image();
