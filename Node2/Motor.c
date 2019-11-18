@@ -115,7 +115,11 @@ void Motor_update_slider_ref(uint8_t slider_pos){
 
 void Motor_position_controller(){
     /*Update reference in accordance with slider position*/
-    Motor_update_slider_ref(controls_msg.data[3]);
+    if(config_msg.data[5]){
+        Motor_update_slider_ref(controls_msg.data[2]);
+    }else{
+        Motor_update_slider_ref(controls_msg.data[3]);
+    }
 
     int16_t e = (position_ref - Motor_encoder_read_data());
     e = e/100;

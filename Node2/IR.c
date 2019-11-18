@@ -23,6 +23,8 @@ void IR_internal_ADC_initialize() {
     /*Set left adjustment, only 8 bit precition is required*/
     ADMUX |= (1<<ADLAR);
 
+    /*initialize CAN*/
+    CAN_initialize();
     
 }
 
@@ -38,13 +40,19 @@ void IR_internal_ADC_read() {
     //return ADCH; //REDUNDANT WITH ISR
 }
 
+uint8_t reset = 1;
+
 ISR(ADC_vect) {
     cli();
     /*Check digitally converted analog signal against constant treshold*/
     uint8_t temp = ADCH;
+    if( temp > 50){
+        reset = 1;
+    }
     //printf("ADCH: %d\n\r", temp);
-    if(!(temp > 50)){
+    if(!(temp > 50) && reset){
         CAN_write_message(score_msg);
+        reset = 0;
     }; //Min: 0, Max: 255
     sei();
 }

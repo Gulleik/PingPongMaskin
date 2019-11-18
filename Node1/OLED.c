@@ -10,6 +10,9 @@
 #include "controller.h"
 #include "fonts.h"
 
+/*************************************************************
+ * WRITE
+*************************************************************/
 void OLED_write_c(uint8_t command) {
 	/*Write to OLED command*/
 	volatile char *ext_OLED = (char *) OLED_COMMAND_BASE_ADDR;
@@ -54,21 +57,10 @@ void OLED_append_d(uint8_t data, uint8_t inverted) {
 	}
 }
 
-void OLED_update_image() {
-	volatile char *ext_OLED_mem = (char *) SRAM_OLED_BASE_ADDR;
-	volatile char *ext_OLED = (char *) OLED_DATA_BASE_ADDR;
-	uint8_t temp_col = current_column;
-	uint8_t temp_page = current_page;
-	OLED_reset_position();
-	for (int page = 0; page<8; page++){
-		for (int column = 0; column<128; column++){
-			ext_OLED[0] = ext_OLED_mem[page * 128 + column];
-		}
-	}
-	current_column = temp_col;
-	current_page = temp_page;
-}
 
+/*************************************************************
+ * INIT
+*************************************************************/
 void OLED_initialize(uint8_t refresh_rate){
 	/*Display off*/
 	OLED_write_c(0xae); 
@@ -126,6 +118,10 @@ void OLED_initialize(uint8_t refresh_rate){
     OLED_clear();
 }
 
+
+/*************************************************************
+ * PRINT
+*************************************************************/
 void OLED_set_pixel(uint8_t x_pos, uint8_t y_pos, uint8_t inverted) {
 	uint8_t value = (1 << (y_pos % 8));
 	
@@ -176,6 +172,10 @@ void OLED_print_string_inverted_P(const unsigned char* string){
 	}
 }
 
+
+/*************************************************************
+ * NAVIGATION 
+*************************************************************/
 void OLED_goto_page(unsigned char new_page){
 	/*Set page start and end address*/
   	OLED_write_c(0x22);
@@ -230,6 +230,25 @@ void OLED_invert_page(int page) {
 	}
 }
 
+// void OLED_scroll() {
+// 	/*Write new data to SRAM memory*/
+// 	volatile uint8_t *ext_OLED_mem = (uint8_t *) SRAM_OLED_BASE_ADDR;
+
+// 	uint8_t temp = ext_OLED_mem[1023];
+// 	for (uint8_t column = 127; column >= 0; column--) {
+// 		if (page == 0 && column == 0) {
+// 			ext_OLED_mem[0] = temp;
+// 			break;
+// 		}
+
+// 		/*Scroll individual OLED byte one position right*/
+// 		ext_OLED_mem[page * 128 + column] = ext_OLED_mem[page * 128 + column - 1];
+// 	}
+// }
+
+/*************************************************************
+ * REFRESH
+*************************************************************/
 void OLED_refresh_enable() {
     /*Enable timer by enabling interrupts*/
     TIMSK |= (1 << OCIE1A);
@@ -240,11 +259,24 @@ void OLED_freeze_image() {
     TIMSK &= ~(1 << OCIE1A);
 }
 
+void OLED_update_image() {
+	volatile char *ext_OLED_mem = (char *) SRAM_OLED_BASE_ADDR;
+	volatile char *ext_OLED = (char *) OLED_DATA_BASE_ADDR;
+	uint8_t temp_col = current_column;
+	uint8_t temp_page = current_page;
+	OLED_reset_position();
+	for (int page = 0; page<8; page++){
+		for (int column = 0; column<128; column++){
+			ext_OLED[0] = ext_OLED_mem[page * 128 + column];
+		}
+	}
+	current_column = temp_col;
+	current_page = temp_page;
+}
+
 ISR (TIMER1_COMPA_vect) {
 	//ISR for timer1, used for screen refresh
     OLED_update_image();
 }
 
-ISR (TIMER1_OVF_vect) {
-    
-}
+ISR (TIMER1_OVF_vect);

@@ -5,6 +5,7 @@
 #include "OLED.h"
 #include "CAN.h"
 #include "score.h"
+#include "timer.h"
 #include <avr/pgmspace.h>
 #include <util/delay.h>
 #include <avr/interrupt.h>
@@ -76,7 +77,7 @@ const PROGMEM char opt_return[] = "Return";
 //              SCREEN SIZE: "-------------------------."
 const PROGMEM char ctrl0[] = "     _-'CONTROLS'-_";
 const PROGMEM char ctrl1[] = "Invert servo";
-const PROGMEM char ctrl2[] = "Invert motor";
+const PROGMEM char ctrl2[] = "Motor slider";
 const PROGMEM char ctrl3[] = "";
 const PROGMEM char ctrl4[] = "";
 const PROGMEM char ctrl5[] = "";
@@ -198,36 +199,64 @@ void play_game() {
 	OLED_print_string_P(PSTR("PRESS JOYSTICK TO QUIT"));
 
 	/*check if 2 player mode is enabled*/
-	/*OLED_goto_page(5);
-	OLED_goto_column(10);
-	if(ext2[17] == "N"){
-		//OLED_print_string_P(PSTR("2 Player mode"));
-		game_mode = 1;
+	OLED_goto_page(5);
+	OLED_goto_column(1);
+	if(game_mode){
+		OLED_print_string_P(PSTR("2 Player mode"));
 	} else{
-		//OLED_print_string_P(PSTR("Single player"));
+		OLED_print_string_P(PSTR("Single player"));
 	}
 
 	/*Print score*/
-	/*OLED_goto_page(6);
-	OLED_goto_column(10);
+	OLED_goto_page(6);
+	OLED_goto_column(1);
 	if(game_mode){
-		//OLED_print_string_P(PSTR("Score: "));
+		OLED_print_string_P(PSTR("Opponent score: "));
 	} else{
-		//OLED_print_string_P(PSTR("Opponent score:"));
+		OLED_print_string_P(PSTR("Score:"));
 	}
 	char score_str[] = "";
-	uint16_t s = 0;*/
+	_delay_ms(2000);
+	time = 0;
+	score = 0;
 	OLED_update_image();
 	/*Loop until joystick is pressed*/
 	do {
 		/*Send all controller inputs by CAN*/
-		//itoa(s, score_str, 10);
-		//OLED_goto_column(50);
-		//OLED_print_string(score_str);
+		if(!game_mode && score){
+			break;
+		}
+		OLED_goto_page(6);
+		OLED_goto_column(100);
+		printf("X: %d ", score);
+		itoa(game_mode ? score : time, score_str, 10);
+		OLED_print_string(score_str);
+		OLED_update_image();
 		controller_CAN_send();
-		//s = score_calculate(game_mode);
-
-	} while (!enter_button(JOYSTICK) /*&& s < 65530*/);
+		/*printf("X: %d, Y: %d, SL: %d, SR: %d, B: %d\n\r", 
+                    controls_msg.data[0],
+                    controls_msg.data[1],
+                    controls_msg.data[2],
+                    controls_msg.data[3],
+                    controls_msg.data[4]
+                );*/
+	} while (!enter_button(JOYSTICK));
+	if(!game_mode){
+		score = time;
+	}
+	OLED_clear();
+	OLED_goto_page(0);
+	OLED_goto_column(1);
+	OLED_print_string_P(PSTR("Game Over"));
+	OLED_goto_page(4);
+	OLED_goto_column(1);
+	OLED_print_string_P(PSTR("Score: "));
+	OLED_goto_column(50);
+	itoa(score, score_str, 10);
+	OLED_print_string(score_str);
+	OLED_update_image();
+	_delay_ms(2000);
+	while (!enter_button(JOYSTICK)){}
 }
 
 void show_slider_selection(uint8_t page) {
@@ -322,13 +351,13 @@ char* ScreenSaver[] = {
 	ss0, ss1, ss2, ss3, ss4, ss5, ss6, ss7,
 };
 */
-uint16_t rand_seed = 0;
+
 void screensaver() {
 	OLED_refresh_enable();
 	OLED_clear();
 
 	/*Set random start point*/
-	srand(rand_seed);
+	srand(rand() + time);
 	uint8_t x_pos = rand() % 128;
 	uint8_t y_pos = rand() % 64;
 	uint8_t x_dir = 0xFF;
@@ -351,7 +380,7 @@ void screensaver() {
 			y_dir ? y_pos++ : y_pos--, 1);
 
 		OLED_refresh_enable();
-		_delay_us(1000);
+		_delay_us(100);
 	} while (!enter_button(JOYSTICK));
 
 	OLED_freeze_image();
@@ -361,7 +390,7 @@ uint8_t FSM(menu_option_t *option) {
 	uint8_t screen = *option / 8;
 
 	/*Traverse up and down on screen*/
-	_delay_ms(50);
+	_delay_ms(150);
 	if (enter_joystick_d()) {
 		/*Loop if option at header or empty line*/
 		do {
@@ -476,9 +505,9 @@ uint8_t FSM(menu_option_t *option) {
 				OLED_goto_page(*option % 8);
 				OLED_goto_column(70);
 				if (config_msg.data[5]) {
-					OLED_print_string_inverted_P(PSTR("True"));
+					OLED_print_string_inverted_P(PSTR("Left"));
 				} else {
-					OLED_print_string_inverted_P(PSTR("False"));
+					OLED_print_string_inverted_P(PSTR("Right"));
 				}
 				OLED_update_image();
 				_delay_ms(1000);
@@ -567,8 +596,6 @@ uint8_t FSM(menu_option_t *option) {
 
 		/*Home->Extras: Screensaver*/
 		case (EXTRAS1):
-			/*Alternative solution to time() as seed to srand()*/
-			rand_seed++;
 			if (enter_joystick_r()) {
 				/*Show screensaver*/
 				screensaver();
@@ -576,12 +603,12 @@ uint8_t FSM(menu_option_t *option) {
 			}
 			break;
 
-		/*Home->Extras: 2 player mode: */
+		/*Home->Extras: 2 player mode */
 		case (EXTRAS2):
 			if (enter_joystick_r()) {
 				/*Print Selection to screen*/
 				OLED_goto_page(*option % 8);
-				OLED_goto_column(65);
+				OLED_goto_column(70);
 				if (!game_mode) {
 					OLED_print_string_inverted_P(PSTR("True"));
 					game_mode = 1;

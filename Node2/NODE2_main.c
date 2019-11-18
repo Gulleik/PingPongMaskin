@@ -27,7 +27,6 @@ void NODE2_initialize() {
     /*Initialize modules*/
     printf("\tUART\t\tOK\r\n");
     printf("\tCAN");
-    CAN_initialize();
     printf("\t\tOK\r\n");
     printf("\tServo");
     Servo_initialize();
@@ -61,7 +60,7 @@ int main(void)
 	config_msg.ID = CONFIG;
 
     while(1) {
-        /*printf("STATE: %d CONFIGS: speed = %d, Kp = %d, Ki = %d, Kd = %d, Inv_ser = %d, Inv_mot = %d\n\r",
+        printf("STATE: %d CONFIGS: speed = %d, Kp = %d, Ki = %d, Kd = %d, Inv_ser = %d, Inv_mot = %d\n\r",
             node2_state_msg.data[0],
             config_msg.data[0],
             config_msg.data[1],
@@ -69,7 +68,7 @@ int main(void)
             config_msg.data[3],
             config_msg.data[4],
             config_msg.data[5]
-        );*/
+        );
 
         switch (node2_state_msg.data[0]) {
             case STATE_IDLE:

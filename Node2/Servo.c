@@ -33,7 +33,7 @@ void Servo_initialize(){
 }
 
 void Servo_set_position(uint8_t pos){
-    if (config_msg.data[5]) {
+    if (config_msg.data[4]) {
         servo_pos = 4200 - ((pos*120)/13);
     } else {
         servo_pos = 1800 + ((pos*120)/13);
