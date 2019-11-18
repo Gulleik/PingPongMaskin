@@ -4,6 +4,9 @@
 #define ON 1
 #define OFF 0
 
+#include "SPI.h"
+#include "MCP_registers.h"
+
 /**
  * @file
  * @brief MCP driver NODE2

@@ -1,13 +1,4 @@
-#define F_CPU 16000000 // clock frequency in Hz
-
 #include "Motor.h"
-#include "CAN.h"
-#include "TWI_Master.h"
-
-#include <avr/io.h>
-#include <util/delay.h>
-#include <stdlib.h>
-#include <stdint.h>
 
 uint16_t MAX_pos;
 uint16_t MIN_pos;
@@ -66,14 +57,14 @@ void Motor_adjust_speed(uint8_t speed){
 }
 
 void Motor_initialize(){
-    TWI_Master_Initialise();
+    TWI_Master_Initialize();
     position_ref = 0;
     DDRH = 0xFF;
     DDRK = 0x00;
     Motor_enable_motor(ON);
 }
 
-void Motor_calibrate(){
+void Motor_calibrate(uint8_t max_speed_conf, uint8_t K_p_conf, uint8_t K_i_conf, uint8_t K_d_conf) {
     Motor_set_dir(MOTOR_RIGHT);
 	Motor_adjust_speed(80);
 	_delay_ms(1000);
@@ -94,10 +85,10 @@ void Motor_calibrate(){
 	MAX_pos = Motor_encoder_read_data();
 
 	/*Get config data from node 1*/
-    K_p = config_msg.data[1]; //1 = Data pos for K_p
-    K_i = config_msg.data[2]; //2 = Data pos for K_i
-    K_d = config_msg.data[3]; //3 = Data pos for K_d
-    Max_speed = config_msg.data[0];
+    K_p = K_p_conf; //1 = Data pos for K_p
+    K_i = K_i_conf; //2 = Data pos for K_i
+    K_d = K_d_conf; //3 = Data pos for K_d
+    Max_speed = max_speed_conf;
 }
 
 void Motor_enable_motor(uint8_t state){
@@ -113,9 +104,9 @@ void Motor_update_slider_ref(uint8_t slider_pos){
     position_ref = MAX_pos - scale*((uint16_t) slider_pos);
 }
 
-void Motor_position_controller(uint8_t refference){
+void Motor_position_controller(uint8_t reference){
     /*Update reference in accordance with slider position*/
-    Motor_update_slider_ref(refference);
+    Motor_update_slider_ref(reference);
     int16_t e = (position_ref - Motor_encoder_read_data());
     e = e/100;
     i_error += e;

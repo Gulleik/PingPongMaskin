@@ -1,17 +1,14 @@
 #ifndef IR_H
 #define IR_H
 
-
-#include <stdint.h>
+#include "CAN.h"
 
 /**
  * @file
  * @brief IR driver
 */
 
-
 int8_t is_blocked; /** @brief Status of IR sensor */
-
 
 /**
  * @brief Initialize IR sensor at ADC1.

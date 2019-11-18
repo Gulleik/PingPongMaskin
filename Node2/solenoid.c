@@ -1,7 +1,4 @@
-#define F_CPU 16000000 // clock frequency in Hz
-
 #include "solenoid.h"
-#include <util/delay.h>
 
 void solenoid_initialize(){
     DDRB |= (1 << PH5);

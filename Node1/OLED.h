@@ -7,7 +7,6 @@
 #include <avr/pgmspace.h>
 #include "XMEM.h"
 #include "timer.h"
-#include "fonts.h"
 
 /**
  * @file

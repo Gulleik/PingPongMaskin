@@ -4,20 +4,13 @@
 #define STATE_IDLE 0
 #define STATE_PLAY 1
 
-#define CONF_DEFAULT_TOP_SPEED 120
-#define CONF_DEFAULT_Kp 80
-#define CONF_DEFAULT_Ki 10
-#define CONF_DEFAULT_Kd 100
-#define CONF_DEFAULT_INV_SERVO 0
-#define CONF_DEFAULT_MOTOR_SLIDER 0
-
-#include <stdint.h>
+#include <avr/interrupt.h>
+#include "MCP.h"
 
 /**
  * @file
  * @brief Can driver NODE2
 */
-
 
 /** 
  * @brief CAN message 

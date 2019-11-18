@@ -2,8 +2,7 @@
 #define SERVO_H
 
 #include <avr/io.h>
-
-#define FREC 
+#include <avr/interrupt.h>
 
 /**
  * @file
@@ -18,7 +17,8 @@ void Servo_initialize();
 /**
  * @brief Sets servo position
  * @param pos; Desired position of encoder, value between 0 and 255.
+ * @param inverted; Boolean value specifying whether the servo controls should be inverted or not
 */
-void Servo_set_position(uint8_t pos);
+void Servo_set_position(uint8_t pos, uint8_t inverted);
 
 #endif

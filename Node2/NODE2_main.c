@@ -12,39 +12,19 @@
 #include <util/delay.h>
 
 #include "UART.h"
-#include "CAN.h"
-#include "MCP.h"
-#include "Servo.h"
 #include "IR.h"
-#include "Motor.h"
-#include "solenoid.h"
 #include "timer.h"
+#include "Motor.h"
+#include "Servo.h"
+#include "solenoid.h"
 
 void NODE2_initialize() {
 	UART_initialize();
-    printf("\n\rNode 2 initializing...\n\r");
-
-    /*Initialize modules*/
-    printf("\tUART\t\tOK\r\n");
-    printf("\tCAN");
-    printf("\t\tOK\r\n");
-    printf("\tServo");
     Servo_initialize();
-    printf("\t\tOK\r\n");
-    printf("\tIR");
     IR_internal_ADC_initialize();
-    printf("\t\tOK\r\n");
-    printf("\tMotor");
     Motor_initialize();
-    printf("\t\tOK\r\n");
-    printf("\tSolenoid");
     solenoid_initialize();
-    printf("\tOK\r\n");
-    printf("\tTimer");
     timer_initialize();
-    printf("\t\tOK\r\n");
-
-    printf("Initialization complete\n\r");
 }
 
 int main(void)
@@ -84,29 +64,25 @@ int main(void)
                     prev_state = STATE_PLAY;
                     timer_enable(IR_ADC_TIMER);
                     timer_enable(CONTROLLER_TIMER);
-                    Motor_calibrate();
+                    Motor_calibrate(config_msg.data[0],     //Top speed
+                                    config_msg.data[1],     //K_p
+                                    config_msg.data[2],     //K_i
+                                    config_msg.data[3]);    //K_d
                 }
                 if(IR_interrupt == 1){
                     IR_internal_ADC_read();
                     IR_interrupt == 0;
                 }
-                if( timer_interrupt == 1){
-                    if(config_msg.data[5]){
-                        Motor_position_controller(controls_msg.data[2]);
-                    }else{
-                        Motor_position_controller(controls_msg.data[3]);
-                    }
-                    Servo_set_position(controls_msg.data[0]);
-                    timer_interrupt = 0;
+                if(controller_interrupt == 1){
+                    Motor_position_controller(config_msg.data[5] ? controls_msg.data[2] : controls_msg.data[3]);
+                    Servo_set_position(controls_msg.data[0], config_msg.data[4]);
+                    controller_interrupt = 0;
                 }
-                else if(controls_msg.data[4] == RIGHT){
+                if(controls_msg.data[4] == RIGHT){
                     solenoid_shoot();
                 }
-                _delay_ms(50);
                 break;
         }
     }
-
-    
     return 0;
 }

@@ -5,7 +5,7 @@
  */ 
 
 #include "UART.h"
-#include "OLED_interface.h"
+#include "OLED_FSM.h"
 
 void XMEM_initialize(){
     //Enabling External Memory Interface
@@ -19,10 +19,7 @@ int main(void)
 {
     UART_initialize();
     XMEM_initialize();
-    OLED_initialize(60); //60Hz refresh rate
+    OLED_FSM_initialize(60); //Initialize OLED with refresh rate of 60Hz
     
-    OLED_interface();
-
-    while(1);
+    OLED_FSM_run();
 }
-

@@ -1,4 +1,4 @@
-#include "OLED_interface.h"
+#include "OLED_FSM.h"
 
 /****************************************************************************************
   .  . .  .   . .  .  . .  .  . . .  . .  .  . .  .  . .  .  . .  .  . .  .  . .  .  . . 
@@ -40,7 +40,7 @@
 *****************************************************************************************/
 
 /*Home*/
-//      SCREEN SIZE: "-------------------------."
+//              SCREEN SIZE: "-------------------------."
 const PROGMEM char home0[] = "        _-'HOME'-_";
 const PROGMEM char home1[] = "Play Game";
 const PROGMEM char home2[] = "Options";
@@ -128,6 +128,31 @@ volatile uint8_t game_mode = 0;
 /*****************************************************************************************
  * 
 *****************************************************************************************/
+
+void OLED_FSM_initialize(uint8_t refresh_rate) {
+	/*Initialize OLED*/
+    OLED_initialize(refresh_rate);
+
+    /*Initialize CAN messages*/
+	node2_state_msg.ID = NODE2_STATE;
+	node2_state_msg.length = 1;
+	config_msg.ID = CONFIG;
+	config_msg.length = 6;
+
+	/*Set node 2 to idle state and default configuration*/
+	node2_state_msg.data[0] = STATE_IDLE;
+	config_msg.data[0] = CONF_DEFAULT_TOP_SPEED;
+	config_msg.data[1] = CONF_DEFAULT_Kp;
+	config_msg.data[2] = CONF_DEFAULT_Ki;
+	config_msg.data[3] = CONF_DEFAULT_Kd;
+	config_msg.data[4] = CONF_DEFAULT_INV_SERVO;
+	config_msg.data[5] = CONF_DEFAULT_INV_MOTOR;
+
+	/*Send state and configuration to node 2*/
+	CAN_write_message(node2_state_msg);
+	_delay_ms(1);
+	CAN_write_message(config_msg);
+}
 
 uint8_t enter_joystick_r() {
 	/*Read joystick input and check if over treshold*/
@@ -223,13 +248,6 @@ void play_game() {
 		OLED_print_string(score_str);
 		OLED_update_image();
 		controller_CAN_send();
-		/*printf("X: %d, Y: %d, SL: %d, SR: %d, B: %d\n\r", 
-                    controls_msg.data[0],
-                    controls_msg.data[1],
-                    controls_msg.data[2],
-                    controls_msg.data[3],
-                    controls_msg.data[4]
-                );*/
 	} while (!enter_button(JOYSTICK));
 	if(!game_mode){
 		score = time;
@@ -258,7 +276,8 @@ void show_slider_selection(uint8_t page) {
 		controller_slider_read_R();
 
 		/*Disable refresh to prevent screen flickering*/
-		OLED_freeze_image();;
+		OLED_freeze_image();
+
 		/*Print Min */
 		OLED_clear_page(page);
 		OLED_goto_page(page);
@@ -274,7 +293,7 @@ void show_slider_selection(uint8_t page) {
 		OLED_print_string_P(PSTR("Max"));
 
 		/*Enable interrupts*/
-		OLED_refresh_enable();;
+		OLED_refresh_enable();
 
 		_delay_ms(50);
 	} while (!enter_button(JOYSTICK));
@@ -320,7 +339,7 @@ void show_and_increment_value(char name[], uint8_t def, volatile uint8_t *value,
 		itoa(def, def_str, 10);
 		OLED_print_string(def_str);
 
-		OLED_refresh_enable();;
+		OLED_refresh_enable();
 		_delay_ms(50);
 	} while (!enter_button(JOYSTICK));
 
@@ -361,7 +380,7 @@ void screensaver() {
 	OLED_freeze_image();
 }
 
-uint8_t FSM(menu_option_t *option) {
+uint8_t OLED_FSM(menu_option_t *option) {
 	uint8_t screen = *option / 8;
 
 	/*Traverse up and down on screen*/
@@ -611,27 +630,7 @@ uint8_t FSM(menu_option_t *option) {
 	return RETAIN_SCREEN;
 }
 
-void OLED_interface() {
-	/*Initialize CAN messages*/
-	node2_state_msg.ID = NODE2_STATE;
-	node2_state_msg.length = 1;
-	config_msg.ID = CONFIG;
-	config_msg.length = 6;
-
-	/*Set node 2 to idle state and default configuration*/
-	node2_state_msg.data[0] = STATE_IDLE;
-	config_msg.data[0] = CONF_DEFAULT_TOP_SPEED;
-	config_msg.data[1] = CONF_DEFAULT_Kp;
-	config_msg.data[2] = CONF_DEFAULT_Ki;
-	config_msg.data[3] = CONF_DEFAULT_Kd;
-	config_msg.data[4] = CONF_DEFAULT_INV_SERVO;
-	config_msg.data[5] = CONF_DEFAULT_INV_MOTOR;
-
-	/*Send state and configuration to node 2*/
-	CAN_write_message(node2_state_msg);
-	_delay_ms(1);
-	CAN_write_message(config_msg);
-
+void OLED_FSM_run() {
 	/*Set first option to top of home screen (HOME1)*/
 	menu_option_t option = HOME1;
 	while(1) {
@@ -649,6 +648,6 @@ void OLED_interface() {
 		OLED_update_image();
 		
 		/*Run FSM until REDRAW_SCREEN is passed*/
-		while (!FSM(&option));
+		while (!OLED_FSM(&option));
 	}
 }
