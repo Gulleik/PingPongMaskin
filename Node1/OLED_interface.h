@@ -4,6 +4,14 @@
 #define REDRAW_SCREEN 1
 #define RETAIN_SCREEN 0
 
+#define F_CPU 4915200 // clock frequency in Hz
+
+#include <avr/pgmspace.h>
+#include <util/delay.h>
+#include <stdlib.h>
+#include "controller.h"
+#include "OLED.h"
+
 /**
  * @file
  * @brief Oled interface driver

@@ -1,14 +1,4 @@
-#define F_CPU 4915200 // clock frequency in Hz
-
-#include "controller.h"
 #include "OLED_interface.h"
-#include "OLED.h"
-#include "CAN.h"
-#include "score.h"
-#include <avr/pgmspace.h>
-#include <util/delay.h>
-#include <avr/interrupt.h>
-#include <stdlib.h>
 
 /****************************************************************************************
   .  . .  .   . .  .  . .  .  . . .  . .  .  . .  .  . .  .  . .  .  . .  .  . .  .  . . 
@@ -278,7 +268,7 @@ void show_and_increment_value(char name[], uint8_t def, volatile uint8_t *value,
 		itoa(*value, val_str, 10);
 
 		/*Disable refresh to prevent screen flickering*/
-		OLED_freeze_image();;
+		OLED_freeze_image();
 
 		/*Print param name and increment/decrement operators according to joystick input*/
 		OLED_print_string(name);
@@ -308,20 +298,6 @@ void show_and_increment_value(char name[], uint8_t def, volatile uint8_t *value,
 	OLED_freeze_image();
 }
 
-/*
-const char ss0[] = "";
-const char ss1[] = "`-:-.   ,-;*`-:-.   ,-;*";
-const char ss2[] = "   `=`,'=/     `=`,'=/  ";
-const char ss3[] = "     y==/        y==/   ";
-const char ss4[] = "   ,=,-<=`.    ,=,-<=`. ";
-const char ss5[] = ",-'-'   `-=_,-'-'   `-=_";
-const char ss6[] = "";
-const char ss7[] = "";
-
-char* ScreenSaver[] = {
-	ss0, ss1, ss2, ss3, ss4, ss5, ss6, ss7,
-};
-*/
 uint16_t rand_seed = 0;
 void screensaver() {
 	OLED_refresh_enable();
@@ -371,7 +347,7 @@ uint8_t FSM(menu_option_t *option) {
 		return REDRAW_SCREEN;
 	}
 	else if (enter_joystick_u()) {
-		/*Loop if option ar header or empty line*/
+		/*Loop if option at header or empty line*/
 		do {
 			/*Increment option and loop to bottom if option "above" screen*/
 			*option = screen * 8 + (*option - 1) % 8;

@@ -1,9 +1,4 @@
 #include "timer.h"
-#include "OLED.h"
-#include <avr/io.h>
-#include <avr/interrupt.h>
-#include <stdlib.h>
-#include <stdint.h>
 
 void timer_initialize(uint8_t refresh_rate) {
     /*

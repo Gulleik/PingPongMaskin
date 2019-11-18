@@ -1,26 +1,11 @@
-/* Test.c
+/* NODE!_main.c
  *
  * Created: 28.08.2019 10.45.11
- * Author : gulle
+ * Author : Gulleik Olsen, Jostein Lysberg and Armon Hakimi
  */ 
 
-//helo from armon
-//ttyS0
-#define F_CPU 4915200 // clock frequency in Hz
-
-#include <avr/io.h>
-#include <util/delay.h>
-#include <avr/interrupt.h>
-#include <stdlib.h>
 #include "UART.h"
-#include "ADC.h"
-#include "controller.h"
-#include "OLED.h"
 #include "OLED_interface.h"
-#include "CAN.h"
-#include "MCP.h"
-#include "MCP_registers.h"
-#include "timer.h"
 
 void XMEM_initialize(){
     //Enabling External Memory Interface
@@ -30,30 +15,14 @@ void XMEM_initialize(){
     SFIOR |= (1<<XMM2);
 }
 
-
 int main(void)
 {
     UART_initialize();
     XMEM_initialize();
     OLED_initialize(60); //60Hz refresh rate
-    CAN_initialize();
-    timer_game_enable();
     
-    //SRAM_test();
-    //OLED_interface();
+    OLED_interface();
 
-    while(1) {
-        printf("Time: %d\n\r", time);
-        //OLED_clear();   
-        /*controller_CAN_send();
-        printf("X: %d, Y: %d, SL: %d, SR: %d, B: %d\n\r", 
-                    controls_msg.data[0],
-                    controls_msg.data[1],
-                    controls_msg.data[2],
-                    controls_msg.data[3],
-                    controls_msg.data[4]
-                );*/
-                _delay_ms(100);
-    }
+    while(1);
 }
 

@@ -1,8 +1,4 @@
 #include "CAN.h"
-#include "MCP.h"
-//#include "MCP_registers.h"
-#include <avr/io.h>
-#include <avr/interrupt.h>
 
 void CAN_initialize(){
     MCP_initialize();
@@ -19,28 +15,31 @@ void CAN_initialize(){
 }
 
 void CAN_write_message(message_t msg) {
+    /*Write message ID to MCP for transfer*/
     MCP_write(MCP_TXB0SIDH, (uint8_t) msg.ID>>3);
     MCP_write(MCP_TXB0SIDL, (uint8_t) msg.ID<<5);
 
+    /*Write message length to MCP for transfer*/
     MCP_write(MCP_TXB0DLC, msg.length);
 
+    /*Write message data to MCP for transfer*/
     for (int i = 0; i < msg.length; i++) {
         MCP_write((uint8_t) (MCP_TXB0D0 + i), msg.data[i]);
     }
     
-    //Initiate transmission on buffer 0
+    /*Initiate transmission on buffer 0*/
     MCP_write(MCP_TXB0CTRL, 1<<3); //1<<3 = TXREQ
 
-    MCP_Request_To_Send(0x00); //RTS buffer 0
+    /*Request to send on buffer 0*/
+    MCP_Request_To_Send(0x00);
 }
 
 void CAN_receive_message(){
     message_t msg;
-    /*Update msg with new received data*/
+    /*Update msg with new received ID, length and data*/
     msg.ID = (MCP_read(MCP_RXB0SIDH) << 3);
     msg.ID |= (MCP_read(MCP_RXB0SIDL) >> 5);
     msg.length = (MCP_read(MCP_RXB0DLC) & 0x0F);
-
     for(uint8_t i = 0;i < msg.length;i++){
         msg.data[i] = MCP_read(MCP_RXB0D0+i);
     }
@@ -48,6 +47,7 @@ void CAN_receive_message(){
     /*Clear interrupt flag on CAN reception*/
     MCP_bit_modify(MCP_CANINTF, 0x01, 0);
 
+    /*Increment score if score was sent from node 2*/
     if (msg.ID == SCORE) {
         score +=1;
     }

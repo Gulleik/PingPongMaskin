@@ -1,10 +1,13 @@
 #ifndef OLED_H
 #define OLED_H
 
+#define F_CPU 4915200 // clock frequency in Hz
 
-#include "string.h"
-#include "lib.h"
-#include <stdint.h>
+#include <util/delay.h>
+#include <avr/pgmspace.h>
+#include "XMEM.h"
+#include "timer.h"
+#include "fonts.h"
 
 /**
  * @file
