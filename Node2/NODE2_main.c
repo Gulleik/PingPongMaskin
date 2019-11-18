@@ -86,8 +86,16 @@ int main(void)
                     timer_enable(CONTROLLER_TIMER);
                     Motor_calibrate();
                 }
+                if(IR_interrupt == 1){
+                    IR_internal_ADC_read();
+                    IR_interrupt == 0;
+                }
                 if( timer_interrupt == 1){
-                    Motor_position_controller();
+                    if(config_msg.data[5]){
+                        Motor_position_controller(controls_msg.data[2]);
+                    }else{
+                        Motor_position_controller(controls_msg.data[3]);
+                    }
                     Servo_set_position(controls_msg.data[0]);
                     timer_interrupt = 0;
                 }

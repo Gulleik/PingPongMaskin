@@ -1,19 +1,17 @@
 #ifndef SPI
 #define SPI
 
-
-
 #include <avr/io.h>
 #include <stdint.h>
-
-#define DD_CS PB0
-#define DD_MOSI PB2
-#define DD_SCK PB1
 
 /**
  * @file
  * @brief SPI driver NODE2
 */
+
+#define DD_CS PB0
+#define DD_MOSI PB2
+#define DD_SCK PB1
 
 /**
  * @brief Initialize ATmega 2560 as SPI master

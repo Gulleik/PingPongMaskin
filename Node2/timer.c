@@ -3,7 +3,7 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
-volatile uint8_t timer_interrupt = 0;
+
 
 void timer_initialize() {
     /*
@@ -109,7 +109,7 @@ ISR (TIMER3_OVF_vect) {
 
 ISR (TIMER4_COMPA_vect) {
     //Every 200ms
-    IR_internal_ADC_read();
+    IR_interrupt = 1;
 }
 
 ISR (TIMER4_OVF_vect) {
