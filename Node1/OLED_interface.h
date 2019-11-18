@@ -9,13 +9,9 @@
  * @brief Oled interface driver
 */
 
-
 /**
  * @brief Show interface for human interaction over OLED screen. Includes FSM for system operation
 */
 void OLED_interface();
-
-void progmem_test();
-
 
 #endif

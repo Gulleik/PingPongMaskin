@@ -11,6 +11,7 @@
 #include <avr/io.h>
 #include <util/delay.h>
 #include <avr/interrupt.h>
+#include <stdlib.h>
 #include "UART.h"
 #include "ADC.h"
 #include "controller.h"
@@ -49,6 +50,7 @@ int main(void)
                     controls_msg.data[3],
                     controls_msg.data[4]
                 );*/
+                _delay_ms(100);
     }
 }
 

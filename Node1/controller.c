@@ -10,25 +10,25 @@ void controller_initialize() {
 }
 
 uint8_t controller_joystick_read_X(){
-    char X = ADC_read(0b0101);
+    char X = ADC_read((uint8_t*) 0b0101);
     controls_msg.data[0] = (uint8_t) X;
     return X;
 }
 
 uint8_t controller_joystick_read_Y(){
-    char Y = ADC_read(0b0100);
+    char Y = ADC_read((uint8_t*) 0b0100);
     controls_msg.data[1] = (uint8_t) Y;
     return Y;
 }
 
 uint8_t controller_slider_read_L(){
-    char S = ADC_read(0b0111);
+    char S = ADC_read((uint8_t*) 0b0111);
     controls_msg.data[2] = (uint8_t) S;
     return S;
 }
 
 uint8_t controller_slider_read_R(){
-    char S = ADC_read(0b0110);
+    char S = ADC_read((uint8_t*) 0b0110);
     controls_msg.data[3] = (uint8_t) S;
     return S;
 }
@@ -36,7 +36,7 @@ uint8_t controller_slider_read_R(){
 uint8_t controller_button_read(){
     uint8_t B = PINB & 0b00001110;
 
-    enum BUTTON ret;
+    button_t ret;
 
     if(B==0){
         ret =  JOYSTICK;
@@ -49,7 +49,7 @@ uint8_t controller_button_read(){
     }else{
         ret = UNDEF;
     }
-    //printf("Raw B: %d,B: %d\n\r", B, ret);
+    
     controls_msg.data[4] = (uint8_t) ret;
 }
 

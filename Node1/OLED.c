@@ -3,23 +3,44 @@
 
 #include <util/delay.h>
 #include <avr/pgmspace.h>
-#include <string.h>
 #include <avr/interrupt.h>
+#include <stdint.h>
 #include "OLED.h"
 #include "timer.h"
 #include "controller.h"
 #include "fonts.h"
 
-void OLED_write_c(unsigned char command) {
+void OLED_write_c(uint8_t command) {
 	/*Write to OLED command*/
 	volatile char *ext_OLED = (char *) OLED_COMMAND_BASE_ADDR;
 	ext_OLED[0] = command;
 }
 
-void OLED_write_d(unsigned char data) {
-	/*Write to new data to SRAM memory*/
+void OLED_write_d(uint8_t data) {
+	/*Write new data to SRAM memory*/
 	volatile char *ext_OLED_mem = (char *) SRAM_OLED_BASE_ADDR;
 	ext_OLED_mem[current_page * 128 + current_column] = data;
+
+	/*Update current_column and current_page variables*/
+	if (current_column < 127) {
+		current_column++;
+	} else {
+		current_column = 0;
+		current_page++;
+	}
+	if (current_page > 7) {
+		current_page = 0;
+	}
+}
+
+void OLED_append_d(uint8_t data, uint8_t inverted) {
+	/*Append to new data to SRAM memory*/
+	volatile char *ext_OLED_mem = (char *) SRAM_OLED_BASE_ADDR;
+	if (inverted) {
+		ext_OLED_mem[current_page * 128 + current_column] ^= data;
+	} else {
+		ext_OLED_mem[current_page * 128 + current_column] |= data;
+	}
 
 	/*Update current_column and current_page variables*/
 	if (current_column < 127) {
@@ -105,12 +126,12 @@ void OLED_initialize(uint8_t refresh_rate){
     OLED_clear();
 }
 
-void OLED_set_pixel(uint8_t x_pos, uint8_t y_pos) {
+void OLED_set_pixel(uint8_t x_pos, uint8_t y_pos, uint8_t inverted) {
 	uint8_t value = (1 << (y_pos % 8));
 	
 	OLED_goto_page(y_pos / 8);
 	OLED_goto_column(x_pos);
-	OLED_write_d(value);
+	OLED_append_d(value, inverted);
 }
 
 void OLED_print_char(unsigned char character) {
@@ -127,7 +148,7 @@ void OLED_print_string(unsigned char* string){
 	}
 }
 
-void OLED_print_string_P(unsigned char* string){
+void OLED_print_string_P(const unsigned char* string){
 	/*Loop through input string and print each separate character at current page and column*/
 	while (pgm_read_byte(string) != 0x00) {
 		OLED_print_char(pgm_read_byte(string++));
@@ -148,7 +169,7 @@ void OLED_print_string_inverted(unsigned char* string){
 	}
 }
 
-void OLED_print_string_inverted_P(unsigned char* string){
+void OLED_print_string_inverted_P(const unsigned char* string){
 	/*Loop through input string and print each separate character at current page and column*/
 	while (pgm_read_byte(string) != 0x00) {
 		OLED_print_char_inverted(pgm_read_byte(string++));

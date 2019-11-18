@@ -23,13 +23,13 @@ void OLED_initialize(uint8_t refresh_rate);
 /**
  * @brief Set value of one pixel to 1
 */
-void OLED_set_pixel(uint8_t pos_x, uint8_t pos_y);
+void OLED_set_pixel(uint8_t pos_x, uint8_t pos_y, uint8_t inverted);
 
 /**
   @brief Write data to OLED_data using dual buffering. Data is saved to address space 0x1c00-0x2000 (?) of SRAM
   @param data; Char value to be written to OLED_data register
 */
-void OLED_write_d(unsigned char data);
+void OLED_write_d(uint8_t data);
 
 /**
  * @brief Iterate through entire address space of OLED screen in SRAM and rewrite everything exactly once
@@ -46,7 +46,7 @@ void OLED_print_string(unsigned char* string);
  * @brief Print PROGMEM string to current line and column of OLED screen
  * @param string; PROGMEM pointer to string in FLASH memory
 */
-void OLED_print_string_P(unsigned char* string);
+void OLED_print_string_P(const unsigned char* string);
 
 /**
   @brief Print inverted string to current line and column of OLED screen
@@ -58,7 +58,7 @@ void OLED_print_string_inverted(unsigned char* string);
  * @brief Print PROGMEM string to current line and column of OLED screen
  * @param string; PROGMEM pointer to string in FLASH memory
 */
-void OLED_print_string_inverted_P(unsigned char* string);
+void OLED_print_string_inverted_P(const unsigned char* string);
 
 /**
  * @brief Clear entire OLED screen, i.e. pages 0-7

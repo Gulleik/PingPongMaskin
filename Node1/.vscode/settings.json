@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "mcp.h": "c",
-        "controller.h": "c"
+        "controller.h": "c",
+        "can.h": "c"
     }
 }

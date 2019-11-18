@@ -18,19 +18,19 @@
  * @brief Can driver NODE1
 */
 
-struct message_t {
+typedef struct message {
     uint16_t ID;
     uint8_t data[8];
     uint8_t length;
-} typedef message_t;
+} message_t;
 
-enum MESSAGE_ID {
+typedef enum message_id {
 	NODE2_STATE, CONFIG, CONTROLS, SCORE
-};
+} message_id_t;
 
-enum BUTTON {
+typedef enum button {
     UNDEF, JOYSTICK, LEFT, RIGHT, BOTH
-};
+} button_t;
 
 volatile message_t node2_state_msg;
 volatile message_t config_msg;

@@ -1,24 +1,16 @@
 #define F_CPU 4915200 // clock frequency in Hz
 
+#include "controller.h"
 #include "OLED_interface.h"
 #include "OLED.h"
 #include "CAN.h"
 #include "score.h"
-#include "controller.h"
 #include <avr/pgmspace.h>
 #include <util/delay.h>
 #include <avr/interrupt.h>
 #include <stdlib.h>
-#include <string.h>
 
-//const char MenuItem1[] PROGMEM = "Menu1";
-//const char MenuItem2[] PROGMEM = "Menu2";
-//const char MenuItem3[] PROGMEM = "Menu3";
-
-//char* MenuItemPointers[]  = {MenuItem1, MenuItem2, MenuItem3};
-
-
-/*
+/****************************************************************************************
   .  . .  .   . .  .  . .  .  . . .  . .  .  . .  .  . .  .  . .  .  . .  .  . .  .  . . 
    .       .        .       .     .  . .  .  . .  .  . .   .       .       .       .     
  .  .    .  .     .  .   .    .. ----------------------- .    . .    .  .    .  .    .  .
@@ -117,14 +109,14 @@ const PROGMEM char par_return[] = "Return";
 //             SCREEN SIZE: "-------------------------."
 const PROGMEM char ext0[] = "       _-'EXTRAS'-_";
 const PROGMEM char ext1[] = "Screensaver";
-const PROGMEM char ext2[] = "2 Player mode: OFF";
+const PROGMEM char ext2[] = "2 Player mode";
 const PROGMEM char ext3[] = "";
 const PROGMEM char ext4[] = "";
 const PROGMEM char ext5[] = "";
 const PROGMEM char ext6[] = "";
 const PROGMEM char ext_return[] = "Return";
 
-char* menu_string_pointers[] = {
+const char* menu_string_pointers[] = {
 	home0, home1, home2, home3, home4, home5, home6, home7,
 	opt0, opt1, opt2, opt3, opt4, opt5, opt6, opt_return,
 	ctrl0, ctrl1, ctrl2, ctrl3, ctrl4, ctrl5, ctrl6, ctrl_return,
@@ -133,14 +125,14 @@ char* menu_string_pointers[] = {
 	ext0, ext1, ext2, ext3, ext4, ext5, ext6, ext_return
 };
 
-enum menu_options {
+typedef enum menu_option {
 	HOME0, HOME1, HOME2, HOME3, HOME4, HOME5, HOME6, HOME7,
 	OPTIONS0, OPTIONS1, OPTIONS2, OPTIONS3, OPTIONS4, OPTIONS5, OPTIONS6, OPTIONS_RETURN,
 	CONTROLS0, CONTROLS1, CONTROLS2, CONTROLS3, CONTROLS4, CONTROLS5, CONTROLS6, CONTROLS_RETURN,
 	MOTOR0, MOTOR1, MOTOR2, MOTOR3, MOTOR4, MOTOR5, MOTOR6, MOTOR_RETURN,
 	PARAM0, PARAM1, PARAM2, PARAM3, PARAM4, PARAM5, PARAM6, PARAM_RETURN,
 	EXTRAS0, EXTRAS1, EXTRAS2, EXTRAS3, EXTRAS4, EXTRAS5, EXTRAS6, EXTRAS_RETURN
-};
+} menu_option_t;
 
 volatile uint8_t game_mode = 0;
 /*****************************************************************************************
@@ -171,7 +163,7 @@ uint8_t enter_joystick_d() {
 	return controls_msg.data[1] < 50;
 }
 
-uint8_t enter_button(enum BUTTON B) {
+uint8_t enter_button(button_t B) {
 	/*Check if param button is pressed*/
 	controller_button_read();
 	return controls_msg.data[4] == B;
@@ -181,8 +173,8 @@ void play_game() {
 	OLED_clear();
 	
 	/*Show parameters on OLED*/
-	/*OLED_goto_page(2);
-	OLED_goto_column(0);
+	OLED_goto_page(2);
+	OLED_goto_column(1);
 	OLED_print_string_P(PSTR("Params.: Kp = "));
 	char Kp_str[] = "";
 	itoa(config_msg.data[1], Kp_str, 10); //Convert int value to str in order to print to OLED
@@ -198,12 +190,12 @@ void play_game() {
 	OLED_print_string_P(PSTR("Kd = "));
 	char Kd_str[] = "";
 	itoa(config_msg.data[3], Kd_str, 10); //Convert int value to str in order to print to OLED
-	OLED_print_string(Kd_str);*/
+	OLED_print_string(Kd_str);
 
 	/*Show quit message on OLED*/
-	/*OLED_goto_page(7);
-	OLED_goto_column(10);
-	OLED_print_string_P(PSTR("HOLD JOYSTICK TO QUIT"));
+	OLED_goto_page(7);
+	OLED_goto_column(7);
+	OLED_print_string_P(PSTR("PRESS JOYSTICK TO QUIT"));
 
 	/*check if 2 player mode is enabled*/
 	/*OLED_goto_page(5);
@@ -224,8 +216,8 @@ void play_game() {
 		//OLED_print_string_P(PSTR("Opponent score:"));
 	}
 	char score_str[] = "";
-	uint16_t s = 0;
-	OLED_update_image();*/
+	uint16_t s = 0;*/
+	OLED_update_image();
 	/*Loop until joystick is pressed*/
 	do {
 		/*Send all controller inputs by CAN*/
@@ -239,7 +231,6 @@ void play_game() {
 }
 
 void show_slider_selection(uint8_t page) {
-	/*Enable screen refresh at specified refresh rate*/
 	OLED_refresh_enable();
 
 	/*Loop until joystick is pressed*/
@@ -247,11 +238,12 @@ void show_slider_selection(uint8_t page) {
 		/*Read slider input*/
 		controller_slider_read_R();
 
-		/*Disable interrupts to prevent screen flickering*/
-		cli();
+		/*Disable refresh to prevent screen flickering*/
+		OLED_freeze_image();;
 		/*Print Min */
 		OLED_clear_page(page);
 		OLED_goto_page(page);
+		OLED_goto_column(1);
 		OLED_print_string_P(PSTR("Min"));
 
 		/*Print slider indicator*/
@@ -263,7 +255,7 @@ void show_slider_selection(uint8_t page) {
 		OLED_print_string_P(PSTR("Max"));
 
 		/*Enable interrupts*/
-		sei();
+		OLED_refresh_enable();;
 
 		_delay_ms(50);
 	} while (!enter_button(JOYSTICK));
@@ -273,20 +265,20 @@ void show_slider_selection(uint8_t page) {
 }
 
 void show_and_increment_value(char name[], uint8_t def, volatile uint8_t *value, uint8_t page) {
-	/*Enable screen refresh at specified refresh rate*/
 	OLED_refresh_enable();
 
 	/*Loop until joystick is pressed*/
 	do {
 		OLED_clear_page(page);
 		OLED_goto_page(page);
+		OLED_goto_column(1);
 
 		/*Print param value as string*/
 		char val_str[] = "";
 		itoa(*value, val_str, 10);
 
-		/*Disable interrupts to prevent screen flickering*/
-		cli();
+		/*Disable refresh to prevent screen flickering*/
+		OLED_freeze_image();;
 
 		/*Print param name and increment/decrement operators according to joystick input*/
 		OLED_print_string(name);
@@ -309,12 +301,10 @@ void show_and_increment_value(char name[], uint8_t def, volatile uint8_t *value,
 		itoa(def, def_str, 10);
 		OLED_print_string(def_str);
 
-		/*Enable interrupts*/
-		sei();
+		OLED_refresh_enable();;
 		_delay_ms(50);
 	} while (!enter_button(JOYSTICK));
 
-	/*Freeze image*/
 	OLED_freeze_image();
 }
 
@@ -332,35 +322,48 @@ char* ScreenSaver[] = {
 	ss0, ss1, ss2, ss3, ss4, ss5, ss6, ss7,
 };
 */
-void OLED_screensaver() {
+uint16_t rand_seed = 0;
+void screensaver() {
 	OLED_refresh_enable();
 	OLED_clear();
-	
+
+	/*Set random start point*/
+	srand(rand_seed);
 	uint8_t x_pos = rand() % 128;
 	uint8_t y_pos = rand() % 64;
+	uint8_t x_dir = 0xFF;
+	uint8_t y_dir = 0xFF;
+	
+	/*Loop screensaver until joystick is pressed*/
+	do {
+		/*Disable screen refresh to prevent screen flickering*/
+		OLED_freeze_image();
 
-	while(1) {
-		cli();
-		if (x_pos > 127) {
-			x_pos = 0;
-		} else if (y_pos > 63) {
-			y_pos = 0;
+		/*Calculate next pixel positon and set pixel*/
+		if (x_pos == 127 || x_pos == 0) {
+			x_dir = ~x_dir;
 		}
-		OLED_set_pixel(x_pos++, y_pos++);
-		sei();
-		_delay_ms(1);
-	}
+		if (y_pos == 63 || y_pos == 0) {
+			y_dir = ~y_dir;
+		}
+		OLED_set_pixel(
+			x_dir ? x_pos++ : x_pos--,
+			y_dir ? y_pos++ : y_pos--, 1);
+
+		OLED_refresh_enable();
+		_delay_us(10);
+	} while (!enter_button(JOYSTICK));
 
 	OLED_freeze_image();
 }
 
-uint8_t OLED_FSM(enum menu_options *option) {
+uint8_t FSM(menu_option_t *option) {
 	uint8_t screen = *option / 8;
 
 	/*Traverse up and down on screen*/
-	_delay_ms(200);
+	_delay_ms(50);
 	if (enter_joystick_d()) {
-		/*Loop if option ar header or empty line*/
+		/*Loop if option at header or empty line*/
 		do {
 			/*Increment option and loop to top if option "below" screen*/
 			*option = screen * 8 + (*option + 1) % 8;
@@ -382,7 +385,6 @@ uint8_t OLED_FSM(enum menu_options *option) {
 		case (HOME1):
 			if (enter_joystick_r())
 			    {
-					printf("1");
 				/*Set node 2 to RUN state and send by CAN*/
 				node2_state_msg.data[0] = 1;
 				CAN_write_message(node2_state_msg);
@@ -453,9 +455,9 @@ uint8_t OLED_FSM(enum menu_options *option) {
 				OLED_goto_page(*option % 8);
 				OLED_goto_column(70);
 				if (config_msg.data[4]) {
-					//OLED_print_string_inverted_P(PSTR("True"));
+					OLED_print_string_inverted_P(PSTR("True"));
 				} else {
-					//OLED_print_string_inverted_P(PSTR("False"));
+					OLED_print_string_inverted_P(PSTR("False"));
 				}
 				OLED_update_image();
 				_delay_ms(1000);
@@ -474,9 +476,9 @@ uint8_t OLED_FSM(enum menu_options *option) {
 				OLED_goto_page(*option % 8);
 				OLED_goto_column(70);
 				if (config_msg.data[5]) {
-					//OLED_print_string_inverted_P(PSTR("True"));
+					OLED_print_string_inverted_P(PSTR("True"));
 				} else {
-					//OLED_print_string_inverted_P(PSTR("False"));
+					OLED_print_string_inverted_P(PSTR("False"));
 				}
 				OLED_update_image();
 				_delay_ms(1000);
@@ -548,8 +550,8 @@ uint8_t OLED_FSM(enum menu_options *option) {
 		case (PARAM3):
 			if (enter_joystick_r() || enter_joystick_l()) {
 				/*Show value and let user increment value, configure node 2 and send by CAN*/
-				/*show_and_increment_value("Kd", CONF_DEFAULT_Kd, &config_msg.data[3], *option % 8);
-				CAN_write_message(config_msg);*/
+				show_and_increment_value("Kd", CONF_DEFAULT_Kd, &config_msg.data[3], *option % 8);
+				CAN_write_message(config_msg);
 				return REDRAW_SCREEN;
 			}
 			break;
@@ -558,16 +560,18 @@ uint8_t OLED_FSM(enum menu_options *option) {
 		case (PARAM_RETURN):
 			if (enter_joystick_r()) {
 				/*Return to motor screen*/
-				*option = MOTOR1; //Return to motor screen
+				*option = MOTOR1;
 				return REDRAW_SCREEN;
 			}
 			break;
 
 		/*Home->Extras: Screensaver*/
 		case (EXTRAS1):
+			/*Alternative solution to time() as seed to srand()*/
+			rand_seed++;
 			if (enter_joystick_r()) {
 				/*Show screensaver*/
-				OLED_screensaver();
+				screensaver();
 				return REDRAW_SCREEN;
 			}
 			break;
@@ -579,10 +583,10 @@ uint8_t OLED_FSM(enum menu_options *option) {
 				OLED_goto_page(*option % 8);
 				OLED_goto_column(65);
 				if (!game_mode) {
-					//OLED_print_string_inverted_P(PSTR("True"));
+					OLED_print_string_inverted_P(PSTR("True"));
 					game_mode = 1;
 				} else {
-					//OLED_print_string_inverted_P(PSTR("False"));
+					OLED_print_string_inverted_P(PSTR("False"));
 					game_mode = 0;
 				}
 				OLED_update_image();
@@ -627,13 +631,13 @@ void OLED_interface() {
 	CAN_write_message(config_msg);
 
 	/*Set first option to top of home screen (HOME1)*/
-	enum menu_options option = HOME1;
+	menu_option_t option = HOME1;
 	while(1) {
 		/*Print entire screen*/
 		for (int page = 0; page < 8; page++) {
-			OLED_goto_column(0);
 			OLED_clear_page(page);
 			OLED_goto_page(page);
+			OLED_goto_column(1);
 			OLED_print_string_P(menu_string_pointers[(option / 8) * 8 + page]);
 		}
 		
@@ -643,6 +647,6 @@ void OLED_interface() {
 		OLED_update_image();
 		
 		/*Run FSM until REDRAW_SCREEN is passed*/
-		while (!OLED_FSM(&option));
+		while (!FSM(&option));
 	}
 }
