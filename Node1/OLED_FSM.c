@@ -154,37 +154,37 @@ void OLED_FSM_initialize(uint8_t refresh_rate) {
 	CAN_write_message(config_msg);
 }
 
-uint8_t enter_joystick_r() {
+uint8_t OLED_FSM_enter_joystick_r() {
 	/*Read joystick input and check if over treshold*/
 	controller_joystick_read_X();
 	return controls_msg.data[0] > 200;
 }
 
-uint8_t enter_joystick_l() {
+uint8_t OLED_FSM_enter_joystick_l() {
 	/*Read joystick input and check if over treshold*/
 	controller_joystick_read_X();
 	return controls_msg.data[0] < 50;
 }
 
-uint8_t enter_joystick_u() {
+uint8_t OLED_FSM_enter_joystick_u() {
 	/*Read joystick input and check if over treshold*/
 	controller_joystick_read_Y();
 	return controls_msg.data[1] > 200;
 }
 
-uint8_t enter_joystick_d() {
+uint8_t OLED_FSM_enter_joystick_d() {
 	/*Read joystick input and check if over treshold*/
 	controller_joystick_read_Y();
 	return controls_msg.data[1] < 50;
 }
 
-uint8_t enter_button(button_t B) {
+uint8_t OLED_FSM_enter_button(button_t B) {
 	/*Check if param button is pressed*/
 	controller_button_read();
 	return controls_msg.data[4] == B;
 }
 
-void play_game() {
+void OLED_FSM_play_game() {
 	OLED_clear();
 	
 	/*Show parameters on OLED*/
@@ -248,7 +248,7 @@ void play_game() {
 		OLED_print_string(score_str);
 		OLED_update_image();
 		controller_CAN_send();
-	} while (!enter_button(JOYSTICK));
+	} while (!OLED_FSM_enter_button(JOYSTICK));
 	if(!game_mode){
 		score = time;
 	}
@@ -264,16 +264,16 @@ void play_game() {
 	OLED_print_string(score_str);
 	OLED_update_image();
 	_delay_ms(2000);
-	while (!enter_button(JOYSTICK)){}
+	while (!OLED_FSM_enter_button(JOYSTICK)){}
 }
 
-void show_slider_selection(uint8_t page) {
+void OLED_FSM_show_slider_selection(uint8_t page) {
 	OLED_refresh_enable();
 
 	/*Loop until joystick is pressed*/
 	do {
 		/*Read slider input*/
-		controller_slider_read_R();
+		OLED_FSM_controller_slider_read_R();
 
 		/*Disable refresh to prevent screen flickering*/
 		OLED_freeze_image();
@@ -296,7 +296,7 @@ void show_slider_selection(uint8_t page) {
 		OLED_refresh_enable();
 
 		_delay_ms(50);
-	} while (!enter_button(JOYSTICK));
+	} while (!OLED_FSM_enter_button(JOYSTICK));
 
 	/*Freeze image*/
 	OLED_freeze_image();
