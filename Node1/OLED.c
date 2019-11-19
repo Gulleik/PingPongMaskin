@@ -319,22 +319,6 @@ void OLED_invert_page(uint8_t page) {
 	}
 }
 
-// void OLED_scroll() {
-// 	/*Write new data to SRAM memory*/
-// 	volatile uint8_t *ext_OLED_mem = (uint8_t *) SRAM_OLED_BASE_ADDR;
-
-// 	uint8_t temp = ext_OLED_mem[1023];
-// 	for (uint8_t column = 127; column >= 0; column--) {
-// 		if (page == 0 && column == 0) {
-// 			ext_OLED_mem[0] = temp;
-// 			break;
-// 		}
-
-// 		/*Scroll individual OLED byte one position right*/
-// 		ext_OLED_mem[page * 128 + column] = ext_OLED_mem[page * 128 + column - 1];
-// 	}
-// }
-
 /*************************************************************
  * REFRESH
 *************************************************************/
