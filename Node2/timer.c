@@ -65,6 +65,9 @@ void timer_initialize() {
 
     /*Enable global interrupts in case this has not been done already*/
     sei();
+
+    controller_interrupt = 0;
+    IR_interrupt = 0;
 }
 
 void timer_enable(timer_t timer) {

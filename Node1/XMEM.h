@@ -14,6 +14,11 @@
  * @brief Driver for external memory functionality
 */
 
+// /**
+//  * @brief Initialize communication with external memory
+// */
+// void XMEM_initialize()
+
 /**
  * @brief Tests that SRAM is connected properly and operational.
 */

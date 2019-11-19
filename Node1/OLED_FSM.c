@@ -130,8 +130,8 @@ volatile uint8_t game_mode = 0;
 *****************************************************************************************/
 
 void OLED_FSM_initialize(uint8_t refresh_rate) {
-	/*Initialize OLED*/
     OLED_initialize(refresh_rate);
+	controller_initialize();
 
     /*Initialize CAN messages*/
 	node2_state_msg.ID = NODE2_STATE;
@@ -243,7 +243,6 @@ void play_game() {
 		}
 		OLED_goto_page(6);
 		OLED_goto_column(100);
-		printf("X: %d ", score);
 		itoa(game_mode ? score : time, score_str, 10);
 		OLED_print_string(score_str);
 		OLED_update_image();

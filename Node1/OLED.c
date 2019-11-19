@@ -126,7 +126,7 @@ void OLED_write_d(uint8_t data) {
 }
 
 void OLED_append_d(uint8_t data, uint8_t inverted) {
-	/*Append to new data to SRAM memory*/
+	/*Append new data to SRAM memory*/
 	uint8_t *ext_OLED_mem = (uint8_t *) SRAM_OLED_BASE_ADDR;
 	if (inverted) {
 		ext_OLED_mem[current_page * 128 + current_column] ^= data;

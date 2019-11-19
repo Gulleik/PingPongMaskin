@@ -1,5 +1,5 @@
 # List all source files to be compiled; separate with space
-SOURCE_FILES := NODE1_main.c UART.c ADC.c controller.c OLED.c OLED_interface.c SPI.c MCP.c CAN.c XMEM.c timer.c
+SOURCE_FILES := NODE1_main.c UART.c ADC.c controller.c OLED.c OLED_FSM.c SPI.c MCP.c CAN.c XMEM.c timer.c
 
 # Set this flag to "yes" (no quotes) to use JTAG; otherwise ISP (SPI) is used
 PROGRAM_WITH_JTAG := yes

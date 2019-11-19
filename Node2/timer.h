@@ -10,8 +10,8 @@
  * @brief Driver to handle timer interrups
 */
 
-volatile uint8_t controller_interrupt = 0; /** < @brief variable to check if timer_interrupt have been triggered, val = 1 if triggered */
-volatile  uint8_t IR_interrupt = 0; /** < @brief variable to check if ir_timer_interrupt have been triggered, val = 1 if triggered */
+volatile uint8_t controller_interrupt; /** < @brief variable to check if timer_interrupt have been triggered, val = 1 if triggered */
+volatile uint8_t IR_interrupt; /** < @brief variable to check if ir_timer_interrupt have been triggered, val = 1 if triggered */
 
 /**
  * @brief Enum to differentiate timers

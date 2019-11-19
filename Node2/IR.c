@@ -47,7 +47,7 @@ ISR(ADC_vect) {
         reset = 1;
     }
     //printf("ADCH: %d\n\r", temp);
-    if(!(temp > 50) && reset){
+    if(!(temp > 30) && reset){
         CAN_write_message(score_msg);
         reset = 0;
     }; //Min: 0, Max: 255
