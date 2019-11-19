@@ -104,13 +104,13 @@ const unsigned char PROGMEM font5[95][5] = {
 *************************************************************/
 void OLED_write_c(uint8_t command) {
 	/*Write to OLED command*/
-	uint8_t *ext_OLED = (uint8_t *) OLED_COMMAND_BASE_ADDR;
+	volatile uint8_t *ext_OLED = (uint8_t *) OLED_COMMAND_BASE_ADDR;
 	ext_OLED[0] = command;
 }
 
 void OLED_write_d(uint8_t data) {
 	/*Write new data to SRAM memory*/
-	uint8_t *ext_OLED_mem = (uint8_t *) SRAM_OLED_BASE_ADDR;
+	volatile uint8_t *ext_OLED_mem = (uint8_t *) SRAM_OLED_BASE_ADDR;
 	ext_OLED_mem[current_page * 128 + current_column] = data;
 
 	/*Update current_column and current_page variables*/
@@ -298,6 +298,12 @@ void OLED_clear(){
 			OLED_write_d(0x00);
 		}
 	}
+	// uint8_t *ext_OLED_mem = (uint8_t *) SRAM_OLED_BASE_ADDR;
+	// for (uint8_t i = 0; i<8; i++){
+	// 	for (uint8_t f = 0; f<128;f++){
+	// 		printf("p: %d, c: %d, SRAM data: %d\n\r", i, f, ext_OLED_mem[i * 128 + f]);
+	// 	}
+	// }
 }
 
 void OLED_clear_page(uint8_t page){
@@ -333,8 +339,8 @@ void OLED_freeze_image() {
 }
 
 void OLED_update_image() {
-	volatile char *ext_OLED_mem = (char *) SRAM_OLED_BASE_ADDR;
-	volatile char *ext_OLED = (char *) OLED_DATA_BASE_ADDR;
+	uint8_t *ext_OLED_mem = (uint8_t *) SRAM_OLED_BASE_ADDR;
+	uint8_t *ext_OLED = (uint8_t *) OLED_DATA_BASE_ADDR;
 	uint8_t temp_col = current_column;
 	uint8_t temp_page = current_page;
 	OLED_reset_position();

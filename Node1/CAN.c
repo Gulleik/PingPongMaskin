@@ -56,5 +56,6 @@ void CAN_receive_message(){
 ISR(INT0_vect){
     cli();
     CAN_receive_message();
+    printf("int");
     sei();
 }

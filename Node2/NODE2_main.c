@@ -40,16 +40,13 @@ int main(void)
 	config_msg.ID = CONFIG;
 
     while(1) {
-        printf("STATE: %d CONFIGS: speed = %d, Kp = %d, Ki = %d, Kd = %d, Inv_ser = %d, Inv_mot = %d\n\r",
-            node2_state_msg.data[0],
-            config_msg.data[0],
-            config_msg.data[1],
-            config_msg.data[2],
-            config_msg.data[3],
-            config_msg.data[4],
-            config_msg.data[5]
-        );
-
+        printf("X: %d, Y: %d, SL: %d, SR: %d, B: %d\n\r",
+                controls_msg.data[0],
+                controls_msg.data[1],
+                controls_msg.data[2],
+                controls_msg.data[3],
+                controls_msg.data[4]
+                );
         switch (node2_state_msg.data[0]) {
             case STATE_IDLE:
                 if (prev_state != STATE_IDLE) {

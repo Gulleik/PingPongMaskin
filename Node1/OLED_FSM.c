@@ -152,6 +152,9 @@ void OLED_FSM_initialize(uint8_t refresh_rate) {
 	CAN_write_message(node2_state_msg);
 	_delay_ms(1);
 	CAN_write_message(config_msg);
+
+	/*Enable game timer*/
+	timer_game_enable();
 }
 
 uint8_t OLED_FSM_enter_joystick_r() {
@@ -186,7 +189,7 @@ uint8_t OLED_FSM_enter_button(button_t B) {
 
 void OLED_FSM_play_game() {
 	OLED_clear();
-	
+
 	/*Show parameters on OLED*/
 	OLED_goto_page(2);
 	OLED_goto_column(1);
@@ -195,8 +198,7 @@ void OLED_FSM_play_game() {
 	itoa(config_msg.data[1], Kp_str, 10); //Convert int value to str in order to print to OLED
 	OLED_print_string(Kp_str);
 	OLED_goto_page(3);
-	OLED_goto_column(45);    printf("\tUART\t\tOK\r\n");
-    printf("\tCAN");
+	OLED_goto_column(45);
 	OLED_print_string_P(PSTR("Ki = "));
 	char Ki_str[] = "";
 	itoa(config_msg.data[2], Ki_str, 10); //Convert int value to str in order to print to OLED
@@ -230,13 +232,17 @@ void OLED_FSM_play_game() {
 	} else{
 		OLED_print_string_P(PSTR("Score:"));
 	}
-	char score_str[] = "";
+
 	_delay_ms(2000);
 	time = 0;
 	score = 0;
-	OLED_update_image();
+	OLED_refresh_enable();
+	
 	/*Loop until joystick is pressed*/
+	char score_str[] = "";
 	do {
+		/*Disable interrupts to prevent screen flickering*/
+		OLED_freeze_image();
 		/*Send all controller inputs by CAN*/
 		if(!game_mode && score){
 			break;
@@ -247,10 +253,17 @@ void OLED_FSM_play_game() {
 		OLED_print_string(score_str);
 		OLED_update_image();
 		controller_CAN_send();
+
+		/*Enable interrupts*/
+		OLED_refresh_enable();
 	} while (!OLED_FSM_enter_button(JOYSTICK));
 	if(!game_mode){
 		score = time;
 	}
+	/*Disable interrupts to prevent screen flickering*/
+	OLED_freeze_image();
+
+	/* print end game results*/
 	OLED_clear();
 	OLED_goto_page(0);
 	OLED_goto_column(1);
@@ -261,8 +274,11 @@ void OLED_FSM_play_game() {
 	OLED_goto_column(50);
 	itoa(score, score_str, 10);
 	OLED_print_string(score_str);
-	OLED_update_image();
+	
+	/*Enable interrupts*/
+	OLED_refresh_enable();
 	_delay_ms(2000);
+	
 	while (!OLED_FSM_enter_button(JOYSTICK)){}
 }
 
@@ -272,7 +288,7 @@ void OLED_FSM_show_slider_selection(uint8_t page) {
 	/*Loop until joystick is pressed*/
 	do {
 		/*Read slider input*/
-		OLED_FSM_controller_slider_read_R();
+		controller_slider_read_R();
 
 		/*Disable refresh to prevent screen flickering*/
 		OLED_freeze_image();
@@ -319,14 +335,14 @@ void show_and_increment_value(char name[], uint8_t def, volatile uint8_t *value,
 
 		/*Print param name and increment/decrement operators according to joystick input*/
 		OLED_print_string(name);
-		if (enter_joystick_l()) {
+		if (OLED_FSM_enter_joystick_l()) {
 			*value -= 5;
 			OLED_print_string_P(PSTR(" - "));
 		} else {
 			OLED_print_string_P(PSTR("   "));
 		}
 		OLED_print_string(val_str);
-		if (enter_joystick_r()) {
+		if (OLED_FSM_enter_joystick_r()) {
 			*value += 5;
 			OLED_print_string_P(PSTR(" +"));
 		}
@@ -340,7 +356,7 @@ void show_and_increment_value(char name[], uint8_t def, volatile uint8_t *value,
 
 		OLED_refresh_enable();
 		_delay_ms(50);
-	} while (!enter_button(JOYSTICK));
+	} while (!OLED_FSM_enter_button(JOYSTICK));
 
 	OLED_freeze_image();
 }
@@ -374,7 +390,7 @@ void screensaver() {
 
 		OLED_refresh_enable();
 		_delay_us(100);
-	} while (!enter_button(JOYSTICK));
+	} while (!OLED_FSM_enter_button(JOYSTICK));
 
 	OLED_freeze_image();
 }
@@ -384,7 +400,7 @@ uint8_t OLED_FSM(menu_option_t *option) {
 
 	/*Traverse up and down on screen*/
 	_delay_ms(150);
-	if (enter_joystick_d()) {
+	if (OLED_FSM_enter_joystick_d()) {
 		/*Loop if option at header or empty line*/
 		do {
 			/*Increment option and loop to top if option "below" screen*/
@@ -392,7 +408,7 @@ uint8_t OLED_FSM(menu_option_t *option) {
 		} while (pgm_read_byte(menu_string_pointers[*option]) == 0x00 || *option % 8 == 0);
 		return REDRAW_SCREEN;
 	}
-	else if (enter_joystick_u()) {
+	else if (OLED_FSM_enter_joystick_u()) {
 		/*Loop if option at header or empty line*/
 		do {
 			/*Increment option and loop to bottom if option "above" screen*/
@@ -405,14 +421,14 @@ uint8_t OLED_FSM(menu_option_t *option) {
 	switch (*option) {
 		/*Home: Play Game*/
 		case (HOME1):
-			if (enter_joystick_r())
+			if (OLED_FSM_enter_joystick_r())
 			    {
 				/*Set node 2 to RUN state and send by CAN*/
 				node2_state_msg.data[0] = 1;
 				CAN_write_message(node2_state_msg);
 
-				/*Initiate main play_game function*/
-				play_game();
+				/*Initiate main OLED_FSM_play_game function*/
+				OLED_FSM_play_game();
 
 				/*Set node 2 to IDLE state*/
 				node2_state_msg.data[0] = 0;
@@ -423,7 +439,7 @@ uint8_t OLED_FSM(menu_option_t *option) {
 
 		/*Home: Options*/
 		case (HOME2):
-			if (enter_joystick_r()) {
+			if (OLED_FSM_enter_joystick_r()) {
 				/*Goto options screen*/
 				*option = OPTIONS1;
 				return REDRAW_SCREEN;
@@ -432,7 +448,7 @@ uint8_t OLED_FSM(menu_option_t *option) {
 
 		/*Home: Extras*/
 		case (HOME3):
-			if (enter_joystick_r()) {
+			if (OLED_FSM_enter_joystick_r()) {
 				/*Goto extras screen*/
 				*option = EXTRAS1;
 				return REDRAW_SCREEN;
@@ -441,7 +457,7 @@ uint8_t OLED_FSM(menu_option_t *option) {
 
 		/*Home->Options: Controls*/
 		case (OPTIONS1):
-			if (enter_joystick_r()) {
+			if (OLED_FSM_enter_joystick_r()) {
 				/*Goto controls screen*/
 				*option = CONTROLS1;
 				return REDRAW_SCREEN;
@@ -450,7 +466,7 @@ uint8_t OLED_FSM(menu_option_t *option) {
 
 		/*Home->Options: Motor*/
 		case (OPTIONS2):
-			if (enter_joystick_r()) {
+			if (OLED_FSM_enter_joystick_r()) {
 				/*Goto motor screen*/
 				*option = MOTOR1;
 				return REDRAW_SCREEN;
@@ -459,7 +475,7 @@ uint8_t OLED_FSM(menu_option_t *option) {
 
 		/*Home->Options: Return*/
 		case (OPTIONS_RETURN):
-			if (enter_joystick_r()) {
+			if (OLED_FSM_enter_joystick_r()) {
 				/*Return to home screen*/
 				*option = HOME2;
 				return REDRAW_SCREEN;
@@ -468,7 +484,7 @@ uint8_t OLED_FSM(menu_option_t *option) {
 
 		/*Home->Options->Controls: Invert servo*/
 		case (CONTROLS1):
-			if (enter_joystick_r()) {
+			if (OLED_FSM_enter_joystick_r()) {
 				/*Confure node 2 servo dir and send by CAN*/
 				config_msg.data[4] = ~config_msg.data[4];
 				CAN_write_message(config_msg);
@@ -489,7 +505,7 @@ uint8_t OLED_FSM(menu_option_t *option) {
 
 		/*Home->Options->Controls: Invert motor*/
 		case (CONTROLS2):
-			if (enter_joystick_r()) {
+			if (OLED_FSM_enter_joystick_r()) {
 				/*Confure node 2 motor dir and send by CAN*/
 				config_msg.data[5] = ~config_msg.data[5];
 				CAN_write_message(config_msg);
@@ -510,7 +526,7 @@ uint8_t OLED_FSM(menu_option_t *option) {
 
 		/*Home->Options->Controls: Return*/
 		case (CONTROLS_RETURN):
-			if (enter_joystick_r()) {
+			if (OLED_FSM_enter_joystick_r()) {
 				/*Return to options screen*/
 				*option = OPTIONS1;
 				return REDRAW_SCREEN;
@@ -519,9 +535,9 @@ uint8_t OLED_FSM(menu_option_t *option) {
 
 		/*Home->Options->Motor: Top speed*/
 		case (MOTOR1):
-			if (enter_joystick_r()) {
+			if (OLED_FSM_enter_joystick_r()) {
 				/*Show slider selection and let user select*/
-				show_slider_selection(*option % 8);
+				OLED_FSM_show_slider_selection(*option % 8);
 
 				/*Configure node 2 top speed and send by CAN*/
 				config_msg.data[0] = controls_msg.data[3]; // Configure node 2 top speed
@@ -532,7 +548,7 @@ uint8_t OLED_FSM(menu_option_t *option) {
 
 		/*Home->Options->Motor: Controller params*/
 		case (MOTOR2):
-			if (enter_joystick_r()) {
+			if (OLED_FSM_enter_joystick_r()) {
 				/*Goto params screen*/
 				*option = PARAM1;
 				return REDRAW_SCREEN;
@@ -541,7 +557,7 @@ uint8_t OLED_FSM(menu_option_t *option) {
 
 		/*Home->Options->Motor: Return*/
 		case (MOTOR_RETURN):
-			if (enter_joystick_r()) {
+			if (OLED_FSM_enter_joystick_r()) {
 				/*Return to options screen*/
 				*option = OPTIONS2;
 				return REDRAW_SCREEN;
@@ -550,7 +566,7 @@ uint8_t OLED_FSM(menu_option_t *option) {
 
 		/*Home->Options->Motor: Kp*/
 		case (PARAM1):
-			if (enter_joystick_r() || enter_joystick_l()) {
+			if (OLED_FSM_enter_joystick_r() || OLED_FSM_enter_joystick_l()) {
 				/*Show value and let user increment value, configure node 2 and send by CAN*/
 				show_and_increment_value("Kp", CONF_DEFAULT_Kp, &config_msg.data[1], *option % 8);
 				CAN_write_message(config_msg);
@@ -560,7 +576,7 @@ uint8_t OLED_FSM(menu_option_t *option) {
 
 		/*Home->Options->Motor: Ki*/
 		case (PARAM2):
-			if (enter_joystick_r() || enter_joystick_l()) {
+			if (OLED_FSM_enter_joystick_r() || OLED_FSM_enter_joystick_l()) {
 				/*Show value and let user increment value, configure node 2 and send by CAN*/
 				show_and_increment_value("Ki", CONF_DEFAULT_Ki, &config_msg.data[2], *option % 8);
 				CAN_write_message(config_msg);
@@ -570,7 +586,7 @@ uint8_t OLED_FSM(menu_option_t *option) {
 
 		/*Home->Options->Motor: Kd*/
 		case (PARAM3):
-			if (enter_joystick_r() || enter_joystick_l()) {
+			if (OLED_FSM_enter_joystick_r() || OLED_FSM_enter_joystick_l()) {
 				/*Show value and let user increment value, configure node 2 and send by CAN*/
 				show_and_increment_value("Kd", CONF_DEFAULT_Kd, &config_msg.data[3], *option % 8);
 				CAN_write_message(config_msg);
@@ -580,7 +596,7 @@ uint8_t OLED_FSM(menu_option_t *option) {
 
 		/*Home->Options->Motor: Return*/
 		case (PARAM_RETURN):
-			if (enter_joystick_r()) {
+			if (OLED_FSM_enter_joystick_r()) {
 				/*Return to motor screen*/
 				*option = MOTOR1;
 				return REDRAW_SCREEN;
@@ -589,7 +605,7 @@ uint8_t OLED_FSM(menu_option_t *option) {
 
 		/*Home->Extras: Screensaver*/
 		case (EXTRAS1):
-			if (enter_joystick_r()) {
+			if (OLED_FSM_enter_joystick_r()) {
 				/*Show screensaver*/
 				screensaver();
 				return REDRAW_SCREEN;
@@ -598,7 +614,7 @@ uint8_t OLED_FSM(menu_option_t *option) {
 
 		/*Home->Extras: 2 player mode */
 		case (EXTRAS2):
-			if (enter_joystick_r()) {
+			if (OLED_FSM_enter_joystick_r()) {
 				/*Print Selection to screen*/
 				OLED_goto_page(*option % 8);
 				OLED_goto_column(70);
@@ -617,7 +633,7 @@ uint8_t OLED_FSM(menu_option_t *option) {
 
 		/*Home->Extras: Return*/
 		case (EXTRAS_RETURN):
-			if (enter_joystick_r()) {
+			if (OLED_FSM_enter_joystick_r()) {
 				/*Return to home screen*/
 				*option = HOME1;
 				return REDRAW_SCREEN;

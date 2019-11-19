@@ -2,6 +2,10 @@
     "files.associations": {
         "mcp.h": "c",
         "controller.h": "c",
-        "can.h": "c"
+        "can.h": "c",
+        "spi.h": "c",
+        "array": "c",
+        "string": "c",
+        "timer.h": "c"
     }
 }

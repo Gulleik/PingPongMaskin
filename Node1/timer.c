@@ -67,7 +67,6 @@ void timer_initialize(uint8_t refresh_rate) {
     /*Initially disable interrupt*/
     ETIMSK &= ~(1 << OCIE3A);
 
-
     /*Enable global interrupts in case this has not been done already*/
     sei();
 }

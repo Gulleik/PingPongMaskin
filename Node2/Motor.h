@@ -13,10 +13,10 @@
 #define OE PH5
 #define RST PH6
 
-#define F_CPU 16000000 // clock frequency in Hz
+// #define F_CPU 16000000 // clock frequency in Hz
 
+// #include <util/delay.h>
 #include <avr/io.h>
-#include <util/delay.h>
 #include <stdlib.h>
 #include <stdint.h>
 #include "TWI_Master.h"

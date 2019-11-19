@@ -4,7 +4,7 @@ void controller_initialize() {
     CAN_initialize();
 
     /*Set pin 1, 2 and 3 on port B as input*/
-    DDRB &= ~((1 << DDB1) | ~(1 << DDB2) | ~(1 << DDB3));
+    DDRB &= ~((1 << DDB1) | (1 << DDB2) | (1 << DDB3));
 }
 
 void controller_joystick_read_X(){

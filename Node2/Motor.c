@@ -1,5 +1,9 @@
 #include "Motor.h"
 
+#define F_CPU 16000000 // clock frequency in Hz
+
+#include <util/delay.h>
+
 uint16_t MAX_pos;
 uint16_t MIN_pos;
 int16_t i_error = 0;

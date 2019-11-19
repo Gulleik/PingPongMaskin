@@ -46,7 +46,7 @@ ISR(ADC_vect) {
     if( temp > 50){
         reset = 1;
     }
-    //printf("ADCH: %d\n\r", temp);
+    
     if(!(temp > 30) && reset){
         CAN_write_message(score_msg);
         reset = 0;
