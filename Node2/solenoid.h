@@ -8,7 +8,7 @@
 
 /**
  * @file
- * @brief Solenoid driver
+ * @brief NODE2 Solenoid driver
 */
 
 /**

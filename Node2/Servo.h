@@ -6,7 +6,7 @@
 
 /**
  * @file
- * @brief Servo driver
+ * @brief NODE2 Servo driver
 */
 
 /**

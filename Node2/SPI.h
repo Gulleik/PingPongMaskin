@@ -6,7 +6,7 @@
 
 /**
  * @file
- * @brief SPI driver NODE2
+ * @brief NODE2 SPI driver
 */
 
 #define DD_CS PB0
@@ -20,13 +20,13 @@ void SPI_master_initialize();
 
 /**
  * @brief Write one byte on SPI bus.
- * @param data; One byte of data
+ * @param data; Data to be written on SPI bus.
 */
 void SPI_write_byte(uint8_t data);
 
 /**
  * @brief Read one byte of data from SPI bus.
- * @return One byte of data
+ * @return Data read from SPI bus.
 */
 uint8_t SPI_read_byte();
 

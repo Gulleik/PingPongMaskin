@@ -6,7 +6,7 @@
 
 /**
  * @file
- * @brief Driver for controller input
+ * @brief NODE1 Driver for controller input
 */
 
 /**

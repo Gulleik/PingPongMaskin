@@ -5,10 +5,13 @@
 
 /**
  * @file
- * @brief IR driver
+ * @brief NODE2 IR driver
 */
 
-int8_t is_blocked; /** @brief Status of IR sensor */
+/** 
+ * @brief Status of IR sensor
+*/
+int8_t is_blocked;
 
 /**
  * @brief Initialize IR sensor at ADC1.

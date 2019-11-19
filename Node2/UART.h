@@ -5,7 +5,7 @@
 
 /**
  * @file
- * @brief UART driver NODE2
+ * @brief NODE2 UART driver
 */
 
 /**
@@ -15,7 +15,7 @@ void UART_initialize();
 
 /**
  * @brief Listen to UART interface and recieve data
- * @return Recieved data
+ * @return Data received from UART interface
 */
 unsigned char UART_receive();
 

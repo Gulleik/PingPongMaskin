@@ -15,7 +15,7 @@ Copyright 2003 Kimberly Otten Software Consulting
 
 /**
  * @file
- * @brief Collection of MCP register MAKROs 
+ * @brief NODE1 Collection of MCP register Macros 
 */
 
 // Define MCP2515 register addresREADses

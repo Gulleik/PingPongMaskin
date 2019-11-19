@@ -7,11 +7,11 @@
 
 /**
  * @file
- * @brief Driver to handle timer interrups
+ * @brief NODE2 Driver to handle timer interrupts
 */
 
 volatile uint8_t controller_interrupt = 0; /** < @brief variable to check if timer_interrupt have been triggered, val = 1 if triggered */
-volatile  uint8_t IR_interrupt = 0; /** < @brief variable to check if ir_timer_interrupt have been triggered, val = 1 if triggered */
+volatile uint8_t IR_interrupt = 0; /** < @brief variable to check if ir_timer_interrupt have been triggered, val = 1 if triggered */
 
 /**
  * @brief Enum to differentiate timers
@@ -21,19 +21,19 @@ enum TIMER {
 } typedef timer_t;
 
 /**
- * @brief Initialize Timer interrupts
+ * @brief Initialize timer interrupts
 */
 void timer_initialize();
 
 /**
  * @brief Turns on timer interrupt
- * @param timer; timer to be enabeled
+ * @param timer; timer to be enabled
 */
 void timer_enable(timer_t timer);
 
 /**
  * @brief Turns off timer interrupt
- * @param timer; timer to be disabeled
+ * @param timer; timer to be disabled
 */
 void timer_disable(timer_t timer);
 

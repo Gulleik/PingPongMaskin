@@ -9,7 +9,7 @@
 
 /**
  * @file
- * @brief MCP driver NODE2
+ * @brief NODE2 MCP driver
 */
 
 /**
@@ -23,13 +23,14 @@ void MCP_initialize();
 void MCP_reset();
 
 /**
- *  @brief Reads data from the AVR
- * @param address; The adress that is to be read from
+ * @brief Reads data from the AVR
+ * @param address; The address that is to be read from
+ * @return Returns the data read from the specified address.
 */
 uint8_t MCP_read(uint8_t address);
 
 /**
- *  @brief Write data to a spesific address on the AVR
+ * @brief Write data to a spesific address on the AVR
  * @param address; The adress that is to be written to
  * @param data; Data that is to be written
 */
@@ -43,14 +44,11 @@ void MCP_Request_To_Send(uint8_t buffer);
 
 
 /**
- * @brief Modify data on a spesific address
- * @param addres; The address to read from.
+ * @brief Modify data in a specific address
+ * @param address; The address where data is to be modified.
+ * @param mask; Specifies which bits are to be modified.
+ * @param data; The data that is to be masked and written to given address.
 */
 void MCP_bit_modify(uint8_t address, uint8_t mask, uint8_t data);
-
-/**
- * @brief Read status of MCP
-*/
-uint8_t MCP_read_status();
 
 #endif
