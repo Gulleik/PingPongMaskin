@@ -12,13 +12,13 @@
 
 /**
  * @file
- * @brief ADC driver for controller input
+ * @brief NODE1 ADC driver for controller input
 */
 
 /**
- * @brief Listen to data BUS and recieve converted ADC data
+ * @brief Listen to data bus and receive converted data
  * @param channel; ADC-channel to be read from
- * @return Recieved data
+ * @return Returns the data recieved
 */
 uint8_t ADC_read(uint8_t * channel);
 

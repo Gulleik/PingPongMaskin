@@ -14,17 +14,17 @@
 
 /**
  * @file
- * @brief Oled interface driver
+ * @brief NODE1 OLED interface driver
 */
 
 /**
- * @brief Initialize all modules that the OLED FSM relies on, and configure node2 to default values.
- * @param refresh_rate; Specifies refresh rate of OLED screen, used in OLED initialization
+ * @brief Initialize all modules that OLED FSM relies on, and configure NODE2 to default values.
+ * @param refresh_rate; Specifies refresh rate of OLED screen, used in OLED initialization.
 */
 void OLED_FSM_initialize(uint8_t refresh_rate);
 
 /**
- * @brief Run FSM for human interaction over OLED screen. Includes FSM for system operation
+ * @brief Run FSM for human interaction over OLED screen. Includes FSM for system operation.
 */
 void OLED_FSM_run();
 

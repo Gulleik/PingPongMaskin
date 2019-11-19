@@ -8,7 +8,7 @@
 
 /**
  * @file
- * @brief UART driver NODE1
+ * @brief NODE1 UART driver
 */
 
 /**
@@ -23,7 +23,8 @@ void UART_initialize();
 unsigned char UART_receive();
 
 /**
- * @brief Initialize UART hardware
+ * @brief Transmits data using UART interface.
+ * @param data; Data to be transmitted.
 */
 void UART_transmit(char data);
 

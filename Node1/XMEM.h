@@ -11,7 +11,7 @@
 
 /**
  * @file
- * @brief Driver for external memory functionality
+ * @brief NODE1 Driver for external memory functionality
 */
 
 // /**
@@ -20,7 +20,7 @@
 // void XMEM_initialize()
 
 /**
- * @brief Tests that SRAM is connected properly and operational.
+ * @brief Tests that SRAM is properly connected and operational.
 */
 void SRAM_test(void);
 

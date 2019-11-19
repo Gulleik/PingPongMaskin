@@ -23,10 +23,10 @@
 
 /**
  * @file
- * @brief Motor driver
+ * @brief NODE2 Motor driver
 */
 
-uint16_t position_ref; /** < @brief position refference */
+uint16_t position_ref; /** < @brief position reference */
 
 /**
  * @brief Initialize Motor and TWI, turns motor on and calls calibration function
@@ -56,7 +56,7 @@ void Motor_update_slider_ref(uint8_t slider_pos);
 
 /**
  * @brief The position controller, ensuring that the position follows the refference
- * @param reference, the position refference, value between 0 and 255.
+ * @param reference, the position reference, value between 0 and 255.
 */
 void Motor_position_controller(uint8_t reference);
 

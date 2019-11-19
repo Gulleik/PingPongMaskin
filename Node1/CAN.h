@@ -16,7 +16,7 @@
 
 /**
  * @file
- * @brief Can driver NODE1
+ * @brief NODE1 Can driver
 */
 
 /**
@@ -48,18 +48,18 @@ typedef enum button {
 } button_t;
 
 /**
- * @brief Initialize the Can bus
+ * @brief Initialize the CAN bus
 */
 void CAN_initialize();
 
 /**
- * @brief Write message over the Can bus
+ * @brief Write message over the CAN bus
    @param msg; Message to be sent.
 */
 void CAN_write_message(message_t msg);
 
 /**
- * @brief Receive message over the Can bus
+ * @brief Receive message over the CAN bus
 */
 void CAN_receive_message();
 

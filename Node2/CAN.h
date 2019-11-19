@@ -9,7 +9,7 @@
 
 /**
  * @file
- * @brief Can driver NODE2
+ * @brief NODE2 CAN driver
 */
 
 /** 
@@ -41,19 +41,18 @@ volatile message_t controls_msg; /** < @brief message to keep track of the contr
 volatile message_t score_msg; /** < @brief message to keep track of score */
 
 /**
- * @brief Initialize can driver
+ * @brief Initialize CAN driver
 */
 void CAN_initialize();
 
 /**
- * @brief Write message over the Can bus
-   @param msg; message to be sent.
+ * @brief Write message over the CAN bus
+ * @param msg; message to be sent.
 */
 void CAN_write_message(message_t msg);
 
 /**
- * @brief Receive message over the Can bus
-   @param msg; message to be sent.
+ * @brief Receive message over the CAN bus
 */
 void CAN_receive_message();
 

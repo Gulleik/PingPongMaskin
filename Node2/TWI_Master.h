@@ -22,7 +22,7 @@
 
 /**
  * @file
- * @brief TWI driver (imported)
+ * @brief NODE2 TWI driver (imported)
 */
 
 

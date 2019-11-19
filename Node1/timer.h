@@ -7,7 +7,7 @@
 
 /**
  * @file
- * @brief Driver for timer control
+ * @brief NODE1 Driver for timer control
 */
 
 /**

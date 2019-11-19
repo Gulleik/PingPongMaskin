@@ -10,7 +10,7 @@
 
 /**
  * @file
- * @brief OLED driver
+ * @brief NODE1 OLED driver
 */
 
 /**
@@ -24,18 +24,22 @@ volatile uint8_t current_column;
 volatile uint8_t current_page;
 
 /**
-  @brief Structure with command initializations of OLED, also clears OLED and enables 
+  @brief Runs several commands to initialize the OLED (screen is cleared).
+  @param refresh_rate; The refresh rate of the OLED screen.
 */
 void OLED_initialize(uint8_t refresh_rate);
 
 /**
  * @brief Set value of one pixel to 1
+ * @param pos_x; X position of the pixel.
+ * @param pos_y; Y position of the pixel.
+ * @param inverted; Specifies whether bit should be set or inverted. If inverted != 0, invert pixel. Else set pixel to 1.
 */
 void OLED_set_pixel(uint8_t pos_x, uint8_t pos_y, uint8_t inverted);
 
 /**
-  @brief Write data to OLED_data using dual buffering. Data is saved to address space 0x1c00-0x2000 (?) of SRAM
-  @param data; Char value to be written to OLED_data register
+  @brief Write data to OLED_data register using dual buffering. Data is saved to address space 0x1c00-0x2000 (?) of SRAM.
+  @param data; Value to be written to OLED_data register.
 */
 void OLED_write_d(uint8_t data);
 
@@ -75,11 +79,13 @@ void OLED_clear();
 
 /**
  * @brief Set current page for OLED_write_d operations
+ * @param new_page; Specifies what to set current page to. Must be in range 0-7.
 */
 void OLED_goto_page(uint8_t new_page);
 
 /**
  * @brief Set current column for OLED_write_d operations
+ * @param new_column; Specifies what to set current column to. Must be in range 0-127.
 */
 void OLED_goto_column(uint8_t new_column);
 
@@ -90,7 +96,7 @@ void OLED_reset_position();
 
 /**
   @brief Clears an entire page
-  @param pageNR; Page to be cleared
+  @param page; Page to be cleared
 */
 void OLED_clear_page(uint8_t page);
 
@@ -101,12 +107,12 @@ void OLED_clear_page(uint8_t page);
 void OLED_invert_page(uint8_t page);
 
 /**
- * @brief Enable timer to keep refresing image at refresh rate specified in initializer
+ * @brief Enable timer to keep refresing image at refresh rate specified in initializer.
 */
 void OLED_refresh_enable();
 
 /**
- * @brief Freeze image by disabling refresh timer
+ * @brief Freeze image by disabling refresh timer.
 */
 void OLED_freeze_image();
 
