@@ -17,13 +17,13 @@
   .   .           . |  PLAY GAME |  |   OPTIONS   |  .|   EXTRAS    | .     .        .   
     .   . .   .   .  \          /   |             | . |             |   .      . . .    .
   .          .  .     '--------'    ---------------   ---------------  .   .  .          
-.    . .  .       .                 /:. .. .      \ . . .. . .  . .    .   .   .  . .   .
-  .          .   .          .  .  :/ .       .. .  \ . .      .     .    .   .        .  
-    .  . . .    .   .   . . ---------------. --------------- .   .  .  .         .  .    
-  .       .        .       .|             | .|             |      .       .       .      
-  .          .     .  .    .|  CONTROLS   | .|    MOTOR    |             .  .  .   .  .  
-    . .  .      .        . .|             | .|             |  . . .  .     .     .      .
-  .       . .       .  .  . ---------------  --------------- .        .  . .   . .    .  
+.    . .  .       .                 /:. .. .      \ . . .. . .  . .  \  .   .   .  . .   
+  .          .   .          .  .  :/ .       .. .  \ . .      .     . \   . .    .         
+    .  . . .    .   .   . . ---------------. --------------- .   .  .  _---------_   .  .    
+  .       .        .       .|             | .|             |      .   /           \             
+  .          .     .  .    .|  CONTROLS   | .|    MOTOR    |         | SCREENSAVER | .  .   
+    . .  .      .        . .|             | .|             |  . . .   \           / .    .
+  .       . .       .  .  . ---------------  --------------- .        .'---------'  . .     
    .       .       .        .     .  . .  .  . .  . | . .   .       .       .       .    
     .  .      .  .    .   .      .   .        . .  .|.  .  .    .  .   .    .         .  
     .  . . .   .   .    . .           ...  . --------------- .   .  .  .         .  .    
@@ -361,7 +361,7 @@ void show_and_increment_value(char name[], uint8_t def, volatile uint8_t *value,
 	OLED_freeze_image();
 }
 
-void screensaver() {
+void OLED_FSM_screensaver() {
 	OLED_refresh_enable();
 	OLED_clear();
 
@@ -415,6 +415,13 @@ uint8_t OLED_FSM(menu_option_t *option) {
 			*option = screen * 8 + (*option - 1) % 8;
 		} while (pgm_read_byte(menu_string_pointers[*option]) == 0x00 || *option % 8 == 0);
 		return REDRAW_SCREEN;
+	}
+
+	if (time > 30) {
+		OLED_FSM_screensaver();
+
+		/*Reset timer upon leaving screensaver*/
+		time = 0;
 	}
 	
 	/*FSM*/
@@ -607,7 +614,7 @@ uint8_t OLED_FSM(menu_option_t *option) {
 		case (EXTRAS1):
 			if (OLED_FSM_enter_joystick_r()) {
 				/*Show screensaver*/
-				screensaver();
+				OLED_FSM_screensaver();
 				return REDRAW_SCREEN;
 			}
 			break;
@@ -649,6 +656,9 @@ void OLED_FSM_run() {
 	/*Set first option to top of home screen (HOME1)*/
 	menu_option_t option = HOME1;
 	while(1) {
+		/*Reset timer*/
+		time = 0;
+
 		/*Print entire screen*/
 		for (int page = 0; page < 8; page++) {
 			OLED_clear_page(page);
